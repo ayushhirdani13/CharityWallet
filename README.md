@@ -12,4 +12,27 @@ The Charity Wallet Website is a user-friendly platform designed to facilitate tr
 - **Multiple Payment Options:** Support for various payment methods.
 - **Mobile Responsive:** Access the website on any device.
 
-## Getting Started
+## Tech Stack
+- **Frontend:**
+  - HTML
+  - CSS
+  - JavaScript
+  - React.js
+
+- **Backend:**
+  - MongoDB
+
+- **Payment Processing:**
+  - Yet to be decided
+
+- **Deployment:**
+  - AWS
+    
+- **Version Control:**
+  - Git
+  - GitHub
+    
+- **UI/UX Design:**
+  - Figma
+  
+
