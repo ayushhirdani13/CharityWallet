@@ -1,0 +1,5 @@
+style={{height:"50px",width:"140px", marginRight:"10px"}}
+
+ <button >Sign in</button>
+       <button style={{height:"50px",width:"140px"}}>Forgot Password</button>
+    
