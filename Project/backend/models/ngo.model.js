@@ -1,3 +1,4 @@
+// ./models/ngo.model.js
 import mongoose from "mongoose";
 
 // NGO Schema

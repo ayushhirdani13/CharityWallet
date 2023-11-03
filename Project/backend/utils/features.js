@@ -1,3 +1,4 @@
+// ./utils/features.js
 import jwt from "jsonwebtoken";
 
 export const sendNgoCookie = (ngo, res, message, statusCode = 200) => {

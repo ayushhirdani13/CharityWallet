@@ -1,3 +1,4 @@
+// ./controllers/campaign.controller.js
 import ErrorHandler from "../middlewares/error.js";
 import { Campaign } from "../models/campaign.model.js";
 import { Donation } from "../models/donation.model.js";

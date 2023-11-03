@@ -1,3 +1,4 @@
+// ./middlewares/auth.js
 import { NGO } from "../models/ngo.model.js";
 import { Organizer } from "../models/organizer.model.js";
 import jwt from "jsonwebtoken";

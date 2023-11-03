@@ -1,3 +1,4 @@
+// ./models/organizer.model.js
 import mongoose from "mongoose";
 
 // Organizer Schema

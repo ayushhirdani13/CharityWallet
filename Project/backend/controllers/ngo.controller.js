@@ -1,4 +1,4 @@
-// The controllers for the NGO routes
+// ./controllers/ngo.controller.js
 import bcrypt from "bcrypt";
 import ErrorHandler from "../middlewares/error.js";
 import { sendNgoCookie } from "../utils/features.js";
@@ -10,6 +10,8 @@ import {
   registerCampaign,
   updateCampaign,
 } from "./campaign.controller.js";
+import { generateOtp, verifyOTP } from "../utils/otp.js";
+import { redisClient } from "../data/redisConnect.js";
 // import mongoose from "mongoose";
 
 export const getNgos = async (req, res, next) => {
@@ -61,11 +63,48 @@ export const registerNgo = async (req, res, next) => {
     let hashedPassword = await bcrypt.hash(ngo_form.password, 10);
     ngo_form.password = hashedPassword;
 
-    const ngo = await NGO.create(ngo_form);
+    const generatedOtp = await generateOtp(ngo_form.email);
 
-    sendNgoCookie(ngo, res, "NGO registered Successfully.", 200);
+    if (!generatedOtp.success)
+      return next(new ErrorHandler("OTP could not be generated.", 500));
+
+    await redisClient.set(ngo_form.email, JSON.stringify(ngo_form));
+
+    res.status(200).json({
+      success: true,
+      message: "Email for OTP sent to you.",
+    });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+export const completeNgoRegistration = async (req, res, next) => {
+  try {
+    const data = req.body;
+
+    const isVerified = await verifyOTP(data.email, data.otp);
+
+    if (!isVerified)
+      return next(new ErrorHandler("OTP Validation Failed.", 500));
+
+    const ngo_form_string = await redisClient.get(data.email);
+
+    if (!ngo_form_string) {
+      return next(
+        new ErrorHandler("Invalid email or registration data expired", 400)
+      );
+    }
+
+    const ngo_form = JSON.parse(ngo_form_string);
+    // console.log(ngo_form);
+
+    const ngo = await NGO.create(ngo_form);
+    sendNgoCookie(ngo, res, "NGO registered Successfully.", 200);
+
+    await redisClient.del(data.email);
+  } catch (error) {
     next(error);
   }
 };
@@ -312,6 +351,48 @@ export const deleteMyCampaign = async (req, res, next) => {
       success: true,
       message: "Campaign deleted successfully.",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const ngo = await NGO.findOne({ email: email });
+
+    if (!ngo) return next(new ErrorHandler("NGO Not Found!", 404));
+
+    const generatedOtp = await generateOtp(email);
+    if (!generatedOtp.success)
+      return next(new ErrorHandler("OTP could not be generated.", 500));
+
+    res.status(200).json({
+      success: true,
+      message: "Email for OTP sent to you.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePasswordConfirmation = async (req, res, next) => {
+  try {
+    const data = req.body;
+
+    const isVerified = await verifyOTP(data.email, data.otp);
+
+    if (!isVerified)
+      return next(new ErrorHandler("OTP Validation Failed.", 500));
+
+    const ngo = await NGO.findOne({ email: data.email }).select("+password");
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    await ngo.updateOne({ password: hashedPassword });
+
+    sendNgoCookie(ngo, res, "NGO Password Updated Successfully.", 200);
   } catch (error) {
     next(error);
   }

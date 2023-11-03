@@ -1,3 +1,4 @@
+// ./models/campaign.model.js
 import mongoose from "mongoose";
 
 // Campaign Schema
