@@ -12,6 +12,13 @@ import {
 } from "./campaign.controller.js";
 import { generateOtp, verifyOTP } from "../utils/otp.js";
 import { redisClient } from "../data/redisConnect.js";
+import {
+  deleteLogoGdrive,
+  getLogoGdrive,
+  updateLogoGdrive,
+  uploadLogoGdrive,
+  uploadMultipleImagesGdrive,
+} from "../middlewares/imageHandler.js";
 // import mongoose from "mongoose";
 
 export const getNgos = async (req, res, next) => {
@@ -120,8 +127,7 @@ export const loginNgo = async (req, res, next) => {
     const isMatch = await bcrypt.compare(req.body.password, ngo.password);
 
     if (!isMatch) {
-      if (!ngo)
-        return next(new ErrorHandler("Invalid email or password.", 400));
+      return next(new ErrorHandler("Invalid email or password.", 400));
     }
 
     sendNgoCookie(ngo, res, `Welcome Back, ${ngo.name}`, 200);
@@ -170,6 +176,7 @@ export const deleteNgo = async (req, res, next) => {
   try {
     const ngoId = req.ngo._id;
 
+    await deleteLogoGdrive(req.ngo.logo, next);
     const deletedNgo = await NGO.findByIdAndDelete(ngoId);
 
     if (!deletedNgo) {
@@ -190,7 +197,15 @@ export const getNgoByAlias = async (req, res, next) => {
   try {
     const ngoAlias = req.query.alias;
 
-    const ngo = await NGO.findOne({ alias: ngoAlias }).select("-_id");
+    if (!ngoAlias) {
+      return next(
+        new ErrorHandler("NGO alias is required in query string.", 400)
+      );
+    }
+
+    const ngo = await NGO.findOne({ alias: ngoAlias })
+      .populate({ path: "campaigns", model: Campaign })
+      .select("-_id");
 
     if (!ngo) return next(new ErrorHandler("NGO not found.", 404));
 
@@ -255,7 +270,7 @@ export const getCampaigns = async (req, res, next) => {
     const campaigns = await Campaign.find({ organizer: ngo._id });
     res.status(200).json({
       success: true,
-      campaigns,
+      campaigns: campaigns,
     });
   } catch (err) {
     next(err);
@@ -393,6 +408,87 @@ export const changePasswordConfirmation = async (req, res, next) => {
     await ngo.updateOne({ password: hashedPassword });
 
     sendNgoCookie(ngo, res, "NGO Password Updated Successfully.", 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadLogo = async (req, res, next) => {
+  try {
+    const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
+    let imgId;
+    if (!req.ngo.logo) imgId = await uploadLogoGdrive(req.file, next);
+    else imgId = await updateLogoGdrive(req.ngo.logo, req.file, next);
+    const updateData = { logo: imgId };
+
+    // Find the NGO by id and update it with the new data
+    const updatedNgo = await NGO.findByIdAndUpdate(ngoId, updateData, {
+      new: true,
+    });
+
+    if (!updatedNgo) {
+      return next(new ErrorHandler("Update Unsuccessful.", 400));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "NGO profile updated successfully",
+      data: updatedNgo,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const getLogo = async (req, res, next) => {
+  try {
+    // Get the NGO alias and image name from the request parameters
+    const ngoAlias = req.query.ngoAlias;
+
+    const ngo = await NGO.findOne({ alias: ngoAlias });
+
+    const imgPath = await getLogoGdrive(ngo.logo, next);
+    res.sendFile(imgPath);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteLogo = async (req, res, next) => {
+  try {
+    const resp = await deleteLogoGdrive(req.ngo.logo, next);
+    await NGO.findByIdAndUpdate(req.ngo._id, {
+      $set: { logo: null },
+    });
+
+    res.status(resp.status);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadGallery = async (req, res, next) => {
+  try {
+    const gallery = await uploadMultipleImagesGdrive(req.files, next);
+
+    const updatedNgo = await NGO.findByIdAndUpdate(
+      req.ngo._id,
+      { $push: { gallery: gallery } },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedNgo) {
+      return next(new ErrorHandler("Update Unsuccessful."));
+    }
+
+    res.status(201).json({
+      success: true,
+      message: "Gallery Updated Successful.",
+      ngo: updatedNgo,
+    });
   } catch (error) {
     next(error);
   }
