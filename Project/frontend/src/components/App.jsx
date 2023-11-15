@@ -5,11 +5,15 @@ import NgoRegistration from "./NgoRegistration";
 import Footer from "./footer";
 import Card from "./Card";
 import pic2_card from "../image/home_card2_pic.png";
+import Createcampaign from "./createcampaign"
+import  Aftercreatecampaign from "./aftercreatecampaign"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/createcampaign" element={<Createcampaign />} />
+        <Route path="/aftercreatecampaign" element={<Aftercreatecampaign />} />
         <Route path="/" element={<Login />} />
         <Route path="/ngosignin" element={<NgoSignIn />} />
         <Route path="/Registration" element={<NgoRegistration />} />
