@@ -7,6 +7,9 @@ import Card from "./Card";
 import pic2_card from "../image/home_card2_pic.png";
 import Createcampaign from "./createcampaign"
 import  Aftercreatecampaign from "./aftercreatecampaign"
+import Home from "./home";
+import Profile_Dashboard from "./profile_dashboard";
+import Edit_Profile from "./edit_profile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
                   buttonText="Donation"
                   link="card1" 
                 />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/profile_dashboard" element={<Profile_Dashboard />} />
+        <Route path="/edit_profile" element={<Edit_Profile />} />
       </Routes>
     </Router>
   );
