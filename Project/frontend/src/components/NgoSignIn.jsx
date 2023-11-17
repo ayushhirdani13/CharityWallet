@@ -25,6 +25,8 @@ function NgoSignIn() {
     password: "",
   });
 
+  const [errors,setErrors]=useState({});
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -35,13 +37,54 @@ function NgoSignIn() {
 
   function handlechange(event) {
     const { name, value } = event.target;
+    // const validationerrors={};
+    // const error_email_patten= /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
+    // if(!user.email.trim())
+    // {
+    //   validationerrors.email="Email is required";
+    // }
+    // else if(!error_email_patten.test(user.email))
+    // {
+    //   validationerrors.email="Email is not valid";
+    // }
 
+   
+
+    // setErrors(validationerrors);
+
+    // if(Object.keys(validationerrors).length===0)
+    // {
     setUser((prev) => {
       return { ...prev, [name]: value };
     });
   }
   async function handelsignin(e) {
     e.preventDefault();
+    
+    const validationerrors={};
+    const error_email_patten= /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
+    if(!user.email.trim())
+    {
+      validationerrors.email="Email is required";
+    }
+    else if(!error_email_patten.test(user.email))
+    {
+      validationerrors.email="Email is not valid";
+    }
+
+    if(!user.password.trim())
+    {
+      validationerrors.password="Password is required";
+    }
+    else if(user.password.length<8)
+    {
+      validationerrors.password="Password shold be at least 8 char";
+    }
+
+    setErrors(validationerrors);
+
+    if(Object.keys(validationerrors).length===0)
+{
     try {
       const response = await fetch("/ngo/login", {
         method: "POST",
@@ -64,24 +107,18 @@ function NgoSignIn() {
       console.error(error);
     }
   }
+  }
 
   // console.log(user);
 
   return (
-    <div className="login">
-      {/* <div className="logoimg"> */}
-      <img id="l1" src={logo} alt="logo" />
-      {/* </div>  */}
-      <div
-        style={{ height: { md: "50px" }, width: {} }}
-        className="loginform"
-        id="l1"
-      >
-        <div
-          style={{ height: { md: "50px" }, width: {} }}
-          className="box-login"
-        >
-          <form
+    <div id="r1">
+      <div className="logo1">
+     <img id="l1" src={logo} alt="logo" /> 
+     </div>
+      <div className="signfrom">
+        <div className="box-signin">
+          <form className="f1"
             onSubmit={(event) => {
               console.log(event);
               handelsignin(event);
@@ -90,27 +127,34 @@ function NgoSignIn() {
             <h1>Sign in</h1>
 
             <TextField
+            error={errors.email}
               name="email"
-              type="email"
-              id="filled-password-input"
-              sx={{ height: "60px", width: "500px" }}
+             
+              id="filled-error"
+              // sx={{ height: "60px", width: "500px" }}
               label="Email"
-              autoComplete="current-password"
+              helperText={errors.email}
+              
               variant="filled"
               onChange={handlechange}
+              className="email"
+             
             />
-
+              
             <FormControl
-              sx={{ height: "60px", width: "500px" }}
+            className="password"
+              sx={{ height: "60px" }}
               variant="filled"
               onChange={handlechange}
             >
-              <InputLabel htmlFor="filled-adornment-password">
+              <InputLabel helperText={errors.password}htmlFor="filled-error">
                 Password
               </InputLabel>
               <FilledInput
+                error={errors.password}
                 name="password"
-                id="filled-adornment-password"
+                id="filled-error"
+                
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment sx={{ marginLeft: "10px" }} position="end">
@@ -126,17 +170,18 @@ function NgoSignIn() {
                 }
               />
             </FormControl>
-
-            <button type="submit" style={{ borderRadius: "50px" }}>
+            {errors.password&&<span style={{color:"red"}}>{errors.password}</span>}
+          <div className="button"> 
+            <button className="btn1" type="submit" >
               Sign in
             </button>
-            <button style={{ borderRadius: "50px" }}>Forgot Password</button>
-
+            <button className="btn1" >Sign up</button>
+            </div>
             <div>
               <span>
-                Don't have an account?
+                Don't have an account? 
                 <Link
-                  style={{ fontSize: "25px", color: "blue" }}
+                  style={{ fontSize: "20px", color: "blue" }}
                   to="/Registration"
                 >
                   Sign up
@@ -146,7 +191,7 @@ function NgoSignIn() {
           </form>
         </div>
       </div>
-    </div>
+      </div>
   );
 }
 
