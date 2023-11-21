@@ -9,16 +9,19 @@ import {
   deleteCampaign,
   registerCampaign,
   updateCampaign,
+  uploadGalleryCampaign,
 } from "./campaign.controller.js";
 import { generateOtp, verifyOTP } from "../utils/otp.js";
 import { redisClient } from "../data/redisConnect.js";
 import {
   deleteLogoGdrive,
+  getGalleryFromGdrive,
   getLogoGdrive,
   updateLogoGdrive,
   uploadLogoGdrive,
   uploadMultipleImagesGdrive,
 } from "../middlewares/imageHandler.js";
+import fs from "fs";
 // import mongoose from "mongoose";
 
 export const getNgos = async (req, res, next) => {
@@ -450,6 +453,12 @@ export const getLogo = async (req, res, next) => {
 
     const imgPath = await getLogoGdrive(ngo.logo, next);
     res.sendFile(imgPath);
+
+    res.on("finish", async () => {
+      // Delete the file after it has been sent successfully
+      await fs.promises.unlink(imgPath);
+      // console.log(`File ${imgPath} has been deleted.`);
+    });
   } catch (error) {
     next(error);
   }
@@ -489,6 +498,52 @@ export const uploadGallery = async (req, res, next) => {
       message: "Gallery Updated Successful.",
       ngo: updatedNgo,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getGallery = async (req, res, next) => {
+  try {
+    const ngo = await NGO.findOne({ alias: req.query.ngoAlias });
+    const gallery = ngo.gallery;
+
+    if (!gallery || gallery.length === 0) {
+      return next(new ErrorHandler("Gallery is empty.", 404));
+    }
+
+    const images = await getGalleryFromGdrive(gallery, next);
+
+    if (!images) return next(new ErrorHandler("Error getting images.", 402));
+
+    // // Set the response content type to JPEG
+    // res.type("image/jpeg");
+
+    // for (const image of images) {
+    //   res.write(image);
+    //   // console.log("Image sent.");
+    //   // await new Promise(resolve => setTimeout(resolve, 100));
+    // }
+
+    // res.end();
+
+    // Convert each image buffer to base64
+    const base64Images = images.map(image => image.toString('base64'));
+
+    // Set the response content type to JSON
+    res.type("application/json");
+
+    // Send the images as a JSON array
+    res.json({ gallery: base64Images });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadCampaignGallery = async (req, res, next) => {
+  try {
+    req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
+    await uploadGalleryCampaign(req, res, next);
   } catch (error) {
     next(error);
   }

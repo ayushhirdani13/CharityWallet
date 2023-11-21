@@ -1,5 +1,9 @@
 // ./controllers/campaign.controller.js
 import ErrorHandler from "../middlewares/error.js";
+import {
+  getGalleryFromGdrive,
+  uploadMultipleImagesGdrive,
+} from "../middlewares/imageHandler.js";
 import { Campaign } from "../models/campaign.model.js";
 import { Donation } from "../models/donation.model.js";
 import lodash from "lodash";
@@ -8,30 +12,25 @@ export const registerCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const allowedFields = [
-      "title",
-      "vision",
-      "alias",
-      "images",
-    ];
+    const allowedFields = ["title", "vision", "alias", "images"];
     const campaignData = lodash.pick(data, allowedFields);
-    
+
     let alias = data.title.toLowerCase().replace(/ /g, "_");
     let newAlias = alias;
     let counter = 1;
-    
+
     while (
       await Campaign.findOne({ alias: new RegExp("^" + newAlias + "$", "i") })
-      ) {
-        newAlias = alias + "-" + counter;
-        counter++;
-      }
-      
-      // Add the alias to the Campaign model
-      campaignData.alias = newAlias;
-      campaignData.organizerId = req.organizer;
-      campaignData.organizerType = req.organizerType;
-      // console.log(campaignData);
+    ) {
+      newAlias = alias + "-" + counter;
+      counter++;
+    }
+
+    // Add the alias to the Campaign model
+    campaignData.alias = newAlias;
+    campaignData.organizerId = req.organizer;
+    campaignData.organizerType = req.organizerType;
+    // console.log(campaignData);
 
     const campaign = await Campaign.create(campaignData);
 
@@ -60,7 +59,9 @@ export const getCampaignByAlias = async (req, res, next) => {
   try {
     const campaignAlias = req.params.alias;
 
-    const campaign = await Campaign.findOne({ alias: campaignAlias }).select("-_id");
+    const campaign = await Campaign.findOne({ alias: campaignAlias }).select(
+      "-_id"
+    );
 
     if (!campaign) return next(new ErrorHandler("Campaign not found.", 404));
 
@@ -129,7 +130,7 @@ export const donateToCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const campaign = await Campaign.findOne({alias: req.params.alias});
+    const campaign = await Campaign.findOne({ alias: req.params.alias });
 
     if (!campaign) return next(new ErrorHandler("Campaign not found", 404));
 
@@ -162,6 +163,58 @@ export const donateToCampaign = async (req, res, next) => {
   } catch (error) {
     // await session.abortTransaction();
     // session.endSession();
+    next(error);
+  }
+};
+
+export const uploadGalleryCampaign = async (req, res, next) => {
+  try {
+    const gallery = await uploadMultipleImagesGdrive(req.files, next);
+
+    const updatedCampaign = await Campaign.findByIdAndUpdate(
+      req.campaign._id,
+      { $push: { gallery: gallery } },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedCampaign) {
+      return next(new ErrorHandler("Update Unsuccessful."));
+    }
+
+    res.status(201).json({
+      success: true,
+      message: "Gallery Updated Successful.",
+      campaign: updatedCampaign,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getGalleryCampaign = async (req, res, next) => {
+  try {
+    const campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
+    const gallery = campaign.gallery;
+
+    if (!gallery || gallery.length === 0) {
+      return next(new ErrorHandler("Gallery is empty.", 404));
+    }
+
+    const images = await getGalleryFromGdrive(gallery, next);
+
+    if (!images) return next(new ErrorHandler("Error getting images.", 402));
+
+    // Set the response content type to JPEG
+    res.type("image/jpeg");
+
+    // Send the images as a response
+    images.forEach((image) => res.write(image));
+
+    // End the response
+    res.end();
+  } catch (error) {
     next(error);
   }
 };

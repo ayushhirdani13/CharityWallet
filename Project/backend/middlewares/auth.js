@@ -1,4 +1,5 @@
 // ./middlewares/auth.js
+import { FundRaiser } from "../models/fundraiser.model.js";
 import { NGO } from "../models/ngo.model.js";
 import { Organizer } from "../models/organizer.model.js";
 import jwt from "jsonwebtoken";
@@ -17,7 +18,7 @@ export const isNgoLoggedIn = async (req, res, next) => {
     req.ngo = await NGO.findById(decoded._id);
     next();
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(401).json({
       success: false,
       message: "Invalid Token",
@@ -39,7 +40,29 @@ export const isOrganizerLoggedIn = async (req, res, next) => {
     req.organizer = await Organizer.findById(decoded._id);
     next();
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    return res.status(401).json({
+      success: false,
+      message: "Invalid Token",
+    });
+  }
+};
+
+export const isFundRaiserLoggedIn = async (req, res, next) => {
+  const { frToken } = req.cookies;
+
+  if (!frToken)
+    return res.status(404).json({
+      success: false,
+      message: "Login First",
+    });
+
+  try {
+    const decoded = jwt.verify(frToken, process.env.JWT_SECRET);
+    req.fundRaiser = await FundRaiser.findById(decoded._id);
+    next();
+  } catch (error) {
+    // console.error(error);
     return res.status(401).json({
       success: false,
       message: "Invalid Token",

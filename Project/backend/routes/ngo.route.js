@@ -20,6 +20,7 @@ import {
   getLogo,
   deleteLogo,
   uploadGallery,
+  getGallery,
 } from "../controllers/ngo.controller.js";
 import { isNgoLoggedIn } from "../middlewares/auth.js";
 import { upload } from "../middlewares/imageHandler.js";
@@ -27,11 +28,15 @@ import { upload } from "../middlewares/imageHandler.js";
 const router = express.Router();
 
 router.get("/", getNgos);
+
 router.route("/register").post(registerNgo);
 router.route("/confirm-registration").post(completeNgoRegistration);
+
 router.route("/login").post(loginNgo);
+
 router.get("/dashboard", getNgoByAlias);
 router.post("/donate", donateToNgo);
+
 router.get("/campaigns", getCampaigns);
 
 router
@@ -59,5 +64,7 @@ router.post(
   upload.array("gallery", 3),
   uploadGallery
 );
+
+router.get("/gallery", getGallery);
 
 export default router;

@@ -64,4 +64,4 @@ const schema = new mongoose.Schema({
   },
 });
 
-export const fundraiser = mongoose.model("FundRaiser", schema);
+export const FundRaiser = mongoose.model("FundRaiser", schema);

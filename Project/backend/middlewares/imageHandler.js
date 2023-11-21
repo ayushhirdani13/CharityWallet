@@ -132,3 +132,42 @@ export const uploadMultipleImagesGdrive = async (files, next) => {
     next(error);
   }
 };
+
+export const getGalleryFromGdrive = async (fileIds, next) => {
+  try {
+    const images = await Promise.all(
+      fileIds.map(async (fileId) => {
+        const content = await drive.files.get({
+          fileId: fileId,
+          alt: "media",
+        });
+
+        const buffer = Buffer.from(await content.data.arrayBuffer());
+
+        const jpegBuffer = await sharp(buffer).toFormat("jpeg").toBuffer();
+
+        return jpegBuffer;
+      })
+    );
+
+    return images;
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteImageGDrive = async (files, next) => {
+  try {
+    await Promise.all(
+      files.map(async (file) => {
+        await drive.files.delete({
+          fileId: file,
+        });
+      })
+    );
+
+    return 201;
+  } catch (error) {
+    next(error);
+  }
+};
