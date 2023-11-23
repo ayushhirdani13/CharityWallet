@@ -6,6 +6,7 @@ import { Campaign } from "../models/campaign.model.js";
 import ErrorHandler from "../middlewares/error.js";
 import { generateOtp } from "../utils/otp.js";
 import { sendOrganizerCookie } from "../utils/features.js";
+import { redisClient } from "../app.js";
 
 export const registerOrganizer = async (req, res, next) => {
   try {

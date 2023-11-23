@@ -4,6 +4,7 @@ import { FundRaiser } from "../models/fundraiser.model.js";
 import { Donation } from "../models/donation.model.js";
 import { generateOtp } from "../utils/otp.js";
 import { sendFundRaiserCookieCookie } from "../utils/features.js";
+import { redisClient } from "../app.js";
 
 export const registerFundraiser = async (req, res, next) => {
   try {

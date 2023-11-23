@@ -12,7 +12,7 @@ import {
   uploadGalleryCampaign,
 } from "./campaign.controller.js";
 import { generateOtp, verifyOTP } from "../utils/otp.js";
-import { redisClient } from "../data/redisConnect.js";
+import { redisClient } from "../app.js";
 import {
   deleteLogoGdrive,
   getGalleryFromGdrive,
@@ -418,6 +418,9 @@ export const changePasswordConfirmation = async (req, res, next) => {
 
 export const uploadLogo = async (req, res, next) => {
   try {
+    if (!req.file) {
+      return next(new ErrorHandler("Multer Error.", 500));
+    }
     const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
     let imgId;
     if (!req.ngo.logo) imgId = await uploadLogoGdrive(req.file, next);
@@ -439,7 +442,7 @@ export const uploadLogo = async (req, res, next) => {
       data: updatedNgo,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 };
@@ -450,7 +453,9 @@ export const getLogo = async (req, res, next) => {
     const ngoAlias = req.query.ngoAlias;
 
     const ngo = await NGO.findOne({ alias: ngoAlias });
-
+    if (ngo.logo === null) {
+      return next(new ErrorHandler("No Logo Image Found.", 400));
+    }
     const imgPath = await getLogoGdrive(ngo.logo, next);
     res.sendFile(imgPath);
 
@@ -466,12 +471,17 @@ export const getLogo = async (req, res, next) => {
 
 export const deleteLogo = async (req, res, next) => {
   try {
+    if (!req.ngo.logo) {
+      return next(new ErrorHandler("No Logo Image Found.", 400));
+    }
     const resp = await deleteLogoGdrive(req.ngo.logo, next);
     await NGO.findByIdAndUpdate(req.ngo._id, {
       $set: { logo: null },
     });
 
-    res.status(resp.status);
+    res.status(resp.status).json({
+      success: true,
+    });
   } catch (error) {
     next(error);
   }
@@ -528,7 +538,7 @@ export const getGallery = async (req, res, next) => {
     // res.end();
 
     // Convert each image buffer to base64
-    const base64Images = images.map(image => image.toString('base64'));
+    const base64Images = images.map((image) => image.toString("base64"));
 
     // Set the response content type to JSON
     res.type("application/json");

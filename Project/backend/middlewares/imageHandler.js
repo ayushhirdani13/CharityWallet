@@ -4,7 +4,7 @@ import { drive } from "../app.js";
 import path from "path";
 import sharp from "sharp";
 
-const uploadsDir = "./uploads/";
+const uploadsDir = path.join(path.resolve(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
@@ -41,6 +41,7 @@ export const uploadLogoGdrive = async (file, next) => {
 
     return response.data.id;
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -66,6 +67,9 @@ export const updateLogoGdrive = async (fileId, file, next) => {
 
 export const getLogoGdrive = async (imgId) => {
   try {
+    if (!imgId) {
+      return next(new ErrorHandler("No Logo Image Found.", 400));
+    }
     // Get file metadata
     const content = await drive.files.get({
       fileId: imgId,

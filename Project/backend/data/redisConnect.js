@@ -1,16 +1,11 @@
 // ./data/redisConnect.js
-import { createClient } from 'redis';
-
-export const redisClient = await createClient()
-  .on('error', err => console.log('Redis Client Error', err))
-  .connect();
 
 // Function to check if Redis is connected
-export const isRedisConnected = async () => {
+export const isRedisConnected = async (redisClient) => {
   try {
     await redisClient.ping();
-    return true; // If ping is successful, Redis is connected
+    console.log("Redis is Connected!"); // If ping is successful, Redis is connected
   } catch (error) {
-    return false; // If an error occurs, Redis is not connected
+    console.log("Redis is not Connected. Error: ", error) // If an error occurs, Redis is not connected
   }
-};
+}; 
