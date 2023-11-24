@@ -1,0 +1,23 @@
+.h-40{
+    height:40vh;
+    
+}
+
+.h-30{
+    height:30vh;
+    
+}
+
+.h-70{
+    height:70vh;
+    
+}
+
+.post{
+    background-color: rgba(125, 185, 225, 0.37);
+    height: 80%;
+}
+
+.btn-clr{
+    background-color: rgba(0, 69, 116, 1);
+}

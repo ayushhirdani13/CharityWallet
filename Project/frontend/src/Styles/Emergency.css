@@ -1,0 +1,26 @@
+.font{
+    font-family: Raleway;
+    font-size: 54px;
+    font-style: normal; 
+    font-weight: 600;
+    line-height: normal;
+}
+/*NGO Page setting*/
+.post{
+    background-color: rgba(125, 185, 225, 0.37);
+}
+
+.bgd-clr{
+    background:#FFF;
+}
+
+.btn-clr{
+    background-color: rgba(0, 69, 116, 1);
+}
+/*scrolling Background*/
+.clr{
+    background-color: rgba(181, 182, 203, 0.12);;
+}
+.h75{
+    height: 75vh;
+}
