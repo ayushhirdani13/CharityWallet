@@ -1,0 +1,164 @@
+.container {
+    height: max-content;
+    width: 1120px;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 100px;
+    margin-top: 100px;
+    align-items: center;  
+  }
+  
+  .card {
+    height:max-content;
+    width: 800px;
+    border-radius: 20px;
+    background-color: rgb(125, 185, 225, 0.24);
+    /* overflow: hidden; */
+  }
+
+  .card-body{
+    height: max-content;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    
+  }
+
+  .card-header{
+    height: 50px;   
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+  }
+
+  .card-header span{
+    
+    font-size: 20px;
+    font-weight: 500;
+    
+  }
+
+  .btn{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+  width: 200px;
+  margin-top: 50px;
+  border-radius: 50px;
+  color: black;
+  background-color: rgb(125, 185, 225, 0.24);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  .btn:hover{
+    background: rgba(0, 69, 116, 1);
+    color: white;
+  }
+
+  .btn-group{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    height: 80px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .row{
+    width:100%;
+    height: max-content;
+    display: contents;
+  }
+
+  .modal-body{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(125, 185, 225, 0.22);
+    flex-direction: column;
+    font-size: large;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .modal-header{
+    background: rgba(125, 185, 225, 0.59);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+
+  }
+  .modal-content{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+
+  }
+
+  .modal-content p{
+    text-align: center;
+  }
+
+
+  @media (max-width: 768px) {
+
+    /* Adjust the width and font size for smaller screens */
+    .form-floating {
+      width: 100%;
+      font-size: 14px;
+    }
+  
+    .container {
+      width: 85%;
+  
+    }
+  
+    .card-body {
+      width: 100%;
+    }
+  
+    .btn1 {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+  
+    /* Further adjustments for smaller screens */
+    .form-floating {
+      width: 100%;
+      font-size: 12px;
+    }
+  
+    .container {
+      width: 85%;
+  
+    }
+  
+    .card-body {
+      width: 100%;
+    }
+  
+    /* .btn1 {
+      width: 100%;
+      flex-direction: column;
+      gap: 10px;
+      margin: 0px;
+    } */
+  
+    .btn {
+      margin-top: 0px;
+      width: 100%;
+    }
+  }

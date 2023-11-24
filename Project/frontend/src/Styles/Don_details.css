@@ -1,0 +1,20 @@
+.details_section{
+  margin: 20px 0 15px;
+  height: max-content;
+  width: 100%;
+}
+
+.pnext_section{
+  display: flex; 
+  height: 80px;
+  flex-direction: row;
+  gap: 25px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
+
+
+
+

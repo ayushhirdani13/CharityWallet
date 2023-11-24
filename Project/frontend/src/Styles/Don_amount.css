@@ -1,0 +1,33 @@
+.ThankU_section{
+  justify-content: center;
+  align-items: center; 
+}
+
+.ThankU_section p{
+  text-align: center;
+}
+
+.DonationAmount_section{
+  width: 100%;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  /* justify-content: center; */
+  
+}
+
+.DonationButton_section{
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  margin: 15px 0 15px;
+}
+
+.proceedtonext_section{
+  display: flex;
+  flex-direction: row;
+  gap: 35px;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+}
