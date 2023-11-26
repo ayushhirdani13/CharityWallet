@@ -1,0 +1,53 @@
+.bg_color_123{
+    background: linear-gradient(90deg, #7DB9E1 0.93%, rgba(216, 244, 250, 0.97) 99.83%);
+}
+
+.transform{
+    color: #1F0000;
+font-family: Faster One;
+font-size: 64px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.raleway{
+    color: #1F0000;
+text-align: center;
+font-family: Raleway;
+font-size: 54px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+.vr{
+    height:100%;
+    width:1px;
+}
+
+.bgd-clr{
+    background:#FFF;
+}
+
+.btn-clr{
+    background-color: rgba(0, 69, 116, 1);
+}
+
+.post_123{
+    background-color: rgba(255, 255, 255, 0.56);
+    height:100%;
+}
+
+.btn-cl{
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.raleway100{
+    color: #004574;
+font-family: Raleway;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}

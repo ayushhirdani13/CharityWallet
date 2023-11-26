@@ -1,15 +1,17 @@
 import React from "react";
-import Login from "./Login";
-import NgoSignIn from "./NgoSignIn";
-import NgoRegistration from "./NgoRegistration";
-import Footer from "./footer";
-import Card from "./Card";
+import Login from "../components/Login";
+import NgoSignIn from "../components/NgoSignIn";
+import NgoRegistration from "../components/NgoRegistration";
+import Footer from "../components/footer";
+import Card from "../components/Card";
 import pic2_card from "../image/home_card2_pic.png";
-import Createcampaign from "./createcampaign"
-import  Aftercreatecampaign from "./aftercreatecampaign"
-import Home from "./home";
-import Profile_Dashboard from "./profile_dashboard";
-import Edit_Profile from "./edit_profile";
+import Createcampaign from "../components/createcampaign"
+import Aftercreatecampaign from "../components/aftercreatecampaign"
+import Fundraiser_dashboard from "../components/fundraiser_dashboard_res";
+import Profile_home1 from "./Profile_home";
+import Profile_Dashboard1 from "./Profile_dashboard";
+import Edit_profile_ngo1 from "./Edit_profile_ngo";
+import Edit_profile_org1 from "./Edit_profile_org";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
@@ -29,9 +31,11 @@ function App() {
                   buttonText="Donation"
                   link="card1" 
                 />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/profile_dashboard" element={<Profile_Dashboard />} />
-        <Route path="/edit_profile" element={<Edit_Profile />} />
+        <Route path="/fund" element={<Fundraiser_dashboard/>} />
+        <Route path="/home" element={<Profile_home1 />} />
+        <Route path="/profile_dashboard" element={<Profile_Dashboard1 />} />
+        <Route path="/edit_profile_ngo" element={<Edit_profile_ngo1 />} />
+        <Route path="/edit_profile" element={<Edit_profile_org1 />} />
       </Routes>
     </Router>
   );
