@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import logo from "../image/logo.svg";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
@@ -11,19 +10,33 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { CheckBox } from "@mui/icons-material";
 import "../Styles/Sign_In.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { responsiveFontSizes } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+
+
+
 
 function NgoSignIn() {
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+
+  const [Type,setType]=useState({
+    type:"",});
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setType({[name]:value});
+  };
+
 
   const [errors,setErrors]=useState({});
 
@@ -37,32 +50,22 @@ function NgoSignIn() {
 
   function handlechange(event) {
     const { name, value } = event.target;
-    // const validationerrors={};
-    // const error_email_patten= /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
-    // if(!user.email.trim())
-    // {
-    //   validationerrors.email="Email is required";
-    // }
-    // else if(!error_email_patten.test(user.email))
-    // {
-    //   validationerrors.email="Email is not valid";
-    // }
-
    
-
-    // setErrors(validationerrors);
-
-    // if(Object.keys(validationerrors).length===0)
-    // {
     setUser((prev) => {
       return { ...prev, [name]: value };
     });
   }
+  console.log(Type);
+let navigate=useNavigate();
   async function handelsignin(e) {
     e.preventDefault();
     
     const validationerrors={};
     const error_email_patten= /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
+    if(!Type.type.trim())
+    {
+      validationerrors.type="Type is required"
+    }
     if(!user.email.trim())
     {
       validationerrors.email="Email is required";
@@ -85,6 +88,8 @@ function NgoSignIn() {
 
     if(Object.keys(validationerrors).length===0)
 {
+  if(Type.type==="NGO")
+  {
     try {
       const response = await fetch("/ngo/login", {
         method: "POST",
@@ -93,23 +98,107 @@ function NgoSignIn() {
         },
         body: JSON.stringify(user),
       });
-
-      console.log(response.message);
+      const data = await response.json(); // Parse the response JSON
+      const token =data?.payload?.token;
+      console.log(token);
+          console.log(data);
+      // console.log(data);
+      if(data.success)
+      {
+        //  window.location.href="/home";
+      }
+   
+          if (!response.ok) {
+            // Handle errors if the request is not successful
+            throw new Error(`Request failed with status: ${response.status}`);
+          }
+    
+         // Log the response data
+         
+        } catch (error) {
+          console.error(error);
+        }
+        // alert(data.message);
+        // window.location.href="/ngosignin";
+      }
+     
+    
+  
+  else if(Type.type==="Fundraiser")
+  {
+    try {
+      const response = await fetch("/fundraiser/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      const data = await response.json(); // Parse the response JSON
+      const token =data?.payload?.token;
+      console.log(token);
+      console.log(data);
+     
+      if(data.success)
+      {
+        window.location.href="/home";
+      }
+      else
+      { }
+        // alert(data.message);
+        // window.location.href="/ngosignin";
+        if (!response.ok) {
+          // Handle errors if the request is not successful
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+    
+       // Log the response data
+       
+      } catch (error) {
+        console.error(error);
+      
+      }
+     
+    }
+   
+  else
+  {
+    try {
+      const response = await fetch("/organizer/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      const data = await response.json(); // Parse the response JSON
+      
+      console.log(data);
+      if(data.success)
+      {
+        // window.location.href="/home";
+      }
+      else
+      {
+        alert(data.message);
+        // window.location.href="/ngo/signin";
+      }
+     
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
       }
 
-      const data = await response.json(); // Parse the response JSON
-
-      console.log(data); // Log the response data
+     // Log the response data
+     
     } catch (error) {
       console.error(error);
     }
   }
-  }
+}
+}
 
-  // console.log(user);
+
 
   return (
     <div id="r1">
@@ -125,9 +214,25 @@ function NgoSignIn() {
             }}
           >
             <h1>Sign in</h1>
+        <FormControl error={errors.email} variant="filled" sx={{ m: 1, minWidth: 120,width:"90%",height:"60px",margin:"0px" } }>
+        <InputLabel id="demo-simple-select-filled-label">Type</InputLabel>
+        <Select
+          name="type"
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={Type}
+          onChange={handleChange}
+        >
+         
+          <MenuItem value={"NGO"}>NGO</MenuItem>
+          <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
+          <MenuItem value={"Oraganizer"}>Oraganizer</MenuItem>
+        </Select>
+        <FormHelperText>{errors.type}</FormHelperText>
+      </FormControl>
 
             <TextField
-            error={errors.email}
+            
               name="email"
              
               id="filled-error"
@@ -142,6 +247,7 @@ function NgoSignIn() {
             />
               
             <FormControl
+            error={errors.password}
             className="password"
               sx={{ height: "60px" }}
               variant="filled"
@@ -169,8 +275,9 @@ function NgoSignIn() {
                   </InputAdornment>
                 }
               />
+              <FormHelperText>{errors.password}</FormHelperText>
             </FormControl>
-            {errors.password&&<span style={{color:"red"}}>{errors.password}</span>}
+           
           <div className="button"> 
             <button className="btn1" type="submit" >
               Sign in
@@ -182,7 +289,7 @@ function NgoSignIn() {
                 Don't have an account? 
                 <Link
                   style={{ fontSize: "20px", color: "blue" }}
-                  to="/Registration"
+                  to="/Registrationas"
                 >
                   Sign up
                 </Link>
@@ -194,5 +301,6 @@ function NgoSignIn() {
       </div>
   );
 }
+
 
 export default NgoSignIn;
