@@ -21,7 +21,7 @@ const schema = new mongoose.Schema({
     required: true,
     type: String,
   },
-  description: {
+  vision: {
     required: false,
     type: String,
   },

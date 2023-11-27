@@ -21,6 +21,10 @@ import {
   deleteLogo,
   uploadGallery,
   getGallery,
+  uploadCampaignCover,
+  deleteCampaignCover,
+  deleteGallery,
+  logoutNgo,
 } from "../controllers/ngo.controller.js";
 import { isNgoLoggedIn } from "../middlewares/auth.js";
 import { upload } from "../middlewares/imageHandler.js";
@@ -33,6 +37,7 @@ router.route("/register").post(registerNgo);
 router.route("/confirm-registration").post(completeNgoRegistration);
 
 router.route("/login").post(loginNgo);
+router.get("/logout", isNgoLoggedIn, logoutNgo);
 
 router.get("/dashboard", getNgoByAlias);
 router.post("/donate", donateToNgo);
@@ -66,5 +71,17 @@ router.post(
 );
 
 router.get("/gallery", getGallery);
+router.delete("/myNgo/gallery", isNgoLoggedIn, deleteGallery);
+router.post(
+  "/myNgo/campaign/uploadGallery",
+  upload.array("gallery", 3),
+  isNgoLoggedIn,
+  uploadCampaignCover
+);
+router.delete(
+  "/myNgo/campaign/deleteGallery",
+  isNgoLoggedIn,
+  deleteCampaignCover
+);
 
 export default router;

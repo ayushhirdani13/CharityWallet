@@ -4,12 +4,14 @@ import {
   getCampaignByAlias,
   getCampaigns,
   donateToCampaign,
+  getCoverCampaign,
 } from "../controllers/campaign.controller.js";
 
 const router = express.Router();
 
 router.get("/", getCampaigns);
-router.get("/:alias", getCampaignByAlias);
+router.get("/dashboard", getCampaignByAlias);
 router.get("/donate", donateToCampaign);
+router.get("/cover", getCoverCampaign);
 
 export default router;

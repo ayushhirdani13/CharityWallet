@@ -1,10 +1,12 @@
 // ./controllers/fundRaiser.controller.js
 import ErrorHandler from "../middlewares/error.js";
+import bcrypt from "bcrypt";
 import { FundRaiser } from "../models/fundraiser.model.js";
 import { Donation } from "../models/donation.model.js";
-import { generateOtp } from "../utils/otp.js";
-import { sendFundRaiserCookieCookie } from "../utils/features.js";
+import { generateOtp, verifyOTP } from "../utils/otp.js";
+import { sendFundRaiserCookieCookie, sendEmail } from "../utils/features.js";
 import { redisClient } from "../app.js";
+import mongoose from "mongoose";
 
 export const registerFundraiser = async (req, res, next) => {
   try {
@@ -120,6 +122,13 @@ export const getMyFr = async (req, res, next) => {
   }
 };
 
+export const logoutFr = async (req, res, next) => {
+  res.status(200).clearCookie("frToken").json({
+    success: true,
+    message: "Logged Out Successfully.",
+  });
+};
+
 export const getFundRaisers = async (req, res, next) => {
   try {
     const fundRaisers = await FundRaiser.find({ verified: true }).select(
@@ -137,9 +146,11 @@ export const getFundRaisers = async (req, res, next) => {
 
 export const getFundRaiserByAlias = async (req, res, next) => {
   try {
-    const fundRaiserId = req.query.frAlias;
+    const frAlias = req.query.frAlias;
 
-    const fundRaiser = await FundRaiser.findById(fundRaiserId).select("-_id");
+    const fundRaiser = await FundRaiser.findOne({ alias: frAlias }).select(
+      "-_id"
+    );
 
     if (!fundRaiser)
       return next(new ErrorHandler("Fund Raiser not found.", 404));
@@ -202,12 +213,19 @@ export const deleteFundRaiser = async (req, res, next) => {
 };
 
 export const donateToFr = async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const data = req.body;
 
     const fr = await FundRaiser.findOne({ alias: req.params.alias });
 
     if (!fr) return next(new ErrorHandler("Fund raiser not found", 404));
+    if (!fr.verified) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new ErrorHandler("FundRaiser is not verified yet.", 403));
+    }
 
     const donationData = {
       ...data,
@@ -220,23 +238,27 @@ export const donateToFr = async (req, res, next) => {
     if (!donation) return next(new ErrorHandler("Donation Unsuccessful.", 400));
 
     const updatedFundRaiser = await fr.updateOne(
-      { donationTillNow: fr.donationTillNow + data.donationAmount }
-      // { session }
+      { donationTillNow: fr.donationTillNow + data.donationAmount },
+      { session }
     );
 
     if (!updatedFundRaiser)
       return next(new ErrorHandler("Update Unsuccessful.", 400));
 
-    // await session.commitTransaction();
-    // session.endSession();
+    await session.commitTransaction();
+    session.endSession();
+
+    message =
+      "Thanks for your donation. This is a confirmation mail that your donation was successful.";
+    await sendEmail(data.email, `Donation to ${fr.title}`, message);
 
     res.status(201).json({
       success: true,
       message: "Donation made successfully.",
     });
   } catch (error) {
-    // await session.abortTransaction();
-    // session.endSession();
+    await session.abortTransaction();
+    session.endSession();
     next(error);
   }
 };

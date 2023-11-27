@@ -9,6 +9,7 @@ import {
   loginFr,
   getMyFr,
   deleteFundRaiser,
+  logoutFr,
 } from "../controllers/fundraiser.controller.js";
 import { isFundRaiserLoggedIn } from "../middlewares/auth.js";
 
@@ -22,6 +23,7 @@ router.post("/register", registerFundraiser);
 router.post("/completeRegistration", completeFrRegistration);
 
 router.post("/login", loginFr);
+router.get("/logout", logoutFr);
 
 router
   .route("/myFundRaiser")

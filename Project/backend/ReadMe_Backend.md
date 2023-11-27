@@ -425,7 +425,7 @@ const uploadedImageIds = await uploadMultipleImagesGdrive(files, next);
 
 ## Packages
 The project is distributed under the following packages :
-
+```json
 {
   "name": "charity-wallet-api",
   "version": "1.0.0",
@@ -454,5 +454,4 @@ The project is distributed under the following packages :
     "sharp": "^0.32.6"
   }
 }
- 
-
+```

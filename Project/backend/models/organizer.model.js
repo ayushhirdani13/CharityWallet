@@ -3,19 +3,19 @@ import mongoose from "mongoose";
 
 // Organizer Schema
 const schema = new mongoose.Schema({
-  organizerName: {
+  name: {
     type: String,
     required: true,
   },
-  organizerEmail: {
+  email: {
     type: String,
     required: true,
   },
-  organizerPhoneNo: {
+  contactNo: {
     type: String,
     required: true,
   },
-  organizerPassword: {
+  password: {
     type: String,
     select: false,
     required: true,

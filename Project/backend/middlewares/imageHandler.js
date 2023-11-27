@@ -41,7 +41,7 @@ export const uploadLogoGdrive = async (file, next) => {
 
     return response.data.id;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 };

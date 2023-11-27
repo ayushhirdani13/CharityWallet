@@ -11,6 +11,9 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+  },
   organizerType: {
     type: String,
     enum: ["NGO", "Organizer"],
@@ -28,9 +31,8 @@ const schema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  images: {
-    type: [String],
-    required: true,
+  cover: {
+    type: String,
   },
   donationsTillNow: {
     type: Number,
