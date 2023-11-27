@@ -12,6 +12,12 @@ import Profile_home1 from "./Profile_home";
 import Profile_Dashboard1 from "./Profile_dashboard";
 import Edit_profile_ngo1 from "./Edit_profile_ngo";
 import Edit_profile_org1 from "./Edit_profile_org";
+import Donor_amount from "./donarAmount";
+import Donor_details from './donarDetails';
+import Donor_Confirm from './donarConfirm';
+import Donor_method from './donarMethod';
+import Donor_records from './donarRecords';
+import Forgot_password from './forgotPassword';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
@@ -36,6 +42,12 @@ function App() {
         <Route path="/profile_dashboard" element={<Profile_Dashboard1 />} />
         <Route path="/edit_profile_ngo" element={<Edit_profile_ngo1 />} />
         <Route path="/edit_profile" element={<Edit_profile_org1 />} />
+        <Route path="/donor_amount" element={<Donor_amount />} />
+        <Route path="/donor_details" element={<Donor_details />} />
+        <Route path="/donor_method" element={<Donor_method />} />
+        <Route path="/donor_records" element={<Donor_records />} />
+        <Route path="/donor_confirm" element={<Donor_Confirm />} />
+        <Route path="/forgot_password" element={<Forgot_password />} />
       </Routes>
     </Router>
   );
