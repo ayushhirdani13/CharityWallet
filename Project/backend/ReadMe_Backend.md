@@ -50,26 +50,30 @@ The Charity Wallet Website Backend serves as the foundational infrastructure sup
 Before setting up the backend, ensure you have the following prerequisites installed:
 
 -**Programming Language**: JavaScript (Node.js)
+
 -**Database**: MongoDB, using Mongoose as the ODM (Object Data Modeling) library
+
 -**Web Framework**: Express.js for building the RESTful API
+
 -**Authentication**: JWT (JSON Web Tokens) for secure user authentication
+
 -**Middleware**: Utilizes custom middleware functions for user authentication and error handling
+
 -**File Upload**: Implements file upload functionality using Multer for handling multipart/form-data
+
 -**Image Processing**: Utilizes Sharp for image processing and resizing
+
 -**External Services/APIs**: Integrates with Google Drive API for efficient file storage and retrieval
+
 -**Email Handling**: Nodemailer for sending emails, such as OTPs (One-Time Passwords) during user registration
+
 -**Google Drive**: Integrated for secure and scalable file storage, supporting the upload, update, retrieval, and deletion of logos and images.
 
 ## Getting Started
 
 ### Installation
 
-Clone the repository
-
-```bash
-git clone https://github.com/ayushhirdani13/CharityWallet/tree/ayush_139/Project/backend 
-
-```
+We assume that you already have the repository cloned in your device and up-to-date with the original repo.
 
 Navigate to the project directory in the backend folder 
 
@@ -87,7 +91,7 @@ Configure the backend by setting up environment variables, connecting to databas
 *Example for a .env file*
 ```bash
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/charity-wallet
+MONGO_URI=mongodb://localhost:27017/
 JWT_SECRET=your_jwt_secret_key
 REDIS_URL=your_redis_url
 # Add other necessary environment variables
@@ -131,6 +135,7 @@ REDIS_URL=your_redis_url
 - **Get NGO Dashboard:**
   - Endpoint: `GET /ngos/dashboard`
   - Controller: `getNgoByAlias`
+  - Note: You need to send a query here as ngoAlias='Alias for NGO'
 
 - **Donate to NGO:**
   - Endpoint: `POST /ngos/donate`

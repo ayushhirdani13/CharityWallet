@@ -65,7 +65,7 @@ export const updateLogoGdrive = async (fileId, file, next) => {
   }
 };
 
-export const getLogoGdrive = async (imgId) => {
+export const getLogoGdrive = async (imgId, next) => {
   try {
     if (!imgId) {
       return next(new ErrorHandler("No Logo Image Found.", 400));

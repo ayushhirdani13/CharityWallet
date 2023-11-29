@@ -1,5 +1,6 @@
 // ./models/donation.model.js
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 // Donation Schema
 const schema = new mongoose.Schema({
@@ -35,6 +36,11 @@ const schema = new mongoose.Schema({
       if (this.receiverType === "Campaign") return "Campaign";
     },
     required: true,
+  },
+  transactionId: {
+    type: String,
+    default: uuidv4,
+    unique: true,
   },
   donationTime: {
     type: Date,

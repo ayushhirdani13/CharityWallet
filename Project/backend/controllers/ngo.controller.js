@@ -25,6 +25,7 @@ import {
 } from "../middlewares/imageHandler.js";
 import fs from "fs";
 import mongoose from "mongoose";
+import lodash from "lodash";
 
 export const getNgos = async (req, res, next) => {
   try {
@@ -164,7 +165,11 @@ export const getMyNgo = async (req, res, next) => {
 export const updateNgoProfile = async (req, res, next) => {
   try {
     const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
-    const updateData = req.body;
+    const formData = req.body;
+
+    const allowedFields = ["name", "vision", "contactNo"];
+
+    const updateData = lodash.pick(formData, allowedFields);
 
     // Find the NGO by id and update it with the new data
     const updatedNgo = await NGO.findByIdAndUpdate(ngoId, updateData, {
@@ -198,6 +203,10 @@ export const deleteNgo = async (req, res, next) => {
     const ngoId = req.ngo._id;
 
     await deleteLogoGdrive(req.ngo.logo, next);
+    await deleteGallery(req.gallery, next);
+
+    await Campaign.deleteMany({ organizerId: ngoId });
+
     const deletedNgo = await NGO.findByIdAndDelete(ngoId);
 
     if (!deletedNgo) {
@@ -291,11 +300,14 @@ export const donateToNgo = async (req, res, next) => {
 };
 
 export const getCampaigns = async (req, res, next) => {
-  const ngoAlias = req.query.alias; // Replace with actual parameter name if different
+  const ngoAlias = req.query.ngoAlias;
 
   try {
     const ngo = await NGO.findOne({ alias: ngoAlias });
-    const campaigns = await Campaign.find({ organizer: ngo._id });
+    if (!ngo) {
+      return next(new ErrorHandler("NGO not found.", 404));
+    }
+    const campaigns = await Campaign.find({ organizerId: ngo._id });
     res.status(200).json({
       success: true,
       campaigns: campaigns,
@@ -608,6 +620,11 @@ export const deleteGallery = async (req, res, next) => {
 
 export const uploadCampaignCover = async (req, res, next) => {
   try {
+    if (!req.query.campaignAlias) {
+      return next(
+        new ErrorHandler("campaignAlias required in URL query param.", 400)
+      );
+    }
     req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
     if (req.campaign.organizerId.toString() !== req.ngo._id.toString())
       return next(

@@ -7,7 +7,7 @@ export const sendNgoCookie = (ngo, res, message, statusCode = 200) => {
   res
     .status(statusCode)
     .cookie("ngoToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,
@@ -23,7 +23,7 @@ export const sendOrganizerCookie = (ngo, res, message, statusCode = 200) => {
   res
     .status(statusCode)
     .cookie("organizerToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,
@@ -43,7 +43,7 @@ export const sendFundRaiserCookieCookie = (
   res
     .status(statusCode)
     .cookie("frToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,

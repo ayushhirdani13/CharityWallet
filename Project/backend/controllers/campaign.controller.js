@@ -16,7 +16,7 @@ export const registerCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const allowedFields = ["title", "vision", "alias", "images"];
+    const allowedFields = ["title", "vision"];
     const campaignData = lodash.pick(data, allowedFields);
 
     let alias = data.title.toLowerCase().replace(/ /g, "_");
@@ -83,10 +83,9 @@ export const updateCampaign = async (req, res, next) => {
     const campaignId = req.campaign._id;
     const data = req.body;
 
-    const allowedFields = ["vision", "images"];
+    const allowedFields = ["vision"];
 
     const updateData = lodash.pick(data, allowedFields);
-    // console.log(updateData);
 
     // Find the NGO by id and update it with the new data
     const updatedCampaign = await Campaign.findByIdAndUpdate(
@@ -103,7 +102,6 @@ export const updateCampaign = async (req, res, next) => {
 
     return updatedCampaign;
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -120,7 +118,6 @@ export const deleteCampaign = async (req, res, next) => {
 
     return deletedCampaign;
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
