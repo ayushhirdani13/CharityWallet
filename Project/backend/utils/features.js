@@ -1,12 +1,13 @@
 // ./utils/features.js
 import jwt from "jsonwebtoken";
+import ErrorHandler from "../middlewares/error.js";
 
 export const sendNgoCookie = (ngo, res, message, statusCode = 200) => {
   const token = jwt.sign({ _id: ngo._id }, process.env.JWT_SECRET);
   res
     .status(statusCode)
     .cookie("ngoToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,
@@ -22,28 +23,57 @@ export const sendOrganizerCookie = (ngo, res, message, statusCode = 200) => {
   res
     .status(statusCode)
     .cookie("organizerToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
-    //   sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-    //   secure: process.env.NODE_ENV === "Development" ? false : true,
+      sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "Development" ? false : true,
     })
     .json({
       success: true,
       message,
     });
 };
-export const sendFundRaiserCookieCookie = (fr, res, message, statusCode = 200) => {
+export const sendFundRaiserCookieCookie = (
+  fr,
+  res,
+  message,
+  statusCode = 200
+) => {
   const token = jwt.sign({ _id: fr._id }, process.env.JWT_SECRET);
   res
     .status(statusCode)
     .cookie("frToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
-    //   sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-    //   secure: process.env.NODE_ENV === "Development" ? false : true,
+      sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "Development" ? false : true,
     })
     .json({
       success: true,
       message,
     });
+};
+
+export const sendEmail = async (email, subject, message) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      auth: {
+        user: process.env.EMAIL_ID,
+        pass: process.env.EMAIL_PW,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_ID,
+      to: email,
+      subject: subject,
+      text: message,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    throw new ErrorHandler("Could not send email.", 500);
+  }
 };

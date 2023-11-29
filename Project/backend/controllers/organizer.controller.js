@@ -1,12 +1,19 @@
 // ./controllers/organizer.controller.js
 import bcrypt from "bcrypt";
 import { Organizer } from "../models/organizer.model.js";
-import { deleteCampaign, updateCampaign } from "./campaign.controller.js";
+import {
+  deleteCampaign,
+  deleteCoverCampaign,
+  registerCampaign,
+  updateCampaign,
+  uploadCoverCampaign,
+} from "./campaign.controller.js";
 import { Campaign } from "../models/campaign.model.js";
 import ErrorHandler from "../middlewares/error.js";
-import { generateOtp } from "../utils/otp.js";
+import { generateOtp, verifyOTP } from "../utils/otp.js";
 import { sendOrganizerCookie } from "../utils/features.js";
 import { redisClient } from "../app.js";
+import { NGO } from "../models/ngo.model.js";
 
 export const registerOrganizer = async (req, res, next) => {
   try {
@@ -26,7 +33,21 @@ export const registerOrganizer = async (req, res, next) => {
         )
       );
     }
+    const alreadyExistingNgo = await NGO.findOne({
+      $or: [
+        { email: organizerForm.email },
+        { contactNo: organizerForm.contactNo },
+      ],
+    });
 
+    if (alreadyExistingNgo) {
+      return next(
+        new ErrorHandler(
+          "We already have an NGO registered with same email or contact No.",
+          400
+        )
+      );
+    }
     // The following part will be used in later version if we allow our users to know more about Organizers of the Campaign.
     /*
     let alias = organizerForm.name.toLowerCase().replace(/ /g, "_");
@@ -64,7 +85,7 @@ export const registerOrganizer = async (req, res, next) => {
   }
 };
 
-export const completeOrganizerRegistration = async (req, res, next) => {
+export const confirmOrganizerRegistration = async (req, res, next) => {
   try {
     const data = req.body;
 
@@ -121,9 +142,13 @@ export const loginOrganizer = async (req, res, next) => {
 
 export const getMyProfile = async (req, res, next) => {
   try {
+    const organizer = await Organizer.findById(req.organizer._id).populate({
+      path: "campaigns",
+      model: Campaign,
+    });
     res.status(200).json({
       success: true,
-      organizer: req.organizer,
+      organizer: organizer,
     });
   } catch (err) {
     next(err);
@@ -159,12 +184,20 @@ export const updateOrganizerProfile = async (req, res, next) => {
   }
 };
 
+export const logoutOrganizer = async (req, res, next) => {
+  res.status(200).clearCookie("organizerToken").json({
+    success: true,
+    message: "Logged Out Successfully.",
+  });
+};
+
 export const deleteOrganizer = async (req, res, next) => {
   try {
-    const organizerId = req.ngo._id;
+    const organizerId = req.organizer._id;
 
     const deletedOrganizer = await Organizer.findByIdAndDelete(organizerId);
 
+    await Campaign.deleteMany({ organizerId: organizerId });
     if (!deletedOrganizer) {
       return next(new ErrorHandler("Organizer not found", 404));
     }
@@ -194,6 +227,10 @@ export const addCampaign = async (req, res, next) => {
     if (!updatedOrganizer)
       return next(new ErrorHandler("Update Unsuccessful.", 400));
 
+    await updatedOrganizer.populate({
+      path: "campaigns",
+      model: Campaign,
+    });
     res.status(201).json({
       success: true,
       message: "Campaign Added Successfully",
@@ -314,6 +351,32 @@ export const changePasswordConfirmation = async (req, res, next) => {
       "Organizer Password Updated Successfully.",
       200
     );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadCampaignGallery = async (req, res, next) => {
+  try {
+    req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
+    if (req.campaign.organizerId.toString() !== req.organizer._id.toString())
+      return next(
+        new ErrorHandler("Unauthorized Access to the Campaign.", 403)
+      );
+    await uploadCoverCampaign(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteCampaignGallery = async (req, res, next) => {
+  try {
+    req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
+    if (req.campaign.organizerId.toString() !== req.organizer._id.toString())
+      return next(
+        new ErrorHandler("Unauthorized Access to the Campaign.", 403)
+      );
+    await deleteCoverCampaign(req, res, next);
   } catch (error) {
     next(error);
   }

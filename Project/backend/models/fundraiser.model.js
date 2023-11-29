@@ -26,7 +26,7 @@ const schema = new mongoose.Schema({
   issue: {
     type: String,
     required: true,
-    enum: ["Medical", "Animal"],
+    enum: ["Medical", "Animal", "Other"],
   },
   donationReq: {
     type: Number,

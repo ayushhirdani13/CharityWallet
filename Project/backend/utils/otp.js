@@ -51,7 +51,7 @@ export const generateOtp = async (email) => {
       message: "Email sent successfully",
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw new ErrorHandler("Email could not be sent.", 500);
   }
 };
@@ -65,7 +65,7 @@ export const verifyOTP = async (email, otp) => {
 
   const isVerified = otp === storedOTP.otp; // Verify the OTP
 
-  if(isVerified) await OTP.deleteOne({email: email});
+  if (isVerified) await OTP.deleteOne({ email: email });
 
   return isVerified;
 };

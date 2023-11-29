@@ -1,7 +1,7 @@
 // ./controllers/ngo.controller.js
 import bcrypt from "bcrypt";
 import ErrorHandler from "../middlewares/error.js";
-import { sendNgoCookie } from "../utils/features.js";
+import { sendEmail, sendNgoCookie } from "../utils/features.js";
 import { NGO } from "../models/ngo.model.js";
 import { Donation } from "../models/donation.model.js";
 import { Campaign } from "../models/campaign.model.js";
@@ -9,11 +9,13 @@ import {
   deleteCampaign,
   registerCampaign,
   updateCampaign,
-  uploadGalleryCampaign,
+  uploadCoverCampaign,
+  deleteCoverCampaign,
 } from "./campaign.controller.js";
 import { generateOtp, verifyOTP } from "../utils/otp.js";
 import { redisClient } from "../app.js";
 import {
+  deleteImageGDrive,
   deleteLogoGdrive,
   getGalleryFromGdrive,
   getLogoGdrive,
@@ -22,7 +24,8 @@ import {
   uploadMultipleImagesGdrive,
 } from "../middlewares/imageHandler.js";
 import fs from "fs";
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
+import lodash from "lodash";
 
 export const getNgos = async (req, res, next) => {
   try {
@@ -85,7 +88,7 @@ export const registerNgo = async (req, res, next) => {
       message: "Email for OTP sent to you.",
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 };
@@ -111,7 +114,12 @@ export const completeNgoRegistration = async (req, res, next) => {
     // console.log(ngo_form);
 
     const ngo = await NGO.create(ngo_form);
-    sendNgoCookie(ngo, res, "NGO registered Successfully.", 200);
+    sendNgoCookie(
+      ngo,
+      res,
+      "NGO registered Successfully. Wait for some time so that We verify your credentials ",
+      200
+    );
 
     await redisClient.del(data.email);
   } catch (error) {
@@ -141,9 +149,13 @@ export const loginNgo = async (req, res, next) => {
 
 export const getMyNgo = async (req, res, next) => {
   try {
+    const ngo = await NGO.findById(req.ngo._id).populate({
+      path: "campaigns",
+      model: Campaign,
+    });
     res.status(200).json({
       success: true,
-      ngo: req.ngo,
+      ngo: ngo,
     });
   } catch (err) {
     next(err);
@@ -153,7 +165,11 @@ export const getMyNgo = async (req, res, next) => {
 export const updateNgoProfile = async (req, res, next) => {
   try {
     const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
-    const updateData = req.body;
+    const formData = req.body;
+
+    const allowedFields = ["name", "vision", "contactNo"];
+
+    const updateData = lodash.pick(formData, allowedFields);
 
     // Find the NGO by id and update it with the new data
     const updatedNgo = await NGO.findByIdAndUpdate(ngoId, updateData, {
@@ -170,9 +186,16 @@ export const updateNgoProfile = async (req, res, next) => {
       data: updatedNgo,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
+};
+
+export const logoutNgo = async (req, res, next) => {
+  res.status(200).clearCookie("ngoToken").json({
+    success: true,
+    message: "Logged Out Successfully.",
+  });
 };
 
 export const deleteNgo = async (req, res, next) => {
@@ -180,6 +203,10 @@ export const deleteNgo = async (req, res, next) => {
     const ngoId = req.ngo._id;
 
     await deleteLogoGdrive(req.ngo.logo, next);
+    await deleteGallery(req.gallery, next);
+
+    await Campaign.deleteMany({ organizerId: ngoId });
+
     const deletedNgo = await NGO.findByIdAndDelete(ngoId);
 
     if (!deletedNgo) {
@@ -191,14 +218,14 @@ export const deleteNgo = async (req, res, next) => {
       message: "NGO deleted successfully",
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 };
 
 export const getNgoByAlias = async (req, res, next) => {
   try {
-    const ngoAlias = req.query.alias;
+    const ngoAlias = req.query.ngoAlias;
 
     if (!ngoAlias) {
       return next(
@@ -224,14 +251,19 @@ export const getNgoByAlias = async (req, res, next) => {
 export const donateToNgo = async (req, res, next) => {
   // Here, I have not used transaction for development purpose.
   // When deploying, we will use transactions for updating database.
-  // const session = await mongoose.startSession();
-  // session.startTransaction();
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const data = req.body;
 
-    const ngo = await NGO.findOne(req.query);
+    const ngo = await NGO.findOne(req.query.ngoAlias);
 
     if (!ngo) return next(new ErrorHandler("NGO not found", 404));
+    if (!ngo.verified) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new ErrorHandler("NGO is not verified yet.", 403));
+    }
 
     const donationData = {
       ...data,
@@ -239,38 +271,43 @@ export const donateToNgo = async (req, res, next) => {
       receiverId: ngo._id,
     };
 
-    // const donation = await Donation.create([donationData], { session });
-    const donation = await Donation.create(donationData);
+    const donation = await Donation.create([donationData], { session });
+    // const donation = await Donation.create(donationData);
 
     if (!donation) return next(new ErrorHandler("Donation Unsuccessful.", 400));
 
     const updatedNgo = await ngo.updateOne(
-      { donationsTillNow: ngo.donationsTillNow + data.donationAmount }
-      // { session }
+      { donationsTillNow: ngo.donationsTillNow + data.donationAmount },
+      { session }
     );
 
     if (!updatedNgo) return next(new ErrorHandler("Update Unsuccessful.", 400));
 
-    // await session.commitTransaction();
-    // session.endSession();
-
+    await session.commitTransaction();
+    session.endSession();
+    message =
+      "Thanks for your donation. This is a confirmation email that your donation was successful.";
+    await sendEmail(data.email, `Donation to ${ngo.name}`, message);
     res.status(201).json({
       success: true,
       message: "Donation made successfully.",
     });
   } catch (error) {
-    // await session.abortTransaction();
-    // session.endSession();
+    await session.abortTransaction();
+    session.endSession();
     next(error);
   }
 };
 
 export const getCampaigns = async (req, res, next) => {
-  const ngoAlias = req.query.alias; // Replace with actual parameter name if different
+  const ngoAlias = req.query.ngoAlias;
 
   try {
     const ngo = await NGO.findOne({ alias: ngoAlias });
-    const campaigns = await Campaign.find({ organizer: ngo._id });
+    if (!ngo) {
+      return next(new ErrorHandler("NGO not found.", 404));
+    }
+    const campaigns = await Campaign.find({ organizerId: ngo._id });
     res.status(200).json({
       success: true,
       campaigns: campaigns,
@@ -293,7 +330,7 @@ export const addCampaign = async (req, res, next) => {
     );
 
     if (!updatedNGO) return next(new ErrorHandler("Update Unsuccessful.", 400));
-
+    await updatedNGO.populate({ path: "campaigns", model: Campaign });
     res.status(201).json({
       success: true,
       ngo: updatedNGO,
@@ -489,6 +526,9 @@ export const deleteLogo = async (req, res, next) => {
 
 export const uploadGallery = async (req, res, next) => {
   try {
+    if (!req.files) {
+      return next(new ErrorHandler("Multer Error. Try again Later."));
+    }
     const gallery = await uploadMultipleImagesGdrive(req.files, next);
 
     const updatedNgo = await NGO.findByIdAndUpdate(
@@ -515,6 +555,9 @@ export const uploadGallery = async (req, res, next) => {
 
 export const getGallery = async (req, res, next) => {
   try {
+    if (!req.query.ngoAlias) {
+      return next(new ErrorHandler("NGO Alias Required in URL.", 400));
+    }
     const ngo = await NGO.findOne({ alias: req.query.ngoAlias });
     const gallery = ngo.gallery;
 
@@ -526,34 +569,81 @@ export const getGallery = async (req, res, next) => {
 
     if (!images) return next(new ErrorHandler("Error getting images.", 402));
 
-    // // Set the response content type to JPEG
-    // res.type("image/jpeg");
+    // Set the response content type to JPEG
+    res.type("image/jpeg");
 
     // for (const image of images) {
     //   res.write(image);
-    //   // console.log("Image sent.");
+    //   console.log("Image sent.");
     //   // await new Promise(resolve => setTimeout(resolve, 100));
     // }
 
     // res.end();
 
-    // Convert each image buffer to base64
+    // Converting each image buffer to base64
     const base64Images = images.map((image) => image.toString("base64"));
 
-    // Set the response content type to JSON
+    // Setting the response content type to JSON
     res.type("application/json");
 
-    // Send the images as a JSON array
+    // Sending images as a JSON array
     res.json({ gallery: base64Images });
   } catch (error) {
     next(error);
   }
 };
 
-export const uploadCampaignGallery = async (req, res, next) => {
+export const deleteGallery = async (req, res, next) => {
+  try {
+    const { images } = req.body;
+    const ngo = await NGO.findByIdAndUpdate(req.ngo._id, {
+      $pull: { gallery: { $in: images } },
+    });
+
+    if (!ngo) {
+      return next(new ErrorHandler("Update Unsuccessful.", 500));
+    }
+
+    await deleteImageGDrive(images, next);
+
+    await ngo.populate({ path: "campaigns", model: Campaign });
+
+    res.status(201).json({
+      success: true,
+      message: "Images Deleted Successfully.",
+      ngo: ngo,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadCampaignCover = async (req, res, next) => {
+  try {
+    if (!req.query.campaignAlias) {
+      return next(
+        new ErrorHandler("campaignAlias required in URL query param.", 400)
+      );
+    }
+    req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
+    if (req.campaign.organizerId.toString() !== req.ngo._id.toString())
+      return next(
+        new ErrorHandler("Unauthorized Access to the Campaign.", 403)
+      );
+    await uploadCoverCampaign(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteCampaignCover = async (req, res, next) => {
   try {
     req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
-    await uploadGalleryCampaign(req, res, next);
+    if (req.campaign.organizerId.toString() !== req.ngo._id.toString())
+      return next(
+        new ErrorHandler("Unauthorized Access to the Campaign.", 403)
+      );
+    await deleteCoverCampaign(req, res, next);
   } catch (error) {
     next(error);
   }
