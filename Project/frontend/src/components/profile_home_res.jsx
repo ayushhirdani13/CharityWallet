@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSpring,animated} from 'react-spring';
 import '../Styles/profile_home_res.css';
+import { Link, useNavigate } from 'react-router-dom';
 function Number({n})
 {
     const {number}=useSpring({
@@ -13,11 +14,25 @@ function Number({n})
     return(<animated.div>{number.to((n)=>n.toFixed(0))}</animated.div>);
 }
 function Profile_home(){
+    const naviGate=useNavigate();
+    function handleSignout()
+    {
+        sessionStorage.removeItem("loggedIn");
+        
+        naviGate("/home");
+        window.location.reload();
+
+    }
     return(
         <div class="container-fluid bg_color_123">
 
             <div class="d-grid gap-2 py-10 d-md-flex justify-content-md-end">
-                <button type='button' class="btn btn-cl btn-lg text-end">Login as NGO</button>
+                {sessionStorage.getItem("loggedIn")?(
+                <button type='button' onClick={handleSignout} class="btn btn-cl btn-lg text-end">SignOut</button>
+                ):( <Link to="/signin">
+                <button type='button' class="btn btn-cl btn-lg text-end">Sign In</button>
+                </Link>)}
+                
             </div>
 
             <div class="row">

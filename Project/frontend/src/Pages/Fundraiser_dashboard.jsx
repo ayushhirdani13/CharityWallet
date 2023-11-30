@@ -1,20 +1,20 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
-import Profile_Dashboard from "../components/profile_d_res";
+import Fundraiser_dashboard from "../components/fundraiser_dashboard_res";
 
 
-function Profile_Dashboard1() {
+function Fundraiser_dashboard1() {
    
     return(
         <>
         <Navbar color="linear-gradient(270deg, #7DB9E1 0.29%, rgba(216, 244, 250, 0.37) 98.4%)"/>
-        <Profile_Dashboard />
-        <Footer/>
+        <Fundraiser_dashboard />
+    <Footer/>
     </>
     );
   
 
 }
 
-export default Profile_Dashboard1;
+export default Fundraiser_dashboard1;

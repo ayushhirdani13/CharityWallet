@@ -1,23 +1,44 @@
-import React, { useState,useEffect } from 'react'
-import "../Styles/aftercreatecampaign.css";
+import {React,useState,useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 import Axios from 'axios';
+import { Box } from '@mui/material';
+import '../Styles/aftercreatecampaign_res.css';
+import HashLoader from 'react-spinners/HashLoader';
 function Aftercreatecampaign(){
-      
-    const[Campaign,setcampaign]=useState({});
 
+    const {alias} = useParams();
+    const[loading,setloading]=useState(true);
+    console.log(alias);
+
+    const[Campaign,setCampaign]=useState({});
     useEffect(() => {
-        Axios.get('http://localhost:5000/campaign')
-        .then(Campaign=>setcampaign(Campaign.data))
+        const getabs=async ()=>{ 
+            const res= await Axios.get(`http://localhost:5000/campaign/${alias}`)
+           
+                   setCampaign(res.data);
+               
+                 setloading(false);
+                   }
+                   getabs();
+
+            
       }, [])
-    
 
-    console.log(Campaign);
+console.log(Campaign);
+const Campaigndetails=Campaign.data;
+console.log(Campaigndetails);
+
     return(
-
+        <>
+        {loading===true?(
+            <Box sx={{height:"80%", display:"flex",justifyContent:"center",alignItems:"center"}}>
+        <HashLoader size="150px"loading={true} color="#36d7b7" />
+        </Box>
+        ):(
         <div class="container">
         
         <div class="py-2 border border-primary my-2 rounded-4">
-            <h1 class="text-center fw-bold ">Bachpan</h1>
+            <h1 class="text-center fw-bold ">{Campaigndetails.title}</h1>
         </div>
     
         <div>
@@ -25,7 +46,7 @@ function Aftercreatecampaign(){
         </div>
         <div class="row py-4">
             <div class="col-8">
-                 <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-3 shadow-lg width : 100% " alt="Example image" loading="lazy"/> 
+                 <img src={`http://localhost:5000/campaign/${alias}`}class="img-fluid border rounded-3 shadow-lg " alt="Example image" loading="lazy"/> 
             </div>
 
             <div class="col-4 d-flex flex-column justify-content-center align-items-center ">
@@ -71,9 +92,9 @@ function Aftercreatecampaign(){
     
 
     
-    </div>
+    </div>)}
     
-  
+    </>
     );
 }
 

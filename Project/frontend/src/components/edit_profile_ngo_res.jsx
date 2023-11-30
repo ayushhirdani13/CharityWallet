@@ -1,7 +1,90 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Styles/edit_profile_ngo_res.css';
 
 function Edit_profile_ngo(){
+    const [gallery, setgallery] = useState([]);
+    const [logo,setlogo]=useState(null);
+  function handlechange(event) {
+
+    setgallery(event.target.files);
+  }
+  function handleChange(event) {
+
+    setlogo(event.target.files[0]);
+  }
+
+  console.log(gallery);
+  async function handleGallery(e) {
+    e.preventDefault();
+
+    try {
+      const formdata = new FormData();
+      // formdata.append('gallery',);
+      // gallery.forEach((file, index) => {
+      //   formdata.append(`gallery[${index}]`, file)
+
+      // })
+      
+      for(let i=0;i<gallery.length;i++)
+      {
+       
+        formdata.append('gallery',gallery[i]);
+      }
+
+     
+      console.log(formdata);
+    
+      const response = await fetch("/ngo/myNgo/gallery", {
+        method: "POST",
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
+        body: formdata,
+      });
+
+      console.log(response);
+      if (!response.ok) {
+        // Handle errors if the request is not successful
+        throw new Error(`Request failed with status: ${response.status}`);
+      }
+
+      const data = await response.json(); // Parse the response JSON
+
+      console.log(data); // Log the response data
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handlelogo(e) {
+    e.preventDefault();
+
+    try {
+      const formdata = new FormData();
+      formdata.append('logo',logo);
+      console.log(formdata);
+    
+      const response = await fetch("/ngo/myNgo/uploadLogo", {
+        method: "POST",
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
+        body: formdata,
+      });
+
+      console.log(response);
+      if (!response.ok) {
+        // Handle errors if the request is not successful
+        throw new Error(`Request failed with status: ${response.status}`);
+      }
+
+      const data = await response.json(); // Parse the response JSON
+     if(data.sucss)
+      console.log(data); // Log the response data
+    } catch (error) {
+      console.log(error);
+    }
+  }
     return(
         <div class="container">
 
@@ -37,7 +120,9 @@ function Edit_profile_ngo(){
                         <input type="file" class="form-control" id="image" name="image" accept="image/*" required/>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary pwclr">Upload</button>
+                        <button type="submit" class="btn btn-primary pwclr"
+                        onClick={(e)=>{
+                            handlelogo(e);}}>Upload</button>
                     </div>
                 </form>
             </div>    
@@ -57,7 +142,9 @@ function Edit_profile_ngo(){
                             <input type="file" class="form-control" id="image" name="image" accept="image/*" required/>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary pwclr">Upload</button>
+                            <button type="submit" class="btn btn-primary pwclr" 
+                            onClick={(e)=>{handleGallery(e);
+                            }}>Upload</button>
                         </div>
                     </form>
                 </div> 

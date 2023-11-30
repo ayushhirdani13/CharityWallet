@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import "../Styles/AboutUs.css"
 function AboutUs(){
     return(
       <div class="container-fluid bcolor_11 py-5">
