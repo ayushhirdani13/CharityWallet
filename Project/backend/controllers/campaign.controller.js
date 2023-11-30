@@ -214,14 +214,12 @@ export const getCoverCampaign = async (req, res, next) => {
       return next(new ErrorHandler("No Cover Image Found.", 404));
     }
 
-    const imgPath = await getLogoGdrive(cover, next);
+    const img = await getLogoGdrive(cover, next);
 
-    if (!imgPath) return next(new ErrorHandler("Error getting images.", 402));
-    res.sendFile(imgPath);
-    res.on("finish", async () => {
-      // Delete the file after it has been sent successfully
-      await fs.promises.unlink(imgPath);
-      // console.log(`File ${imgPath} has been deleted.`);
+    if (!img) return next(new ErrorHandler("Error getting image.", 500));
+    base64img = img.toString("base64");
+    res.status(201).json({
+      cover: base64img,
     });
   } catch (error) {
     next(error);

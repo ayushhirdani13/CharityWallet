@@ -493,13 +493,12 @@ export const getLogo = async (req, res, next) => {
     if (ngo.logo === null) {
       return next(new ErrorHandler("No Logo Image Found.", 400));
     }
-    const imgPath = await getLogoGdrive(ngo.logo, next);
-    res.sendFile(imgPath);
+    const img = await getLogoGdrive(ngo.logo, next);
 
-    res.on("finish", async () => {
-      // Delete the file after it has been sent successfully
-      await fs.promises.unlink(imgPath);
-      // console.log(`File ${imgPath} has been deleted.`);
+    if (!img) return next(new ErrorHandler("Error getting image.", 500));
+    const base64img = img.toString("base64");
+    res.status(201).json({
+      logo: base64img,
     });
   } catch (error) {
     next(error);
@@ -568,17 +567,6 @@ export const getGallery = async (req, res, next) => {
     const images = await getGalleryFromGdrive(gallery, next);
 
     if (!images) return next(new ErrorHandler("Error getting images.", 402));
-
-    // Set the response content type to JPEG
-    res.type("image/jpeg");
-
-    // for (const image of images) {
-    //   res.write(image);
-    //   console.log("Image sent.");
-    //   // await new Promise(resolve => setTimeout(resolve, 100));
-    // }
-
-    // res.end();
 
     // Converting each image buffer to base64
     const base64Images = images.map((image) => image.toString("base64"));

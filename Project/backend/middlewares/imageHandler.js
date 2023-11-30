@@ -77,15 +77,11 @@ export const getLogoGdrive = async (imgId, next) => {
     });
 
     const buffer = Buffer.from(await content.data.arrayBuffer());
-    const fileName = path.join(path.resolve(), "uploads", `${imgId}.jpg`);
 
     // Encode the buffer contents as a JPEG image
     const jpegBuffer = await sharp(buffer).toFormat("jpeg").toBuffer();
 
-    // Write the JPEG buffer to a file
-    fs.writeFileSync(fileName, jpegBuffer);
-
-    return fileName;
+    return jpegBuffer;
   } catch (error) {
     next(error);
   }

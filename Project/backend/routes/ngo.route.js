@@ -60,12 +60,12 @@ router.get("/campaigns", getCampaigns);
 router
   .route("/myNgo")
   .get(isNgoLoggedIn, getMyNgo)
-  .put(isNgoLoggedIn, updateNgoProfile)
+  .patch(isNgoLoggedIn, updateNgoProfile)
   .delete(isNgoLoggedIn, deleteNgo); // Careful while using this as all the images, and campaigns associated with the NGO will be deleted when this route is called.
 
 // Adding a Campaign, updating it, or deleting it, all of it done here.
 router.post("/myNgo/addCampaign", isNgoLoggedIn, addCampaign);
-router.put("/myNgo/updateCampaign", isNgoLoggedIn, updateMyCampaign); // NOTE: Here, campaignAlias is required in the url query params.
+router.patch("/myNgo/updateCampaign", isNgoLoggedIn, updateMyCampaign); // NOTE: Here, campaignAlias is required in the url query params.
 router.delete("/myNgo/deleteCampaign", isNgoLoggedIn, deleteMyCampaign);
 
 // Password changing related queries. OTP required for changing password.
