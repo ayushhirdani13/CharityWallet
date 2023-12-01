@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { FundRaiser } from "../models/fundraiser.model.js";
 import { Donation } from "../models/donation.model.js";
 import { generateOtp, verifyOTP } from "../utils/otp.js";
-import { sendFundRaiserCookieCookie, sendEmail } from "../utils/features.js";
+import { sendFundRaiserCookie, sendEmail } from "../utils/features.js";
 import { redisClient } from "../app.js";
 import mongoose from "mongoose";
 
@@ -78,7 +78,7 @@ export const completeFrRegistration = async (req, res, next) => {
     // console.log(ngo_form);
 
     const fr = await FundRaiser.create(fr_form);
-    sendFundRaiserCookieCookie(
+    sendFundRaiserCookie(
       fr,
       res,
       "FundRaiser registered Successfully.",
@@ -105,7 +105,7 @@ export const loginFr = async (req, res, next) => {
       return next(new ErrorHandler("Invalid email or password.", 400));
     }
 
-    sendFundRaiserCookieCookie(fr, res, `Welcome Back, ${fr.name}`, 200);
+    sendFundRaiserCookie(fr, res, `Welcome Back, ${fr.name}`, 200);
   } catch (error) {
     next(error);
   }
@@ -248,10 +248,21 @@ export const donateToFr = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
-    message =
+    let message =
       "Thanks for your donation. This is a confirmation mail that your donation was successful.";
     await sendEmail(data.email, `Donation to ${fr.title}`, message);
 
+    if (fr.donationTillNow === fr.donationReq) {
+      message = `
+Dear benefactor,
+
+This urgent notice is to inform you that the required donation for your FundRaiser, "${fr.title}," has been successfully gathered. We kindly urge you to conclude the fundraiser promptly. Our heartfelt wishes are with you.
+
+Sincerely,
+Charity Wallet
+`;
+      await sendEmail(fr.email, `Donation Amount Collected for ${fr.title}.`, message);
+    }
     res.status(201).json({
       success: true,
       message: "Donation made successfully.",
@@ -301,7 +312,7 @@ export const changePasswordConfirmation = async (req, res, next) => {
 
     await fr.updateOne({ password: hashedPassword });
 
-    sendNgoCookie(fr, res, "FundRaiser Password Updated Successfully.", 200);
+    sendFundRaiserCookie(fr, res, "FundRaiser Password Updated Successfully.", 200);
   } catch (error) {
     next(error);
   }
