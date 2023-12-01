@@ -5,7 +5,7 @@ import PageTwo from '../components/Donation_amount';
 function donarAmount() {
   return (
     <>
-    <Navbar/>
+    <Navbar color="linear-gradient(270deg, #7DB9E1 0.29%, rgba(216, 244, 250, 0.37) 98.4%)"/>
     <PageTwo/>
     <Footer/>
     </>

@@ -2,21 +2,22 @@ import React from 'react';
 import { useState } from "react";
 import "../Styles/Don_amount.css";
 import '../Styles/boot.css';
-import { Link } from 'react-router-dom';
 
 
-function donationAmount() {
 
-    const [donationAmount, setUser] = useState({
-        amount: "",
+function DonationAmount() {
+
+      const [DonationAmount, setUser] = useState({
+        Amount: "",
 
     });
-    const [amount, setAmount] = useState("");
+    const [Amount, setAmount] = useState();
     const [isValidAmount, setIsValidAmount] = useState(true);
     const handleAmountChange = (value) => {
 
         setAmount(value);
         setIsValidAmount(true);
+        console.log(value);
 
     };
 
@@ -52,34 +53,40 @@ function donationAmount() {
         });
     }
 
+    function handleChange()
+    {
+        if (Amount>10)
+        window.location.href="/DonarMethod";
+    }
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-
+        console.log(Amount);
         // Ensure the amount is at least 10 before submitting
-        if (parseInt(amount) < 10) {
+        if (Amount < 10) {
             setIsValidAmount(false);
             return;
         }
-        (() => {
+        // (() => {
 
 
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.querySelectorAll('.needs-validation')
+        //     // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        //     const forms = document.querySelectorAll('.needs-validation')
 
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
+        //     // Loop over them and prevent submission
+        //     Array.from(forms).forEach(form => {
+        //         form.addEventListener('submit', event => {
+        //             if (!form.checkValidity()) {
+        //                 event.preventDefault()
+        //                 event.stopPropagation()
+        //             }
 
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+        //             form.classList.add('was-validated')
+        //         }, false)
+        //     })
+        // })()
 
         // Clear the input after submission if needed
         setAmount("");
@@ -118,9 +125,9 @@ function donationAmount() {
                                 <label for="validationCustomAmount" class="form-label"></label>
                                 <div class="input-group has-validation">
                                     <span class="input-group-text" id="inputGroupPrepend">₹</span>
-                                    <input type="text" class="form-control" id="validationCustomAmount" aria-describedby="inputGroupPrepend" placeholder="Amount" defaultValue={amount} name='amount' onChange={handlechange}  required/>
+                                    <input type="text" class="form-control" id="validationCustomAmount" aria-describedby="inputGroupPrepend" placeholder="Amount" defaultValue={Amount} name='amount' onChange={handlechange}  required/>
                                         <div class="invalid-feedback">
-                                        {isValidAmount ? 'Invalid Amount' : 'Amount must be at least 10'}
+                                        Minimum amount should be 10.
                                         </div>
                                 </div>
                             </div>
@@ -165,7 +172,7 @@ function donationAmount() {
                                 className="btn btn-outline"
                                 type="submit"
                                 id="buttonnext"
-                                onClick={handleSubmit}
+                                onClick={handleSubmit && handleChange}
                             >
                                 Next
                             </button>
@@ -180,4 +187,4 @@ function donationAmount() {
     )
 }
 
-export default donationAmount;
+export default DonationAmount;
