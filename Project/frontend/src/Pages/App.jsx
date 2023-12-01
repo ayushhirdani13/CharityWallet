@@ -9,8 +9,8 @@ import Createcampaign from "../components/createcampaign"
 import Aftercreatecampaign from "../components/aftercreatecampaign"
 import Fundraiser_dashboard from "../components/fundraiser_dashboard_res";
 import Profile_home1 from "./Profile_home";
-import Fundraiser_Registration from "../Registration/Fundraiser_Registration";
-import Organizer_Registration from "../Registration/Organizer_Registration";
+// import Fundraiser_Registration from "../Registration/Fundraiser_Registration";
+// import Organizer_Registration from "../Registration/Organizer_Registration";
 
 
 import Profile_Dashboard1 from "./Profile_dashboard";
@@ -32,9 +32,9 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/ngosignin" element={<NgoSignIn />} />
         <Route path="/Registration" element={<NgoRegistration />} />
-        <Route path="/fundraiser/Registration" element={<Fundraiser_Registration />} />
+        {/* <Route path="/fundraiser/Registration" element={<Fundraiser_Registration />} />
         <Route path="/organizer/Registration" element={<Organizer_Registration />} />
-        
+         */}
         <Route path="/footer" element={<Footer />} />
         <Route path="/Card" element={<Card
                   imgSrc={pic2_card}
