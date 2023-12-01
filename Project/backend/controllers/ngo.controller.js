@@ -23,7 +23,6 @@ import {
   uploadLogoGdrive,
   uploadMultipleImagesGdrive,
 } from "../middlewares/imageHandler.js";
-import fs from "fs";
 import mongoose from "mongoose";
 import lodash from "lodash";
 
@@ -167,7 +166,7 @@ export const updateNgoProfile = async (req, res, next) => {
     const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
     const formData = req.body;
 
-    const allowedFields = ["name", "vision", "contactNo"];
+    const allowedFields = ["name", "vision", "contactNo", "description", "address"];
 
     const updateData = lodash.pick(formData, allowedFields);
 

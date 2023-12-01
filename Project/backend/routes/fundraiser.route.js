@@ -10,6 +10,8 @@ import {
   getMyFr,
   deleteFundRaiser,
   logoutFr,
+  changePassword,
+  changePasswordConfirmation,
 } from "../controllers/fundraiser.controller.js";
 import { isFundRaiserLoggedIn } from "../middlewares/auth.js";
 
@@ -28,7 +30,6 @@ router.get("/dashboard", getFundRaiserByAlias);
 router.post("/register", registerFundraiser);
 router.post("/completeRegistration", completeFrRegistration); // OTP validation required here as well.
 
-
 // Enter Email and Password for Logging IN.
 router.post("/login", loginFr);
 router.get("/logout", logoutFr); // On Logout, frToken cookie will be deleted.
@@ -37,5 +38,9 @@ router
   .route("/myFundRaiser")
   .get(isFundRaiserLoggedIn, getMyFr)
   .delete(isFundRaiserLoggedIn, deleteFundRaiser);
+
+// Password changing related queries. OTP required for changing password.
+router.post("/changePassword", changePassword);
+router.post("/changePasswordConfirm", changePasswordConfirmation);
 
 export default router;

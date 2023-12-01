@@ -69,8 +69,8 @@ router.patch("/myNgo/updateCampaign", isNgoLoggedIn, updateMyCampaign); // NOTE:
 router.delete("/myNgo/deleteCampaign", isNgoLoggedIn, deleteMyCampaign);
 
 // Password changing related queries. OTP required for changing password.
-router.post("/myNgo/changePassword", changePassword);
-router.post("/myNgo/changePasswordConfirm", changePasswordConfirmation);
+router.post("/changePassword", changePassword);
+router.post("/changePasswordConfirm", changePasswordConfirmation);
 
 // Image handling for NGO.
 router.post(

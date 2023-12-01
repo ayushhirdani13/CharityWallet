@@ -18,9 +18,10 @@ export const app = express();
 
 config();
 
-// Starting mongoose and redis clients
-export const drive = gdriveConnect();
+// Connecting to Google Drive API
+export const drive = await gdriveConnect();
 
+// Starting mongoose and redis clients
 export const redisClient = await createClient({ url: process.env.REDIS_URI })
   .on("error", (err) => console.log("Redis Client Error", err))
   .connect();

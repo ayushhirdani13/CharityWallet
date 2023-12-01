@@ -1,24 +1,25 @@
 import multer from "multer";
 import { drive } from "../app.js";
 import sharp from "sharp";
+import { Readable } from "stream";
 
-const uploadsDir = "../uploads";
-
-const Storage = multer.memoryStorage()
+const Storage = multer.memoryStorage();
 
 export const upload = multer({ storage: Storage });
 
 export const uploadLogoGdrive = async (file, next) => {
   try {
+    const fileStream = new Readable();
+    fileStream.push(file.buffer);
+    fileStream.push(null);
     const response = await drive.files.create({
       requestBody: {
         name: file.filename,
-        parents: [process.env.FOLDER_ID],
         mimeType: "image/jpeg",
       },
       media: {
         mimeType: "image/jpeg",
-        body: file.buffer,
+        body: fileStream,
       },
     });
 
@@ -31,11 +32,14 @@ export const uploadLogoGdrive = async (file, next) => {
 
 export const updateLogoGdrive = async (fileId, file, next) => {
   try {
+    const fileStream = new Readable();
+    fileStream.push(file.buffer);
+    fileStream.push(null);
     const response = await drive.files.update({
       fileId: fileId,
       media: {
         mimeType: "image/jpeg",
-        body: file.buffer,
+        body: fileStream,
       },
     });
 
@@ -86,16 +90,18 @@ export const uploadMultipleImagesGdrive = async (files, next) => {
 
     await Promise.all(
       files.map(async (file) => {
+        const fileStream = new Readable();
+        fileStream.push(file.buffer);
+        fileStream.push(null);
         const filePath = file.path;
         const response = await drive.files.create({
           requestBody: {
             name: file.filename,
-            parents: [process.env.FOLDER_ID],
             mimeType: "image/jpeg",
           },
           media: {
             mimeType: "image/jpeg",
-            body: file.buffer,
+            body: fileStream,
           },
         });
 

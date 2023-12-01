@@ -37,13 +37,13 @@ router.delete("/deleteCampaign", isOrganizerLoggedIn, deleteMyCampaign);
 router.post("/changePassword", changePassword);
 router.post("/changePasswordConfirm", changePasswordConfirmation);
 router.post(
-  "/campaign/uploadGallery",
-  upload.array("gallery", 3),
+  "/campaign/cover",
+  upload.single("cover"),
   isOrganizerLoggedIn,
   uploadCampaignGallery
 );
 router.delete(
-  "/campaign/deleteGallery",
+  "/campaign/cover",
   isOrganizerLoggedIn,
   deleteCampaignGallery
 );

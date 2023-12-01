@@ -262,3 +262,47 @@ export const donateToFr = async (req, res, next) => {
     next(error);
   }
 };
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const fr = await FundRaiser.findOne({ email: email });
+
+    if (!fr) return next(new ErrorHandler("FundRaiser Not Found!", 404));
+
+    const generatedOtp = await generateOtp(email);
+    if (!generatedOtp.success)
+      return next(new ErrorHandler("OTP could not be generated.", 500));
+
+    res.status(200).json({
+      success: true,
+      message: "Email for OTP sent to you.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePasswordConfirmation = async (req, res, next) => {
+  try {
+    const data = req.body;
+
+    const isVerified = await verifyOTP(data.email, data.otp);
+
+    if (!isVerified)
+      return next(new ErrorHandler("OTP Validation Failed.", 500));
+
+    const fr = await FundRaiser.findOne({ email: data.email }).select(
+      "+password"
+    );
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    await fr.updateOne({ password: hashedPassword });
+
+    sendNgoCookie(fr, res, "FundRaiser Password Updated Successfully.", 200);
+  } catch (error) {
+    next(error);
+  }
+};
