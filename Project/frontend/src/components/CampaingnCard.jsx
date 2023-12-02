@@ -1,44 +1,76 @@
-import React from "react";
+import Axios from "axios";
+import React, { useEffect, useState } from "react";
 
-
-function CampaignCard(props)
-{
-    return(
-        <>
-        <div class="row justify-content-center">
-                  <div class="col-11 px-4">
-                    <div class=" row flex-lg-row align-items-center g-5 py-2 px-4 my-3 post_11 rounded-4">
-                      <div class="col-12 col-xxl-6 p-0 mt-0">
-                        <img
-                          src="https://picsum.photos/1600/900"
-                          class="d-flex  img-fluid rounded-4"
-                          alt="Bootstrap Themes"
-                          
-                          loading="lazy"
-                        />
-                      </div>
-                      <div class="col-12 col-xxl-6 mt-0 ">
-                        <h1 class="lh-1 my-3 rounded-4 text-center text-white bg-dark py-2 font fs-1">
-                         {props.title}
-                        </h1>
-                        <div class="bgd-clr p-3 rounded-4">
-                          <p class="text-center">
-                           {props.vision}
-                          </p>
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <button
-                              type="button"
-                              class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
-                            >
-                              Edit
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-        </>
+function CampaignCard(props) {
+  async function handleDelete() {
+    const response = await Axios.delete(
+      `http://localhost:5000/ngo/myNgo/deleteCampaign?campaignAlias=${props.alias}`,
+      { withCredentials: true }
     );
+
+    console.log(response.data);
+  }
+  const [cover, setCover] = useState({});
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    Axios.get(
+      `http://localhost:5000/campaign/cover?campaignAlias=${props.alias}`
+    )
+      .then((res) => {
+        setCover(res.data.cover);
+        setLoading(false);
+      })
+      .catch((error) => {});
+  });
+  return (
+    <>
+      <div class="row justify-content-center">
+        <div class="col-11 px-4">
+          <div class=" row flex-lg-row align-items-center g-5 py-2 px-4 my-3 post_11 rounded-4">
+            <div class="col-12 col-xxl-6 p-0 mt-0">
+              {loading ? (
+                <img
+                  // src={`data:image/jpeg;base64,${cover}`}
+                  class="d-flex w-100 img-fluid rounded-4"
+                  alt="Bootstrap Themes"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src={`data:image/jpeg;base64,${cover}`}
+                  class="d-flex w-100 img-fluid rounded-4"
+                  alt="Bootstrap Themes"
+                  loading="lazy"
+                />
+              )}
+            </div>
+            <div class="col-12 col-xxl-6 mt-0 ">
+              <h1 class="lh-1 my-3 rounded-4 text-center text-white bg-dark py-2 font fs-1">
+                {props.title}
+              </h1>
+              <div class="bgd-clr p-3 rounded-4">
+                <p class="text-center">{props.vision}</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 export default CampaignCard;

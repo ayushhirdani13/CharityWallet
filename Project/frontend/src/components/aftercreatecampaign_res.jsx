@@ -24,9 +24,7 @@ function Aftercreatecampaign() {
     getabs();
   }, []);
 
-  console.log(Campaign);
   const Campaigndetails = Campaign.data;
-  console.log(Campaigndetails);
 
   return (
     <>
@@ -61,8 +59,7 @@ function Aftercreatecampaign() {
             <div class="col-4 d-flex flex-column justify-content-center align-items-center ">
               <div class="py-2 px-4 d-flex align-items-center  border border-primary my-2 rounded-4 dinput22">
                 <p class="text-center">
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat
+                  {Campaigndetails.description}
                 </p>
               </div>
             </div>
@@ -85,8 +82,7 @@ function Aftercreatecampaign() {
             <div class="col-8">
               <div class="py-2 px-4 d-flex align-items-center  border border-primary my-2 rounded-4 vinput22">
                 <p class="text-center">
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat
+                  {Campaigndetails.vision}
                 </p>
               </div>
             </div>

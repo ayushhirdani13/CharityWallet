@@ -30,28 +30,39 @@ function Ngoprofile() {
         `http://localhost:5000/ngo/dashboard?ngoAlias=${alias}`
       );
       setNgo(res.data);
-      console.log(res.data)
       setloading(false);
     };
     getabs();
   }, []);
 
   const [gallery, setGallery] = useState({});
+  const [logo, setLogo] = useState({});
   const [loading1, setloading1] = useState(true);
+  const [loading2, setloading2] = useState(true);
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
         `http://localhost:5000/ngo/gallery?ngoAlias=${alias}`
       );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
-      //   console.log(res);
       setGallery(res.data.gallery);
       //    setlogo(res1.data);
       setloading1(false);
     };
     getabs();
   }, []);
-  //   console.log(gallery[0]);
+  useEffect(() => {
+    const getabs = async () => {
+      const res = await Axios.get(
+        `http://localhost:5000/ngo/logo?ngoAlias=${alias}`
+      );
+      // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
+      setLogo(res.data.logo);
+      //    setlogo(res1.data);
+      setloading2(false);
+    };
+    getabs();
+  }, []);
 
   return (
     <>
@@ -67,9 +78,9 @@ function Ngoprofile() {
           <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
       ) : (
-        <div class="container" style={{height:"max-content"}}>
+        <div class="container-fluid" style={{ height: "max-content" }}>
           <div class="row">
-            <div class="col-8 px-0">
+            <div class="col-6 col-lg-8 px-0">
               <div class="py-2 border border-primary my-5 rounded-4">
                 <h1 class="fs-5 fs-lg-1 text-center fw-light">
                   {Ngo.data.name}
@@ -86,34 +97,34 @@ function Ngoprofile() {
                 <div class="col-12 col-lg-8">
                   <div class="py-2 border border-primary  rounded-4">
                     <h3 class="fs-5 fs-lg-3  text-center fw-light">
-                      {Ngo.data.address.city},{Ngo.data.address.pincode}
+                      {Ngo.data.address.city}, {Ngo.data.address.pincode}
                     </h3>
                   </div>
                 </div>
                 <div class="col-12 col-lg-4 mt-5 mt-lg-0">
                   <div class="py-2 border border-primary  rounded-4">
                     <h3 class="fs-5 fs-lg-3 text-center fw-light">
-                      {Ngo.data.address.state}r
+                      {Ngo.data.address.state}
                     </h3>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="col-4 d-flex align-items-center justify-content-center">
+            <div class="col-6 col-lg-4 d-flex flex-column align-items-center justify-content-center">
               <img
-                src={`http://localhost:5000/ngo/logo?ngoAlias=${alias}`}
-                class="img-fluid border rounded-4 shadow-lg mt-5"
+                src={`data:image/jpeg;base64,${logo}`}
+                class="img-fluid border rounded-4 shadow-lg mt-4"
                 alt="Example image"
                 loading="lazy"
-                style={{height:"300px",width:"100%"}}
+                style={{ height: "400px", width: "400px" }}
               />
             </div>
           </div>
 
           <div class="row my-4 ">
             <div class="col-12 px-0">
-              <h1 class="my-2 fw-normal text-center rounded-4 pwclr text-black py-3">
+              <h1 class="my-2 fw-normal text-center rounded-4 pwclr text-white py-3">
                 Previous Work
               </h1>
             </div>
@@ -121,7 +132,7 @@ function Ngoprofile() {
 
           <div class="row ">
             <div class="col-12 col-lg-8">
-              <div class="row pt-4 px-4 my-5 rounded-4 pdclr">
+              <div class="row py-4 px-4 my-5 rounded-4 pdclr">
                 {loading1 === true ? (
                   <>
                     {" "}
@@ -146,25 +157,31 @@ function Ngoprofile() {
                             class="img-fluid border rounded-4 shadow-lg "
                             alt="Example image"
                             loading="lazy"
-                            
                           />
                         </Box>
                       </div>
-                    ))} 
+                    ))}
+                    <div class="d-flex justify-content-center ">
                     <button
                       type="button"
-                      class="btn btn-primary"
+                      class="btn btn-primary btn-lg btn-clr rounded-4 px-5"
                       data-bs-toggle="modal"
                       data-bs-target="#exampleModal"
                     >
-                    Show gallery
+                      Show gallery
                     </button>
-
-                    <div class="modal" id="exampleModal"   aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
+                    </div>
+                    <div
+                      class="modal"
+                      id="exampleModal"
+                      aria-labelledby="exampleModalLabel"
+                      aria-hidden="true"
+                      tabindex="-1"
+                    >
                       <div class="modal-dialog modal-dialog-centered modal-xl">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title">Gallary</h5>
+                            <h5 class="modal-title">Gallery</h5>
                             <button
                               type="button"
                               class="btn-close"
@@ -175,17 +192,17 @@ function Ngoprofile() {
                           <div class="modal-body">
                             <div id="carouselExample" class="carousel slide">
                               <div class="carousel-inner">
-                              <div class="carousel-item active">
-                                    {/* <div class="col-3 mb-4 mx-auto"> */}
-                                    <img
-                                      src={`data:image/jpeg;base64,${gallery[0]}`}
-                                      class="d-block w-100"
-                                      alt="Example image"
-                                      loading="lazy"
-                                      style={{height:"700px",width:"600px"}}
-                                    />
-                                    {/* </div> */}
-                                  </div>
+                                <div class="carousel-item active">
+                                  {/* <div class="col-3 mb-4 mx-auto"> */}
+                                  <img
+                                    src={`data:image/jpeg;base64,${gallery[0]}`}
+                                    class="d-block w-100"
+                                    alt="Example image"
+                                    loading="lazy"
+                                    style={{ height: "700px", width: "600px" }}
+                                  />
+                                  {/* </div> */}
+                                </div>
                                 {gallery.map((ga) => (
                                   <div class="carousel-item">
                                     {/* <div class="col-3 mb-4 mx-auto"> */}
@@ -194,7 +211,10 @@ function Ngoprofile() {
                                       class="d-block w-100"
                                       alt="Example image"
                                       loading="lazy"
-                                      style={{height:"700px",width:"600px"}}
+                                      style={{
+                                        height: "700px",
+                                        width: "600px",
+                                      }}
                                     />
                                     {/* </div> */}
                                   </div>
@@ -234,14 +254,25 @@ function Ngoprofile() {
                             >
                               Close
                             </button>
-                            
                           </div>
                         </div>
                       </div>
                     </div>
                   </>
                 )}
+                
               </div>
+              <div className="pb-3 d-flex justify-content-center">
+              <button
+                onClick={() => {
+                  window.location.href = "/donor_details";
+                }}
+                type="button"
+                class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
+              >
+                Donate
+              </button>
+            </div>
             </div>
 
             <div class="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4">
@@ -255,11 +286,7 @@ function Ngoprofile() {
                 </p>
               </div>
             </div>
-            <div>
-            <button onClick={()=>{window.location.href="/donor_details"}} type="button" class="btn btn-primary px-5 btn-lg rounded-4">
-              Donate
-            </button>
-          </div>
+            
           </div>
         </div>
       )}

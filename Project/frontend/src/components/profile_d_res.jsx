@@ -44,34 +44,35 @@ function Profile_Dashboard() {
   const { alias } = useParams();
   const [loading, setloading] = useState(true);
   const [gallery, setGallery] = useState({});
+  const [logo, setLogo] = useState({});
   const [Campaign, setCampaign] = useState({});
   const [loading1, setloading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [error1, setErrors1] = useState({});
-  const [open, setOpen] = React.useState(false);
-  const [data,setData]=React.useState();
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState();
 
   const navigate = useNavigate();
-  
+
   const handleClose = () => {
     setOpen(false);
     sessionStorage.removeItem("loggedIn");
     sessionStorage.removeItem("userType");
-     navigate("/home");
-     window.location.reload();
+    navigate("/home");
+    window.location.reload();
   };
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get("http://localhost:5000/ngo/myNgo", {
         withCredentials: true,
-      }).catch(err=>{console.log(err.response.data); setErrors1(err.response.data.message);
-        setOpen(true);})
-     
-      
-      setNgo(res.data.ngo);
-      
+      }).catch((err) => {
+        console.log(err.response.data);
+        setErrors1(err.response.data.message);
+        setOpen(true);
+      });
 
+      setNgo(res.data.ngo);
 
       setloading(false);
       const res1 = await Axios.get(
@@ -88,6 +89,11 @@ function Profile_Dashboard() {
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       //   console.log(res);
       setGallery(res2.data.gallery);
+
+      const res3 = await Axios.get(
+        `http://localhost:5000/ngo/logo?ngoAlias=${res.data.ngo.alias}`
+      );
+      setLogo(res3.data.logo);
       setloading1(false);
     };
 
@@ -112,29 +118,26 @@ function Profile_Dashboard() {
         >
           <HashLoader size="150px" loading={true} color="#36d7b7" />
           <Dialog
-              open={open}
-              onClose={handleClose}
-              PaperComponent={PaperComponent}
-              maxWidth={"xl"}
-              aria-labelledby="draggable-dialog-title"
-            >
-              <DialogTitle
-                style={{ cursor: "move" }}
-                id="draggable-dialog-title"
-              >
-                Error
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>{error1}</DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Re Enter</Button>
-              </DialogActions>
-            </Dialog>
+            open={open}
+            onClose={handleClose}
+            PaperComponent={PaperComponent}
+            maxWidth={"xl"}
+            aria-labelledby="draggable-dialog-title"
+          >
+            <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
+              Error
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>{error1}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Re Enter</Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       ) : (
         <div
-          class="container"
+          className="container"
           style={{ height: "max-content", maxWidth: "100%" }}
         >
           <Box>
@@ -150,82 +153,84 @@ function Profile_Dashboard() {
               </Box>
             )}
           </Box>
-          <div class="row">
-            <div class="col-8 px-0">
-              <div class="py-2 border border-primary my-5 rounded-4">
+          <div className="row">
+            <div className="col-8 px-0">
+              <div className="py-2 border border-primary my-5 rounded-4">
                 <h1
                   style={{
                     fontSize: "100px",
                     margin: "0px",
                     fontWeight: "600",
                   }}
-                  class="text-center "
+                  className="text-center "
                 >
                   {Ngo.name}
                 </h1>
               </div>
 
-              <div class="py-2 border border-primary my-5 rounded-4">
+              <div className="py-2 border border-primary my-5 rounded-4">
                 <h3
                   style={{ fontSize: "40px", margin: "0px", fontWeight: "300" }}
-                  class="  text-center "
+                  className="  text-center "
                 >
                   {Ngo.vision}
                 </h3>
               </div>
 
-              <div class="row mt-5">
-                <div class="col-12 col-lg-8">
-                  <div class="py-2 border border-primary  rounded-4">
+              <div className="row mt-5">
+                <div className="col-12 col-lg-8">
+                  <div className="py-2 border border-primary  rounded-4">
                     <h3
                       style={{
                         fontSize: "30px",
                         margin: "0px",
                         fontWeight: "600",
                       }}
-                      class="  text-center "
+                      className="  text-center "
                     >
-                      {Ngo.address.city},{Ngo.address.pincode}
+                      {Ngo.address.city}, {Ngo.address.pincode}
                     </h3>
                   </div>
                 </div>
-                <div class="col-12 col-lg-4 mt-5 mt-lg-0">
-                  <div class="py-2 border border-primary  rounded-4">
-                    <h3 style={{
+                <div className="col-12 col-lg-4 mt-5 mt-lg-0">
+                  <div className="py-2 border border-primary  rounded-4">
+                    <h3
+                      style={{
                         fontSize: "30px",
                         margin: "0px",
                         fontWeight: "600",
                       }}
-                      class="  text-center ">
-                      {Ngo.address.state}r
+                      className="text-center "
+                    >
+                      {Ngo.address.state}
                     </h3>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="col-4 d-flex align-items-center justify-content-center">
+            <div className="col-4 d-flex align-items-center justify-content-center">
               <img
-                src={`http://localhost:5000/ngo/logo?ngoAlias=${Ngo.alias}`}
-                class="img-fluid border rounded-4 shadow-lg mt-5"
+                src={`data:image/jpeg;base64,${logo}`}
+                className="img-fluid border rounded-4 shadow-lg"
                 alt="Example image"
                 loading="lazy"
-                style={{ height: "100%", width: "100%" }}
+                style={{ height: "400px", width: "400px" }}
               />
             </div>
           </div>
 
-          <div class="row my-4 ">
-            <div class="col-12 px-0">
-              <h1 class="my-2 fw-normal text-center text-white rounded-4 pwclr text-black py-3">
+          <div className="row my-4 ">
+            <div className="col-12 px-0">
+              <h1 className="my-2 fw-normal text-center text-white rounded-4 pwclr text-black py-3">
                 Previous Work
               </h1>
             </div>
           </div>
 
-          <div class="row ">
-            <div class="col-12 col-lg-8">
-              <div class="row pt-4 px-4 my-5 rounded-4 pdclr">
+          <div className="row ">
+            <div className="col-12 col-lg-8">
+              <div className="row pt-4 px-4 my-5 rounded-4 pdclr">
                 {loading1 === true ? (
                   <>
                     {" "}
@@ -243,21 +248,21 @@ function Profile_Dashboard() {
                 ) : (
                   <>
                     {gallery.map((ga) => (
-                      <div class="col-3 mb-4 mx-auto">
+                      <div className="col-3 mb-4 mx-auto">
                         <Box>
                           <img
                             src={`data:image/jpeg;base64,${ga}`}
-                            class="img-fluid border rounded-4 shadow-lg "
+                            className="img-fluid border rounded-4 shadow-lg "
                             alt="Example image"
                             loading="lazy"
-                            style={{ height:"200px", width:"200px"} }
+                            style={{ height: "200px", width: "200px" }}
                           />
                         </Box>
                       </div>
                     ))}
                     <button
                       type="button"
-                      class="btn btn-primary btn-clr btn-lg px-5 "
+                      className="btn btn-primary btn-clr btn-lg px-5 "
                       data-bs-toggle="modal"
                       data-bs-target="#exampleModal"
                       style={{
@@ -270,31 +275,34 @@ function Profile_Dashboard() {
                     </button>
 
                     <div
-                      class="modal"
+                      className="modal"
                       id="exampleModal"
                       aria-labelledby="exampleModalLabel"
                       aria-hidden="true"
-                      tabindex="-1"
+                      tabIndex="-1"
                     >
-                      <div class="modal-dialog modal-dialog-centered modal-xl">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Gallary</h5>
+                      <div className="modal-dialog modal-dialog-centered modal-xl">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title">Gallary</h5>
                             <button
                               type="button"
-                              class="btn-close"
+                              className="btn-close"
                               data-bs-dismiss="modal"
                               aria-label="Close"
                             ></button>
                           </div>
-                          <div class="modal-body">
-                            <div id="carouselExample" class="carousel slide">
-                              <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                  {/* <div class="col-3 mb-4 mx-auto"> */}
+                          <div className="modal-body">
+                            <div
+                              id="carouselExample"
+                              className="carousel slide"
+                            >
+                              <div className="carousel-inner">
+                                <div className="carousel-item active">
+                                  {/* <div className="col-3 mb-4 mx-auto"> */}
                                   <img
                                     src={`data:image/jpeg;base64,${gallery[0]}`}
-                                    class="d-block w-100"
+                                    className="d-block w-100"
                                     alt="Example image"
                                     loading="lazy"
                                     style={{ height: "700px", width: "600px" }}
@@ -302,11 +310,11 @@ function Profile_Dashboard() {
                                   {/* </div> */}
                                 </div>
                                 {gallery.map((ga) => (
-                                  <div class="carousel-item">
-                                    {/* <div class="col-3 mb-4 mx-auto"> */}
+                                  <div className="carousel-item">
+                                    {/* <div className="col-3 mb-4 mx-auto"> */}
                                     <img
                                       src={`data:image/jpeg;base64,${ga}`}
-                                      class="d-block w-100"
+                                      className="d-block w-100"
                                       alt="Example image"
                                       loading="lazy"
                                       style={{
@@ -318,37 +326,41 @@ function Profile_Dashboard() {
                                   </div>
                                 ))}
                                 <button
-                                  class="carousel-control-prev"
+                                  className="carousel-control-prev"
                                   type="button"
                                   data-bs-target="#carouselExample"
                                   data-bs-slide="prev"
                                 >
                                   <span
-                                    class="carousel-control-prev-icon"
+                                    className="carousel-control-prev-icon"
                                     aria-hidden="true"
                                   ></span>
-                                  <span class="visually-hidden
-                                  ">Previous</span>
+                                  <span
+                                    className="visually-hidden
+                                  "
+                                  >
+                                    Previous
+                                  </span>
                                 </button>
                                 <button
-                                  class="carousel-control-next"
+                                  className="carousel-control-next"
                                   type="button"
                                   data-bs-target="#carouselExample"
                                   data-bs-slide="next"
                                 >
                                   <span
-                                    class="carousel-control-next-icon"
+                                    className="carousel-control-next-icon"
                                     aria-hidden="true"
                                   ></span>
-                                  <span class="visually-hidden">Next</span>
+                                  <span className="visually-hidden">Next</span>
                                 </button>
                               </div>
                             </div>
                           </div>
-                          <div class="modal-footer">
+                          <div className="modal-footer">
                             <button
                               type="button"
-                              class="btn btn-secondary"
+                              className="btn btn-secondary"
                               data-bs-dismiss="modal"
                             >
                               Close
@@ -362,28 +374,35 @@ function Profile_Dashboard() {
               </div>
             </div>
 
-            <div class="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4 mb-5">
-              <div tyle={{width:"100%", height:"100%",}}class=" border border-primary rounded-4 hw-adj d-flex justify-content-center align-items-center  max-content">
-                <p style={{
-                        fontSize: "30px",
-                        margin: "0px",
-                        fontWeight: "600",
-                      }}
-                      class="  text-center ">{Ngo.description}</p>
+            <div className="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4 mb-5">
+              <div
+                tyle={{ width: "100%", height: "100%" }}
+                className=" border border-primary rounded-4 hw-adj d-flex justify-content-center align-items-center  max-content"
+              >
+                <p
+                  style={{
+                    fontSize: "30px",
+                    margin: "0px",
+                    fontWeight: "600",
+                  }}
+                  className="  text-center "
+                >
+                  {Ngo.description}
+                </p>
               </div>
-              <h5 class="py-3 mb-0">Donation Live Count</h5>
-              <div class="p-2  text-center rounded-5 dbclr px-5">
-                <p class="fs-1 mb-0">
+              <h5 className="py-3 mb-0">Donation Live Count</h5>
+              <div className="p-2  text-center rounded-5 dbclr px-5">
+                <p className="fs-1 mb-0">
                   <Number n={1202121} />
                 </p>
               </div>
             </div>
           </div>
-          <div class="d-flex justify-content-center mb-3">
+          <div className="d-flex justify-content-center mb-3">
             <Link to="/Createcampaign">
               <button
                 type="button"
-                class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
+                className="btn btn-primary btn-clr btn-lg px-5 me-md-2"
                 onClick={() => (window.location.href = "/Createcampaign")}
               >
                 Create Campaign
@@ -393,7 +412,7 @@ function Profile_Dashboard() {
             <Link to="/edit_profile_ngo">
               <button
                 type="button"
-                class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
+                className="btn btn-primary btn-clr btn-lg px-5 me-md-2"
                 onClick={() => (window.location.href = "/edit_profile_ngo")}
               >
                 Edit Profile
@@ -401,9 +420,9 @@ function Profile_Dashboard() {
             </Link>
           </div>
 
-          <div class="col-12 p-0 clr rounded-4 mx-md-auto">
-            <div class="overflow-auto h75">
-              <div class="container-fluid ">
+          <div className="col-12 p-0 clr rounded-4 mx-md-auto">
+            <div className="overflow-auto h75">
+              <div className="container-fluid ">
                 {loading2 === true ? (
                   <>
                     <Box
@@ -423,12 +442,11 @@ function Profile_Dashboard() {
                       key={campaigns.id}
                       title={campaigns.title}
                       vision={campaigns.vision}
+                      alias={campaigns.alias}
                     />
                   ))
                 )}
               </div>
-              
-
             </div>
           </div>
         </div>

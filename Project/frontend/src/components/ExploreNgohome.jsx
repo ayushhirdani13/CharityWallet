@@ -1,86 +1,94 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "../Styles/campaignhome.css";
-import Axios from 'axios';
-import Ngocard from './Ngocard';
-import CircularProgress from '@mui/material/CircularProgress';
-import LinearProgress from '@mui/material/LinearProgress';
-import HashLoader from 'react-spinners/HashLoader';
-import {Link} from "react-router-dom";
-import { Box } from '@mui/material';
-function ExploreNgohome(){
+import Axios from "axios";
+import Ngocard from "./Ngocard";
+import CircularProgress from "@mui/material/CircularProgress";
+import LinearProgress from "@mui/material/LinearProgress";
+import HashLoader from "react-spinners/HashLoader";
+import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
+function ExploreNgohome() {
+  const [Ngo, setNgo] = useState({});
+  const [loading, setloading] = useState(true);
+  const [logo, setlogo] = useState(null);
+  useEffect(() => {
+    const getabs = async () => {
+      const res = await Axios.get("http://localhost:5000/ngo/");
 
-    const[Ngo,setNgo]=useState({});
-    const[loading,setloading]=useState(true);
-    const[logo,setlogo]=useState(null);
-    useEffect(() => {
-        const getabs=async ()=>{ 
-            const res= await Axios.get('http://localhost:5000/ngo/')
-           
-                   setNgo(res.data);
-               setloading(false);
-                   }
-                   getabs()
-      }, [])
-     
-      const Ngode=Ngo.ngos;
-console.log(logo);
-      const [searchItem, setSearchItem] = useState('')
-  const [filteredUsers, setFilteredUsers] = useState(Ngode)
+      setNgo(res.data);
+      setloading(false);
+    };
+    getabs();
+  }, []);
 
-  const handleInputChange = (e) => { 
+  const Ngode = Ngo.ngos;
+  console.log(logo);
+  const [searchItem, setSearchItem] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState(Ngode);
+
+  const handleInputChange = (e) => {
     const searchTerm = e.target.value;
-    setSearchItem(searchTerm)
+    setSearchItem(searchTerm);
 
     const filteredItems = Ngode.filter((Ngode) =>
-    Ngode.name.toLowerCase().includes(searchTerm.toLowerCase())
+      Ngode.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     setFilteredUsers(filteredItems);
-   
-  }
+  };
 
-      console.log(Ngode);
-    return(
-<>
-        {loading===true?(
-            <Box sx={{height:"80%", display:"flex",justifyContent:"center",alignItems:"center"}}>
-        <HashLoader size="150px"loading={true} color="#36d7b7" />
+  console.log(Ngode);
+  return (
+    <>
+      {loading === true ? (
+        <Box
+          sx={{
+            height: "80%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
-        ):(<div class="container-fluid">
-        
-        <div class="container px-5"> 
-           {/* <img src='http://localhost:5000/ngo/logo?ngoAlias=sample_ngo' alt="logo"/> */}
+      ) : (
+        <div class="container-fluid">
+          <div class="container px-5">
+            {/* <img src='http://localhost:5000/ngo/logo?ngoAlias=sample_ngo' alt="logo"/> */}
             <h1 class="fw-bold text-center hsize33 py-4">Explore NGOs</h1>
-            
-            <input onChange={handleInputChange} type="search" class="form-control rounded-4" placeholder="Search..." aria-label="Search"/> 
 
-            
-            
+            <input
+              onChange={handleInputChange}
+              type="search"
+              class="form-control rounded-4"
+              placeholder="Search..."
+              aria-label="Search"
+            />
+
             <div class="row py-4">
-                {searchItem===''?(Ngode.map(ngoterm=>(
+              {searchItem === ""
+                ? Ngode.map((ngoterm) => (
                     // <Link to={`/ExploreNgo/${ngoterm.name}`}>
                     <Ngocard
-                    key={ngoterm.id}
-                    name={ngoterm.name}
-                    description={ngoterm.description} 
-                    alias={ngoterm.alias}
-                    id={ngoterm._id}
+                      key={ngoterm.id}
+                      name={ngoterm.name}
+                      description={ngoterm.description}
+                      alias={ngoterm.alias}
+                      id={ngoterm._id}
                     />
                     // </Link>
-                ))):(filteredUsers.map(ngoterm=>(
+                  ))
+                : filteredUsers.map((ngoterm) => (
                     <Ngocard
-                    key={ngoterm.id}
-                    name={ngoterm.name}
-                    description={ngoterm.description} 
-                    image={ngoterm.alias}
+                      key={ngoterm.id}
+                      name={ngoterm.name}
+                      description={ngoterm.description}
+                      image={ngoterm.alias}
                     />
-                )))}
-                 
+                  ))}
             </div>
 
-
-           
-{/*             
+            {/*             
             <div class="row py-4">
                 <div class="col-lg-6 col-12">
                     <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-3 shadow-lg " alt="Example image" loading="lazy"/>
@@ -114,14 +122,10 @@ console.log(logo);
                     </div>
                 </div>
             </div> */}
-
-
-
+          </div>
         </div>
-    </div>)}
-       
+      )}
     </>
-
-    );
+  );
 }
- export default ExploreNgohome;
+export default ExploreNgohome;

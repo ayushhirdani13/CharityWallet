@@ -40,11 +40,11 @@ export default function HorizontalLinearStepper() {
   const [error1, setErrors1] = useState({});
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
-  
+
   const handleClose = () => {
     setOpen(false);
-     navigate("/organizer/Registration");
-     window.location.reload();
+    navigate("/organizer/Registration");
+    window.location.reload();
   };
   const section1 = {
     visibility: "hidden",
@@ -55,7 +55,6 @@ export default function HorizontalLinearStepper() {
   const section3 = {
     visibility: "hidden",
   };
-
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -257,10 +256,8 @@ export default function HorizontalLinearStepper() {
         setdata(data1);
         console.log(data);
         if (!data1.success) {
-        setErrors1(data1.message);
-        setOpen(true);
-        
-
+          setErrors1(data1.message);
+          setOpen(true);
         }
 
         if (!response.ok) {
@@ -292,10 +289,9 @@ export default function HorizontalLinearStepper() {
         body: JSON.stringify(verifyOrganizer),
       });
 
-      const data1= await response.json(); // Parse the response JSON
+      const data1 = await response.json(); // Parse the response JSON
 
       if (data1.success) {
-          
         sessionStorage.setItem("loggedIn", true);
         sessionStorage.setItem("userType", "Organizer");
         console.log(sessionStorage);
@@ -767,25 +763,25 @@ export default function HorizontalLinearStepper() {
                       {activeStep === steps.length - 1 ? "Submit" : "Next"}
                     </Button>
                     <Dialog
-              open={open}
-              onClose={handleClose}
-              PaperComponent={PaperComponent}
-              maxWidth={"xl"}
-              aria-labelledby="draggable-dialog-title"
-            >
-              <DialogTitle
-                style={{ cursor: "move" }}
-                id="draggable-dialog-title"
-              >
-                Error
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>{error1}</DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Re Enter</Button>
-              </DialogActions>
-            </Dialog>
+                      open={open}
+                      onClose={handleClose}
+                      PaperComponent={PaperComponent}
+                      maxWidth={"xl"}
+                      aria-labelledby="draggable-dialog-title"
+                    >
+                      <DialogTitle
+                        style={{ cursor: "move" }}
+                        id="draggable-dialog-title"
+                      >
+                        Error
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>{error1}</DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose}>Re Enter</Button>
+                      </DialogActions>
+                    </Dialog>
                   </Box>
                 </React.Fragment>
               )}
