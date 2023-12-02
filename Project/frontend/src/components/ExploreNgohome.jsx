@@ -13,7 +13,7 @@ function ExploreNgohome() {
   const [logo, setlogo] = useState(null);
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get("http://localhost:5000/ngo/");
+      const res = await Axios.get("/ngo/");
 
       setNgo(res.data);
       setloading(false);

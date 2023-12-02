@@ -3,7 +3,7 @@ import { useSpring, animated } from "react-spring";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 // import { use } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../Styles/profile_d_res.css";
 
 import HashLoader from "react-spinners/HashLoader";
@@ -27,7 +27,7 @@ function Ngoprofile() {
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
-        `http://localhost:5000/ngo/dashboard?ngoAlias=${alias}`
+        `/ngo/dashboard?ngoAlias=${alias}`
       );
       setNgo(res.data);
       setloading(false);
@@ -39,13 +39,21 @@ function Ngoprofile() {
   const [logo, setLogo] = useState({});
   const [loading1, setloading1] = useState(true);
   const [loading2, setloading2] = useState(true);
+  const [donationData,setdonationData]=useState({
+    type:"ngo",
+    alias:alias,
+  })
+  const navigate=useNavigate();
+
+  console.log(donationData);
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
-        `http://localhost:5000/ngo/gallery?ngoAlias=${alias}`
+        `/ngo/gallery?ngoAlias=${alias}`
       );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setGallery(res.data.gallery);
+      
       //    setlogo(res1.data);
       setloading1(false);
     };
@@ -54,7 +62,7 @@ function Ngoprofile() {
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
-        `http://localhost:5000/ngo/logo?ngoAlias=${alias}`
+        `/ngo/logo?ngoAlias=${alias}`
       );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setLogo(res.data.logo);
@@ -63,6 +71,8 @@ function Ngoprofile() {
     };
     getabs();
   }, []);
+
+
 
   return (
     <>
@@ -265,7 +275,7 @@ function Ngoprofile() {
               <div className="pb-3 d-flex justify-content-center">
               <button
                 onClick={() => {
-                  window.location.href = "/donor_details";
+                  navigate("/donor_details", { state:donationData });
                 }}
                 type="button"
                 class="btn btn-primary px-5 btn-lg btn-clr rounded-4"

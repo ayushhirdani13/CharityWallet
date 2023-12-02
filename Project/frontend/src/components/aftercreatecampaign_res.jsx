@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Axios from "axios";
 import { Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import "../Styles/aftercreatecampaign_res.css";
 import HashLoader from "react-spinners/HashLoader";
 function Aftercreatecampaign() {
@@ -10,10 +11,15 @@ function Aftercreatecampaign() {
   console.log(alias);
 
   const [Campaign, setCampaign] = useState({});
+  const [donationData,setdonationData]=useState({
+    type:"campaign",
+    alias:alias,
+  })
+  let navigate=useNavigate();
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
-        `http://localhost:5000/campaign/dashboard?campaignAlias=${alias}`
+        `/campaign/dashboard?campaignAlias=${alias}`
       );
 
       console.log(res);
@@ -93,9 +99,17 @@ function Aftercreatecampaign() {
             </div>
           </div>
           <div>
-            <button type="button" class="btn btn-primary px-5 btn-lg rounded-4">
-              Donate
-            </button>
+          <div className="pb-3 d-flex justify-content-center">
+              <button
+                onClick={() => {
+                  navigate("/donor_details", { state:donationData });
+                }}
+                type="button"
+                class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
+              >
+                Donate
+              </button>
+              </div>
           </div>
         </div>
       )}

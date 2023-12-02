@@ -38,6 +38,7 @@ function Emergency(){
                 name={fundraiser.name}
                 title={fundraiser.title}
                 issue={fundraiser.issue}
+                alias={fundraiser.alias}
 
                 />)
               )}

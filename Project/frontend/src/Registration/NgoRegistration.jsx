@@ -21,6 +21,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 function PaperComponent(props) {
   return (
     <Draggable
@@ -76,8 +80,8 @@ export default function HorizontalLinearStepper() {
       city: "",
       state: "",
       pincode: "",
-      dateOfReg: date,
     },
+    dateOfReg:null,
     password: "",
   });
 
@@ -224,10 +228,10 @@ export default function HorizontalLinearStepper() {
       setverify((prev) => {
         return { ...prev, [name]: value };
       });
-      const date = new Date();
-      setNgo((prev) => {
-        return { ...prev, dateOfReg: date };
-      });
+      // const date = new Date();
+      // setNgo((prev) => {
+      //   return { ...prev, dateOfReg: date };
+      // });
     }
 
     setNgo((prev) => {
@@ -625,6 +629,20 @@ export default function HorizontalLinearStepper() {
                         sx={{ width: "85%", height: "50px" }}
                         variant="filled"
                       />
+
+                      <TextField
+                      type="date"
+                        error={errors.dateOfReg}
+                        name="dateOfReg"
+                        onChange={handlechange}
+                        id="filled-error"
+                        defaultValue={Ngo.dateOfReg}
+                        label="Date of Ngo Registration"
+                        helperText={errors.dateOfReg}
+                        sx={{ width: "85%", height: "50px" }}
+                        variant="filled"
+                      />
+                     
                     </div>
                   </Typography>
                   <Box

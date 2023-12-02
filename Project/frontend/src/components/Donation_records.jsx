@@ -1,31 +1,41 @@
 import React, { useState } from "react";
 import "../Styles/boot.css";
 import "../Styles/Don_records.css";
+import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Paper from "@mui/material/Paper";
+import Draggable from "react-draggable";
+function PaperComponent(props) {
+  return (
+    <Draggable
+      handle="#draggable-dialog-title"
+      cancel={'[class*="MuiDialogContent-root"]'}
+    >
+      <Paper {...props} />
+    </Draggable>
+  );
+}
+
 function Donation_records() {
   const [email, setEmail] = useState("");
   const [emailValid, setEmailValid] = useState(false);
   const [otp, setOtp] = useState("");
+  const navigate = useNavigate();
+  const [error1, setErrors1] = useState({});
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+    navigate("/donor_confirm");
+    window.location.reload();
+  };
 
   const validateEmail =
-    // e.preventDefault();
-    // make a POST request to the server with the email
-    // const response = await fetch('http://localhost:5000/api/email-validation', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ email: email }),
-    // });
-
-    // const data = await response.json();
-
-    // if (data.status === 'valid') {
-    // setEmailValid(true);
-    // send OTP to the email and store it in the otp state
-    // setOtp(data.otp);
-    // } else {
-    //     setEmailValid(false);
-    // }
     () => {
       const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       if (re.test(email)) {
@@ -49,8 +59,14 @@ function Donation_records() {
       if (data.success) {
         setEmailValid(true);
       }
+      else
+      {
+        setErrors1(data.message);
+        setOpen(true);
+      }
     } catch (error) {
-      console.log(error);
+      setErrors1(error);
+      setOpen(true);
     }
   }
 
@@ -67,10 +83,17 @@ function Donation_records() {
 
       const data = await response.json();
       if (data.success) {
+        navigate("/donor_records", { state: data.donations});
         // setEmailValid(true);
       }
+      else
+      {
+        setErrors1(data.message);
+        setOpen(true);
+      }
     } catch (error) {
-      console.log(error);
+      setErrors1(error);
+      setOpen(true);
     }
   }
   return (
@@ -127,7 +150,7 @@ function Donation_records() {
                       handelVerify(e)
                     }}
                     className="btn"
-                    type="submit"
+                    
                   >
                     Submit
                   </button>
@@ -145,6 +168,23 @@ function Donation_records() {
                 )}
               </div>
             </div>
+            <Dialog
+            open={open}
+            onClose={handleClose}
+            PaperComponent={PaperComponent}
+            maxWidth={"xl"}
+            aria-labelledby="draggable-dialog-title"
+          >
+            <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
+              Error
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>{error1}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Re Enter</Button>
+            </DialogActions>
+          </Dialog>
           </div>
         </form>
       </div>

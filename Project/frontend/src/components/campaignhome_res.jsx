@@ -17,7 +17,7 @@ function Campaignhome(){
     const[logo,setlogo]=useState(null);
     useEffect(() => {
         const getabs=async ()=>{ 
-            const res= await Axios.get('http://localhost:5000/campaign/')
+            const res= await Axios.get('/campaign/')
             // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
                    setCampaign(res.data);
                 //    setlogo(res1.data);

@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 import "../Styles/Don_details.css";
 import "../Styles/boot.css";
+import { Numbers } from "@mui/icons-material";
 // import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 function DonationDetails() {
-  const navigate = useNavigate();
-
+  const location = useLocation();
+  const Type = location.state;
+  // const navigate = useNavigate();
+console.log(Type);
   const [DonationDetails, setUser] = useState({
     donorName: "",
     donorEmail: "",
     donorPhoneNo: "",
+    donationAmount: Numbers,
     // receiverType:"NGO",
   });
 
@@ -25,10 +29,39 @@ function DonationDetails() {
     });
   }
 
-  function handleChange() {
-    if (isValid == true) {
-      navigate("/donor_amount", { state: DonationDetails });
+  async function handleChange(e) {
+      e.preventDefault();
+    try {
+      
+      const response = await fetch(`/${Type.type}/donate?${Type.type}Alias=${Type.alias}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(DonationDetails),
+        }
+      );
+      const data = await response.json(); // Parse the response JSON
+      console.log(data);
+      // if (data.success) {
+       
+      //   setDisabled(true);
+      //   setErrors(validationerrors);
+      // } else {
+      //   setErrors1(data.message);
+      //   setOpen(true);
+      // }
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
+    // if (isValid == true) {
+    //   // navigate("/donor_amount", { state: DonationDetails });
+    // }
   }
 
   const handleSubmit = (event) => {
@@ -96,6 +129,19 @@ function DonationDetails() {
                   <label for="floatingInput">Address</label>
                   <div className="invalid-feedback">Invaild Address</div>
                 </div>
+                <div className="form-floating mb-3">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="floatingInput"
+                    placeholder="Amount"
+                    onChange={handlechange}
+                    name="donationAmount"
+                    required
+                  />
+                  <label for="floatingInput">Amount</label>
+                  <div className="invalid-feedback">Invaild Address</div>
+                </div>
               </div>
               <div className="pnext_section">
                 <button
@@ -114,8 +160,8 @@ function DonationDetails() {
 
                 <button
                   class="btn"
-                  onClick={handleChange}
-                  type="submit"
+                  onClick={(e)=>(handleChange(e))}
+                  
                   style={{
                     fontFamily: "initial",
                     height: "50px",

@@ -49,7 +49,7 @@ function App() {
         <Route path="/edit_profile_ngo" element={<Edit_profile_ngo/>} />
         <Route path="/edit_profile_org" element={<Edit_profile_org1 />} />
         <Route path="/Campaignhome/:alias" element={<Aftercreatecampaign1 />}/>
-        <Route path="/home" element={<Profile_home1 />} />
+        <Route path="/" element={<Profile_home1 />} />
         <Route path="/AboutUs" element={<AboutUs1/>} />
         <Route path="/Campaignhome" element={<Campaignhome1/>} />
         <Route path="/ExploreNgo" element={<ExploreNGOhome/>} />
@@ -60,13 +60,13 @@ function App() {
         <Route path="/aftercreatecampaign" element={<Aftercreatecampaign1 />} />
         <Route path="/Createcampaign" element={<Createcampaign1/>} />
         </>):(<>
-        <Route path="/" element={<DonorHome />} />
+        
         <Route path="/Registrationas" element={<Login />} />
         <Route path="/ngo/Registration" element={<NgoRegistration />} />
         <Route path="/fundraiser/Registration" element={<Fundraiser_Registration />} />
         <Route path="/organizer/Registration" element={<Organizer_Registration />} />
         <Route path="/signin" element={<NgoSignIn />} />
-        <Route path="/home" element={<Profile_home1 />} />
+        <Route path="/" element={<Profile_home1 />} />
         <Route path="/AboutUs" element={<AboutUs1/>} />
         <Route path="/Campaignhome" element={<Campaignhome1/>} />
         <Route path="/Campaignhome/:alias" element={<Aftercreatecampaign1 />}/>

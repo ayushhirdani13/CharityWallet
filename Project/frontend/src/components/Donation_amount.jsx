@@ -12,7 +12,7 @@ function DonationAmount() {
    const data=location.state;
 
 //    console.log(data);
-      const [DonationAmount, setUser] = useState({...data,donationAmount:1000,});
+      const [DonationAmount, setUser] = useState({...data,donationAmount:Numbers,});
       console.log(DonationAmount);
     
     const [Amount, setAmount] = useState();
