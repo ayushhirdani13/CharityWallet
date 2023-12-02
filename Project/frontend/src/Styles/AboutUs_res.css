@@ -1,0 +1,29 @@
+.bcolor_11{
+    background:  linear-gradient(90.11deg, #7DB9E1 0.93%, rgba(216, 244, 250, 0.97) 99.83%);
+    
+}
+
+.bgcolor_11{
+    background: rgba(255, 255, 255, 0.56);
+
+}
+
+.w-100_11{
+    width:100%;
+}
+
+.horizontal-row_11{
+    height: 3px;
+    background-color: #000000;
+    border: none;
+}
+
+.vertical-line_11{
+    border-left: 1px solid black; 
+    height: 200px; 
+    margin: 0 10px; 
+  }
+.h100_11{
+    height: 100px; /*to be improved*/
+}
+  

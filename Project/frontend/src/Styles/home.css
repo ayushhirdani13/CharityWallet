@@ -1,0 +1,109 @@
+.container-main{
+  align-content: flex-start;
+  background:linear-gradient(90deg, #7DB9E1 0.93%, rgba(216, 244, 250, 0.97) 99.83%);
+
+  
+ 
+  border-radius: 30px 30px 0px 0px;
+  padding: 10px;
+}
+
+
+.carousel{
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  margin: 0px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.p-3-border{
+  margin-left: 100px;
+  background: light;
+  padding: 0px;
+}
+  
+.line1{
+  border-bottom: 1px solid black;
+  font-size: 41px;
+  margin: 0px;
+  margin-top: 50px;
+  line-height: 40px;
+}
+
+.container1{
+  margin-top: 20px;
+  
+  text-align: center;
+}
+
+.row{
+  align-items: center;
+}
+.row2{
+  text-align: center;
+}
+.container2{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.font1{
+  font-size: 54px;
+  font-family: raleway;
+}
+
+.font2{
+ 
+ font-family: 'Faster one';
+
+  color: #1F0000;
+  text-align: center;
+ 
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.p-3-border3{
+  align-content: center;
+  overflow: hidden;
+ 
+  margin-left: 100px;
+  background: light;
+  padding: 0px;
+}
+.p-3-border4{
+  border-left: 1px solid black;
+  margin-left: 100px;
+  background: light;
+  padding: 0px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.im{
+  overflow: hidden;
+  width: 450px;
+  height: 340px;
+  image-rendering: pixelated;
+}
+
+.carousel-item{
+  width: 500px;
+  height: 360px;
+}
+
+.text1{
+  font-family: 'Raleway', sans-serif;
+  font-size: 32px;
+}
+
+.text2{
+  color: #004574;
+  font-family: 'Raleway', sans-serif;
+  font-size: 32px;
+  padding: 10px;
+}
