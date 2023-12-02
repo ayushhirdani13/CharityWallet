@@ -27,9 +27,10 @@ function Ngoprofile() {
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
-        `http://localhost:5000/ngo/dashboard?alias=${alias}`
+        `http://localhost:5000/ngo/dashboard?ngoAlias=${alias}`
       );
       setNgo(res.data);
+      console.log(res.data)
       setloading(false);
     };
     getabs();
@@ -66,7 +67,7 @@ function Ngoprofile() {
           <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
       ) : (
-        <div class="container">
+        <div class="container" style={{height:"max-content"}}>
           <div class="row">
             <div class="col-8 px-0">
               <div class="py-2 border border-primary my-5 rounded-4">
@@ -105,6 +106,7 @@ function Ngoprofile() {
                 class="img-fluid border rounded-4 shadow-lg mt-5"
                 alt="Example image"
                 loading="lazy"
+                style={{height:"300px",width:"100%"}}
               />
             </div>
           </div>
@@ -135,16 +137,109 @@ function Ngoprofile() {
                     </Box>
                   </>
                 ) : (
-                  gallery.map((ga) => (
-                    <div class="col-3 mb-4 mx-auto">
-                      <img
-                        src={`data:image/jpeg;base64,${ga}`}
-                        class="img-fluid border rounded-4 shadow-lg "
-                        alt="Example image"
-                        loading="lazy"
-                      />
+                  <>
+                    {gallery.map((ga) => (
+                      <div class="col-3 mb-4 mx-auto">
+                        <Box>
+                          <img
+                            src={`data:image/jpeg;base64,${ga}`}
+                            class="img-fluid border rounded-4 shadow-lg "
+                            alt="Example image"
+                            loading="lazy"
+                            
+                          />
+                        </Box>
+                      </div>
+                    ))} 
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                    Show gallery
+                    </button>
+
+                    <div class="modal" id="exampleModal"   aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
+                      <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Gallary</h5>
+                            <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <div class="modal-body">
+                            <div id="carouselExample" class="carousel slide">
+                              <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                    {/* <div class="col-3 mb-4 mx-auto"> */}
+                                    <img
+                                      src={`data:image/jpeg;base64,${gallery[0]}`}
+                                      class="d-block w-100"
+                                      alt="Example image"
+                                      loading="lazy"
+                                      style={{height:"700px",width:"600px"}}
+                                    />
+                                    {/* </div> */}
+                                  </div>
+                                {gallery.map((ga) => (
+                                  <div class="carousel-item">
+                                    {/* <div class="col-3 mb-4 mx-auto"> */}
+                                    <img
+                                      src={`data:image/jpeg;base64,${ga}`}
+                                      class="d-block w-100"
+                                      alt="Example image"
+                                      loading="lazy"
+                                      style={{height:"700px",width:"600px"}}
+                                    />
+                                    {/* </div> */}
+                                  </div>
+                                ))}
+                                <button
+                                  class="carousel-control-prev"
+                                  type="button"
+                                  data-bs-target="#carouselExample"
+                                  data-bs-slide="prev"
+                                >
+                                  <span
+                                    class="carousel-control-prev-icon"
+                                    aria-hidden="true"
+                                  ></span>
+                                  <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button
+                                  class="carousel-control-next"
+                                  type="button"
+                                  data-bs-target="#carouselExample"
+                                  data-bs-slide="next"
+                                >
+                                  <span
+                                    class="carousel-control-next-icon"
+                                    aria-hidden="true"
+                                  ></span>
+                                  <span class="visually-hidden">Next</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              type="button"
+                              class="btn btn-secondary"
+                              data-bs-dismiss="modal"
+                            >
+                              Close
+                            </button>
+                            
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  ))
+                  </>
                 )}
               </div>
             </div>
@@ -160,6 +255,11 @@ function Ngoprofile() {
                 </p>
               </div>
             </div>
+            <div>
+            <button onClick={()=>{window.location.href="/donor_details"}} type="button" class="btn btn-primary px-5 btn-lg rounded-4">
+              Donate
+            </button>
+          </div>
           </div>
         </div>
       )}

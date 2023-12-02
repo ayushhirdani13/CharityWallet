@@ -69,7 +69,7 @@ function Navbar(prop) {
               </li>
             ) : (
                 <li class="align-item-center d-flex ">
-                <a href="/Ngoprofile" class="nav-link px-4 text-black  fs-4 mt-2">
+                <a href="/donor_confirm" class="nav-link px-4 text-black  fs-4 mt-2">
                 Donation Records
                 </a>
                 </li>

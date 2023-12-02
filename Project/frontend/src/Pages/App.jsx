@@ -26,8 +26,15 @@ import Edit_Profile from "../components/edit_profile";
 import DonorHome from "./DonorHome";
 import NgoProfile from "./NGOProfile";
 import "../Styles/boot.css";
+import Edit_profile_ngo from "../components/edit_profile_ngo_res";
+import Donor_amount from "./donarAmount";
+import Donor_details from './donarDetails';
+import Donor_Confirm from './donarConfirm';
+import Donor_method from './donarMethod';
+import Donor_records from './donarRecords';
 
 function App() {
+  console.log(process.env.REACT_APP_API)
   return (
     <Router>
       <Routes>
@@ -39,7 +46,7 @@ function App() {
        
         
         {sessionStorage.getItem("loggedIn")?(<>
-        <Route path="/edit_profile_ngo" element={<Edit_Profile/>} />
+        <Route path="/edit_profile_ngo" element={<Edit_profile_ngo/>} />
         <Route path="/edit_profile_org" element={<Edit_profile_org1 />} />
         <Route path="/Campaignhome/:alias" element={<Aftercreatecampaign1 />}/>
         <Route path="/home" element={<Profile_home1 />} />
@@ -67,8 +74,12 @@ function App() {
         <Route path="/ExploreNgo/:alias" element={<NgoProfile />} />
         {/* <Route path="/Ngoprofile" element={<Profile_Dashboard1/>} /> */}
         <Route path="/Emergency" element={<Emergency1/>} />
+        <Route path="/donor_amount" element={<Donor_amount />} />
+        <Route path="/donor_details" element={<Donor_details />} />
+        <Route path="/donor_method" element={<Donor_method />} />
+        <Route path="/donor_records" element={<Donor_records />} />
+        <Route path="/donor_confirm" element={<Donor_Confirm />} />
         </>)}
-        
        
 
         <Route path="/Fundraiser_dashboard" element={<Fundraiser_dashboard1/>} />

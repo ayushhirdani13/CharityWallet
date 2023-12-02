@@ -24,13 +24,13 @@ function Profile_home(){
 
     }
     return(
-        <div class="container-fluid bg_color_123">
+        <div class="container-fluid bg_color_123" style={{borderTopLeftRadius:"50px",borderTopRightRadius:"50px"}}>
 
             <div class="d-grid gap-2 py-10 d-md-flex justify-content-md-end">
                 {sessionStorage.getItem("loggedIn")?(
-                <button type='button' onClick={handleSignout} class="btn btn-cl btn-lg text-end">SignOut</button>
+                <button type='button' onClick={handleSignout} class="btn btn-primary btn-clr text-white mt-4 mx-4 btn-lg text-end">SignOut</button>
                 ):( <Link to="/signin">
-                <button type='button' class="btn btn-cl btn-lg text-end">Sign In</button>
+                <button type='button' class="btn btn-primary btn-clr text-white mt-4 mx-4 btn-lg text-end">Sign In</button>
                 </Link>)}
                 
             </div>
@@ -48,7 +48,7 @@ function Profile_home(){
                         <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        {/* <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button> */}
                         </div>
                         <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -57,9 +57,9 @@ function Profile_home(){
                         <div class="carousel-item">
                             <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-4 shadow-lg " alt="Example image" loading="lazy"/>
                         </div>
-                        <div class="carousel-item">
+                        {/* <div class="carousel-item">
                             <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-4 shadow-lg " alt="Example image" loading="lazy"/>
-                        </div>
+                        </div> */}
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -86,7 +86,7 @@ function Profile_home(){
                         <div class="col-11 px-2">
                             <div class=" row flex-lg-row align-items-center g-5 py-3 px-lg-5 px-3 mx-lg-5 my-3 post_123 rounded-4">
                                 <div class="col-12 col-xxl-6 p-0 mt-0">
-                                    <img src="https://picsum.photos/1300/1500" class="d-block mx-lg-auto img-fluid rounded-4" alt="Bootstrap Themes" width="700" height="500" loading="lazy"/>
+                                    <img src="https://picsum.photos/1600/1500" class="d-block mx-lg-auto img-fluid rounded-4" alt="Bootstrap Themes" width="700" height="500" loading="lazy"/>
                                 </div>
                                 <div class="col-12 col-xxl-6 mt-0 ">
                                 

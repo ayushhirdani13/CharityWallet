@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function CampaignCard(props)
+function HelpSeekerCard(props)
 {
     return(
         <>
@@ -10,10 +10,11 @@ function CampaignCard(props)
                     <div class=" row flex-lg-row align-items-center g-5 py-2 px-4 my-3 post_11 rounded-4">
                       <div class="col-12 col-xxl-6 p-0 mt-0">
                         <img
-                          src="https://picsum.photos/1600/900"
-                          class="d-flex  img-fluid rounded-4"
+                          src="https://picsum.photos/640/360"
+                          class="d-block mx-lg-auto img-fluid rounded-4"
                           alt="Bootstrap Themes"
-                          
+                          width="500px"
+                          height="500px"
                           loading="lazy"
                         />
                       </div>
@@ -23,14 +24,15 @@ function CampaignCard(props)
                         </h1>
                         <div class="bgd-clr p-3 rounded-4">
                           <p class="text-center">
-                           {props.vision}
+                           {props.issue}
                           </p>
                           <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                             <button
+                            onClick={()=>(window.location.href="/donor_details")}
                               type="button"
                               class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
                             >
-                              Edit
+                              Donate
                             </button>
                           </div>
                         </div>
@@ -41,4 +43,4 @@ function CampaignCard(props)
         </>
     );
 }
-export default CampaignCard;
+export default HelpSeekerCard;

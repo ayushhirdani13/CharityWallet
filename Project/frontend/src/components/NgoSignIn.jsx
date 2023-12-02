@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import logo from "../image/logo.svg";
-import {Box} from "@mui/material";
-import CorporateFareIcon from "@mui/icons-material/CorporateFare";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import { useFormControl } from '@mui/material/FormControl';
+import { Box } from "@mui/material";
+// import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+// import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+// import { useFormControl } from '@mui/material/FormControl';
 import FilledInput from "@mui/material/FilledInput";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import Input from "@mui/material/Input";
+// import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import { CheckBox } from "@mui/icons-material";
+// import OutlinedInput from "@mui/material/OutlinedInput";
+// import { CheckBox } from "@mui/icons-material";
 import "../Styles/Sign_In.css";
 import { Link, useNavigate } from "react-router-dom";
-import { responsiveFontSizes } from "@mui/material";
+// import { responsiveFontSizes } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -45,24 +45,27 @@ function NgoSignIn() {
   const [user, setUser] = useState({
     email: "",
     password: "",
+    otp:"",
   });
 
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
-
+  const [disabled,setDisabled]=useState(false);
   const [error1, setErrors1] = useState({});
 
   const [Type, setType] = useState({
     type: "",
+    Confpassword: "",
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setType({ [name]: value });
+    setType((prev) => {
+      return { ...prev, [name]: value };
+    });
   };
 
-  function handleOpen()
-  {
+  function handleOpen() {
     setOpen1(true);
   }
   const [errors, setErrors] = useState({});
@@ -95,6 +98,13 @@ function NgoSignIn() {
 
     const validationerrors = {};
     const error_email_patten = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
+    // const error_password_patten=/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+    if (!user.password.trim()) {
+          validationerrors.password = "Password is required";
+       } //else if (!error_password_patten.test(user.password)) {
+        //   validationerrors.password="Password between 7 to 15 characters which contain at least one numeric digit and a special character";
+        // }
+    
     if (!Type.type.trim()) {
       validationerrors.type = "Type is required";
     }
@@ -124,6 +134,7 @@ function NgoSignIn() {
         const data = await response.json(); // Parse the response JSON
 
         if (data.success) {
+          
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem("userType", Type.type);
           console.log(sessionStorage);
@@ -143,77 +154,116 @@ function NgoSignIn() {
     }
   }
 
-  async function handleForgotPass(e)
-  {
+  async function handleForgotPass(e) {
     e.preventDefault();
-    try{
-      const validationerrors = {};
-      const response = await fetch(`/${Type.type.toLowerCase()}/myNgo/changePassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      const data = await response.json(); // Parse the response JSON
-     console.log(data);
-      if (data.success) {
-        // sessionStorage.setItem("loggedIn", true);
-        // sessionStorage.setItem("userType", Type.type);
-        // console.log(sessionStorage);
-        // window.location.href = "/home";
-        validationerrors.otp="Enter otp you get on Email";
-        setErrors(validationerrors);
-      } else {
-        setErrors1(data.message);
-        setOpen(true);
-      }
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
-
-
+    const validationerrors = {};
+    const error_email_patten = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
+    if (!Type.type.trim()) {
+      validationerrors.type = "Type is required";
     }
-    catch (error) {
-      console.error(error);
+    if (!user.email.trim()) {
+      validationerrors.email = "Email is required";
+    } else if (!error_email_patten.test(user.email)) {
+      validationerrors.email = "Email is not valid";
+    }
+    setErrors(validationerrors);
+    if (Object.keys(validationerrors).length === 0) {
+      try {
+      
+        const response = await fetch(
+          `/${Type.type.toLowerCase()}/myNgo/changePassword`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          }
+        );
+        const data = await response.json(); // Parse the response JSON
+        console.log(data);
+        if (data.success) {
+         
+          setDisabled(true);
+          setErrors(validationerrors);
+        } else {
+          setErrors1(data.message);
+          setOpen(true);
+        }
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
-  async function handleChangePass(e)
-  {
+  async function handleChangePass(e) {
     e.preventDefault();
-    try{
-      // const validationerrors = {};
-      const response = await fetch(`/${Type.type.toLowerCase()}/myNgo/changePasswordConfirm`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      const data = await response.json(); // Parse the response JSON
-     console.log(data);
-      if (data.success) {
+    const validationerrors = {};
+    const error_password_patten=/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+    const error_otp_patten=/^\d{6}$/;
+    console.log(Type);
+    console.log(user);
 
-        alert(data.message);
-        
-        window.location.href = "/signin";
-        // validationerrors.otp="Enter otp you get on Email";
-        // setErrors(validationerrors);
-      } else {
-        setErrors1(data.message);
-        setOpen(true);
-      }
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
-
-
+  if(!user.otp.trim())
+    {
+      validationerrors.otp="OTP is required";
     }
-    catch (error) {
-      console.error(error);
+    else if(!error_otp_patten.test(user.otp))
+    {
+      validationerrors.otp="Pincode required only 6 digits";
+    }
+    
+
+    if (!user.password.trim()) {
+      validationerrors.password = "Password is required";
+    } else if (!error_password_patten.test(user.password)) {
+      validationerrors.password="Password between 7 to 15 characters which contain at least one numeric digit and a special character";
+    }
+
+    if (!Type.Confpassword.trim()) {
+      validationerrors.Confpassword = "Confirm Password is required";
+    } else if (user.password !== Type.Confpassword) {
+      validationerrors.Confpassword ="Confirm Password is not match with Password";
+    }
+
+    setErrors(validationerrors);
+
+    if (Object.keys(validationerrors).length === 0) {
+      try {
+        // const validationerrors = {};
+        const response = await fetch(
+          `/${Type.type.toLowerCase()}/myNgo/changePasswordConfirm`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          }
+        );
+        const data = await response.json(); // Parse the response JSON
+        console.log(data);
+        if (data.success) {
+          alert(data.message);
+
+          window.location.href = "/signin";
+          // validationerrors.otp="Enter otp you get on Email";
+          // setErrors(validationerrors);
+        } else {
+          setErrors1(data.message);
+          setOpen(true);
+        }
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -231,7 +281,11 @@ function NgoSignIn() {
               handelsignin(event);
             }}
           >
-            <h1 style={{fontFamily:"'Raleway', sans-serif",fontWeight:"bold"}}>Sign in</h1>
+            <h1
+              style={{ fontFamily: "'Inter', sans-serif", fontWeight: "bold" }}
+            >
+              Sign in
+            </h1>
             <FormControl
               error={errors.type}
               variant="filled"
@@ -253,14 +307,15 @@ function NgoSignIn() {
               >
                 <MenuItem value={"NGO"}>NGO</MenuItem>
                 <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
-                <MenuItem value={"Oraganizer"}>Organizerr</MenuItem>
+                <MenuItem value={"Oraganizer"}>Organizer</MenuItem>
               </Select>
               <FormHelperText>{errors.type}</FormHelperText>
             </FormControl>
 
             <TextField
+            error={errors.email}
               name="email"
-              id="filled-error1"
+              id="filled-error-email"
               // sx={{ height: "60px", width: "500px" }}
               label="Email"
               helperText={errors.email}
@@ -276,13 +331,13 @@ function NgoSignIn() {
               variant="filled"
               onChange={handlechange}
             >
-              <InputLabel helperText={errors.password} htmlFor="filled-error">
+              <InputLabel helpertext={errors.password} htmlFor="filled-error">
                 Password
               </InputLabel>
               <FilledInput
                 error={errors.password}
                 name="password"
-                id="filled-error1"
+                id="filled-error-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment sx={{ marginLeft: "10px" }} position="end">
@@ -316,11 +371,13 @@ function NgoSignIn() {
                 Sign in
               </Button>
             </div>
-            <div >
-              <Box component={Link} onClick={handleOpen} style={{ fontSize: "20px", color: "blue" }}>
-                
-                  Forgot password ?
-                
+            <div>
+              <Box
+                component={Link}
+                onClick={handleOpen}
+                style={{ fontSize: "20px", color: "blue" }}
+              >
+                Forgot password ?
               </Box>
             </div>
             <div>
@@ -338,7 +395,7 @@ function NgoSignIn() {
               open={open}
               onClose={handleClose}
               PaperComponent={PaperComponent}
-              maxWidth={'sm'}
+              maxWidth={"xl"}
               aria-labelledby="draggable-dialog-title"
             >
               <DialogTitle
@@ -366,75 +423,117 @@ function NgoSignIn() {
                 style={{ cursor: "move" }}
                 id="draggable-dialog-title"
               >
-                Enter Email 
+                Enter Email
               </DialogTitle>
-              <DialogContent sx={{display:"flex",justifyContent:"center",flexDirection:"column",alignItems:"center",gap:"20px"}}>
-                <DialogContentText></DialogContentText>
+              <DialogContent>
+                <DialogContentText
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "20px",
+                  }}
+                >
+                  <FormControl
+                    error={errors.type}
+                    variant="filled"
+                    sx={{
+                      m: 1,
+                      minWidth: 120,
+                      width: "500px",
+                      height: "60px",
+                      margin: "0px",
+                    }}
+                  >
+                    <InputLabel id="demo-simple-select-filled-label">
+                      Type
+                    </InputLabel>
+                    <Select
+                      name="type"
+                      labelId="demo-simple-select-filled-label"
+                      id="demo-simple-select-filled"
+                      value={Type.type}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={"NGO"}>NGO</MenuItem>
+                      <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
+                      <MenuItem value={"Oraganizer"}>Organizer</MenuItem>
+                    </Select>
+                    <FormHelperText>{errors.type}</FormHelperText>
+                  </FormControl>
 
-                <FormControl
-              error={errors.type}
-              variant="filled"
-              sx={{
-                m: 1,
-                minWidth: 120,
-                width: "500px",
-                height: "60px",
-                margin: "0px",
-              }}
-            >
-              <InputLabel id="demo-simple-select-filled-label">Type</InputLabel>
-              <Select
-                name="type"
-                labelId="demo-simple-select-filled-label"
-                id="demo-simple-select-filled"
-                value={Type.type}
-                onChange={handleChange}
-              >
-                <MenuItem value={"NGO"}>NGO</MenuItem>
-                <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
-                <MenuItem value={"Oraganizer"}>Organizerr</MenuItem>
-              </Select>
-              <FormHelperText>{errors.type}</FormHelperText>
-            </FormControl>
+                  <TextField
+                    error={errors.email}
+                    name="email"
+                    id="filled-error-email"
+                    sx={{ height: "60px", width: "100%" }}
+                    label="Email"
+                    helperText={errors.email}
+                    variant="filled"
+                    onChange={handlechange}
+                    className="email"
+                  />
+                  <TextField
+                    disabled={!disabled}
+                    error={errors.otp}
+                    name="otp"
+                    id="filled-error-otp"
+                    sx={{ height: "60px", width: "100%" }}
+                    label="OTP"
+                    helperText={errors.otp}
+                    variant="filled"
+                    onChange={handlechange}
+                    className="email"
+                  />
+                  <TextField
+                    disabled={!disabled}
+                    error={errors.password}
+                    name="password"
+                    type="password"
+                    id="filled-error-password"
+                    sx={{ height: "60px", width: "100%" }}
+                    label="Enter New Password"
+                    helperText={errors.password}
+                    variant="filled"
+                    onChange={handlechange}
+                    className="email"
+                  />
 
-                <TextField
-
-              name="email"
-              id="filled-error1"
-              sx={{ height: "60px", width: "100%" }}
-              label="Email"
-              helperText={errors.email}
-              variant="filled"
-              onChange={handlechange}
-              className="email"
-            />
-              <TextField
-              disabled={!errors.otp}
-              name="otp"
-              id="filled-error1"
-              sx={{ height: "60px", width: "100%" }}
-              label="OTP"
-              helperText={errors.otp}
-              variant="filled"
-              onChange={handlechange}
-              className="email"
-            />
-             <TextField
-              disabled={!errors.otp}
-              name="password"
-              id="filled-error1"
-               sx={{ height: "60px", width: "500px" }}
-              label="Enter New Password"
-              helperText={errors.password}
-              variant="filled"
-              onChange={handlechange}
-              className="email"
-            />
+                  <TextField
+                    disabled={!disabled}
+                    error={errors.Confpassword}
+                    name="Confpassword"
+                    type="password"
+                    id="filled-error-password"
+                    sx={{ height: "60px", width: "100%",marginTop:"20px", }}
+                    label="Confirm Password"
+                    helperText={errors.Confpassword}
+                    variant="filled"
+                    onChange={handleChange}
+                    className="email"
+                  />
+                </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                {!errors.otp?( <Button onClick={(e)=>{handleForgotPass(e);}}>Next</Button>):( <Button onClick={(e)=>{handleChangePass(e);}}>Submit</Button>)}
-               
+                {!disabled ? (
+                  <Button
+                    onClick={(e) => {
+                      handleForgotPass(e);
+                    }}
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={(e) => {
+                      handleChangePass(e);
+                    }}
+                  >
+                    Submit
+                  </Button>
+                )}
               </DialogActions>
             </Dialog>
           </form>

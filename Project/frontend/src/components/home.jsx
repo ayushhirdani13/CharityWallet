@@ -26,8 +26,8 @@ function Number({n})
 function Home(){
   
   return (
-    <div className="container-main ">
-      <div className="container1">
+    <div className="container-main " >
+      <div className="container1" style={{borderRadius:"80px"}}>
         <div className="row g-2">
           <div className="col-6">
             <div className="p-3-border1">

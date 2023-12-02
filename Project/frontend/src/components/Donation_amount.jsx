@@ -1,29 +1,36 @@
 import React from 'react';
 import { useState } from "react";
+import { useLocation } from 'react-router';
 import "../Styles/Don_amount.css";
 import '../Styles/boot.css';
+import { Numbers } from '@mui/icons-material';
 
 
 
 function DonationAmount() {
+   const location =useLocation();
+   const data=location.state;
 
-      const [DonationAmount, setUser] = useState({
-        Amount: "",
-
-    });
+//    console.log(data);
+      const [DonationAmount, setUser] = useState({...data,donationAmount:1000,});
+      console.log(DonationAmount);
+    
     const [Amount, setAmount] = useState();
     const [isValidAmount, setIsValidAmount] = useState(true);
-    const handleAmountChange = (value) => {
+    const handleAmountChange = (donationAmount) => {
+   
+        
 
-        setAmount(value);
+        console.log(DonationAmount);
         setIsValidAmount(true);
-        console.log(value);
+        setAmount(donationAmount);
+        console.log(donationAmount);
 
     };
 
     const handleContinue = () => {
-        setAmount("");
-        setIsValidAmount(true);
+        // setAmount("");
+        // setIsValidAmount(true);
     };
 
     (() => {
@@ -47,10 +54,11 @@ function DonationAmount() {
 
     function handlechange(event) {
         const { name, value } = event.target;
-
-        setUser((prev) => {
-            return { ...prev, [name]: value };
-        });
+        console.log(name);
+        console.log(value);
+        console.log(DonationAmount);
+        setUser(prev=>{return({...data,...prev,[name]:value});});
+        
     }
 
     function handleChange()
@@ -59,11 +67,10 @@ function DonationAmount() {
         window.location.href="/DonarMethod";
     }
 
-
-    const handleSubmit = (event) => {
+ async function handleSubmit(event){
         event.preventDefault();
 
-        console.log(Amount);
+        // console.log(Amount);
         // Ensure the amount is at least 10 before submitting
         if (Amount < 10) {
             setIsValidAmount(false);
@@ -90,6 +97,36 @@ function DonationAmount() {
 
         // Clear the input after submission if needed
         setAmount("");
+
+        try {
+      
+            const response = await fetch(
+              "/ngo/donate?ngoAlias=sample_ngo",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(DonationAmount),
+              }
+            );
+            const data = await response.json(); // Parse the response JSON
+            console.log(data);
+            // if (data.success) {
+             
+            //   setDisabled(true);
+            //   setErrors(validationerrors);
+            // } else {
+            //   setErrors1(data.message);
+            //   setOpen(true);
+            // }
+    
+            if (!response.ok) {
+              throw new Error(`Request failed with status: ${response.status}`);
+            }
+          } catch (error) {
+            console.error(error);
+          }
 
     };
 
@@ -125,7 +162,7 @@ function DonationAmount() {
                                 <label for="validationCustomAmount" class="form-label"></label>
                                 <div class="input-group has-validation">
                                     <span class="input-group-text" id="inputGroupPrepend">₹</span>
-                                    <input type="text" class="form-control" id="validationCustomAmount" aria-describedby="inputGroupPrepend" placeholder="Amount" defaultValue={Amount} name='amount' onChange={handlechange}  required/>
+                                    <input type="number" class="form-control" id="validationCustomAmount" aria-describedby="inputGroupPrepend" placeholder="donationAmount" defaultValue={Amount} name="donationAmount" onChange={handlechange}  required/>
                                         <div class="invalid-feedback">
                                         Minimum amount should be 10.
                                         </div>
@@ -172,7 +209,7 @@ function DonationAmount() {
                                 className="btn btn-outline"
                                 type="submit"
                                 id="buttonnext"
-                                onClick={handleSubmit && handleChange}
+                                onClick={(e)=>(handleSubmit(e))}
                             >
                                 Next
                             </button>
