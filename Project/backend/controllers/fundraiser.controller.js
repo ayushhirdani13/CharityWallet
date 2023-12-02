@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { FundRaiser } from "../models/fundraiser.model.js";
 import { Donation } from "../models/donation.model.js";
 import { generateOtp, verifyOTP } from "../utils/otp.js";
-import { sendFundRaiserCookieCookie, sendEmail } from "../utils/features.js";
+import { sendFundRaiserCookie, sendEmail } from "../utils/features.js";
 import { redisClient } from "../app.js";
 import mongoose from "mongoose";
 
@@ -78,12 +78,7 @@ export const completeFrRegistration = async (req, res, next) => {
     // console.log(ngo_form);
 
     const fr = await FundRaiser.create(fr_form);
-    sendFundRaiserCookieCookie(
-      fr,
-      res,
-      "FundRaiser registered Successfully.",
-      200
-    );
+    sendFundRaiserCookie(fr, res, "FundRaiser registered Successfully.", 200);
 
     await redisClient.del(data.email);
   } catch (error) {
@@ -105,7 +100,7 @@ export const loginFr = async (req, res, next) => {
       return next(new ErrorHandler("Invalid email or password.", 400));
     }
 
-    sendFundRaiserCookieCookie(fr, res, `Welcome Back, ${fr.name}`, 200);
+    sendFundRaiserCookie(fr, res, `Welcome Back, ${fr.name}`, 200);
   } catch (error) {
     next(error);
   }
@@ -218,7 +213,7 @@ export const donateToFr = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const fr = await FundRaiser.findOne({ alias: req.params.alias });
+    const fr = await FundRaiser.findOne({ alias: req.query.frAlias });
 
     if (!fr) return next(new ErrorHandler("Fund raiser not found", 404));
     if (!fr.verified) {
@@ -248,10 +243,25 @@ export const donateToFr = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
-    message =
+    let message =
       "Thanks for your donation. This is a confirmation mail that your donation was successful.";
-    await sendEmail(data.email, `Donation to ${fr.title}`, message);
+    await sendEmail(data.donorEmail, `Donation to ${fr.title}`, message);
 
+    if (fr.donationTillNow === fr.donationReq) {
+      message = `
+Dear benefactor,
+
+This urgent notice is to inform you that the required donation for your FundRaiser, "${fr.title}," has been successfully gathered. We kindly urge you to conclude the fundraiser promptly. Our heartfelt wishes are with you.
+
+Sincerely,
+Charity Wallet
+`;
+      await sendEmail(
+        fr.email,
+        `Donation Amount Collected for ${fr.title}.`,
+        message
+      );
+    }
     res.status(201).json({
       success: true,
       message: "Donation made successfully.",
@@ -259,6 +269,55 @@ export const donateToFr = async (req, res, next) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    next(error);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const fr = await FundRaiser.findOne({ email: email });
+
+    if (!fr) return next(new ErrorHandler("FundRaiser Not Found!", 404));
+
+    const generatedOtp = await generateOtp(email);
+    if (!generatedOtp.success)
+      return next(new ErrorHandler("OTP could not be generated.", 500));
+
+    res.status(200).json({
+      success: true,
+      message: "Email for OTP sent to you.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePasswordConfirmation = async (req, res, next) => {
+  try {
+    const data = req.body;
+
+    const isVerified = await verifyOTP(data.email, data.otp);
+
+    if (!isVerified)
+      return next(new ErrorHandler("OTP Validation Failed.", 500));
+
+    const fr = await FundRaiser.findOne({ email: data.email }).select(
+      "+password"
+    );
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    await fr.updateOne({ password: hashedPassword });
+
+    sendFundRaiserCookie(
+      fr,
+      res,
+      "FundRaiser Password Updated Successfully.",
+      200
+    );
+  } catch (error) {
     next(error);
   }
 };

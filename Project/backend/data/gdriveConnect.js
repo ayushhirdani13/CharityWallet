@@ -1,50 +1,28 @@
 import { google } from "googleapis";
 
 export const gdriveConnect = async () => {
-  const oauth2Client = new google.auth.OAuth2(
-    process.env.CLIENT_ID,
-    process.env.CLIENT_SECRET,
-    process.env.REDIRECT_URI
-  );
-  oauth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
+  const SCOPES = ["https://www.googleapis.com/auth/drive"];
 
-  const drive = google.drive({
-    version: "v3",
-    auth: oauth2Client,
+  const auth = new google.auth.GoogleAuth({
+    credentials: {
+      client_email: process.env.SERVICE_EMAIL,
+      private_key: process.env.SERVICE_KEY.replace(/\\n/g, "\n"),
+    },
+    scopes: SCOPES,
   });
-  const response = await driveService.files.list({
-    pageSize: 1000,
-    fields: "files(id)",
-  });
-  console.log("Google Drive connected successfully!");
 
-  const images = [
-    // "1MxHAsXOWKEEO1ATP-yjQxxXPoO9zHeyj",
-    // "1kYGEu-wHMzSY-mO-HEfRLZsdinrZp6mS",
-    // "1_dgwcnP1NxVnAYmqcetAO2LfG2wkc4fy",
-    // "1FVzZq0iEht5C3573rnAnLyY7SBe_uE6x",
-  ];
+  const driveService = google.drive({ version: "v3", auth });
 
-  // Extract file IDs from the response
-  const allFileIds = response.data.files.map((file) => file.id);
-
-  const filesToDelete = allFileIds.filter(
-    (fileId) => !images.includes(fileId)
-  );
-
-  // Delete files
-  for (const fileId of filesToDelete) {
-    try {
-      await drive.files.delete({
-        fileId,
-      });
-      console.log(`File with ID ${fileId} deleted successfully.`);
-    } catch (deleteError) {
-      console.error(
-        `Error deleting file with ID ${fileId}:`,
-        deleteError.message
-      );
-    }
+  // Check if the drive is connected
+  try {
+    await driveService.files.list({
+      pageSize: 1,
+      fields: "files(id)",
+    });
+    console.log("Google Drive Connected Successfully.");
+  } catch (error) {
+    console.error("Error connecting to Google Drive:", error.message);
   }
-  return drive;
+
+  return driveService;
 };

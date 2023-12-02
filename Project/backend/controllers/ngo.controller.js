@@ -23,8 +23,8 @@ import {
   uploadLogoGdrive,
   uploadMultipleImagesGdrive,
 } from "../middlewares/imageHandler.js";
-import fs from "fs";
 import mongoose from "mongoose";
+import lodash from "lodash";
 
 export const getNgos = async (req, res, next) => {
   try {
@@ -164,7 +164,34 @@ export const getMyNgo = async (req, res, next) => {
 export const updateNgoProfile = async (req, res, next) => {
   try {
     const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
-    const updateData = req.body;
+    const formData = req.body;
+
+    const allowedFields = ["vision", "contactNo", "description"];
+
+    const updateData = lodash.pick(formData, allowedFields);
+
+    const ngo = await NGO.findById(ngoId);
+
+    if (req.files) {
+      if (req.files["logo"]) {
+        if (ngo.logo) {
+          updateData.logo = await updateLogoGdrive(
+            ngo.logo,
+            req.files["logo"][0],
+            next
+          );
+        } else {
+          updateData.logo = await uploadLogoGdrive(req.file, next);
+        }
+      }
+      if (req.files["gallery"]) {
+        let images = await uploadMultipleImagesGdrive(
+          req.files["gallery"],
+          next
+        );
+        updateData.gallery = [...ngo.gallery, ...images];
+      }
+    }
 
     // Find the NGO by id and update it with the new data
     const updatedNgo = await NGO.findByIdAndUpdate(ngoId, updateData, {
@@ -181,7 +208,6 @@ export const updateNgoProfile = async (req, res, next) => {
       data: updatedNgo,
     });
   } catch (error) {
-    // console.log(error);
     next(error);
   }
 };
@@ -198,6 +224,10 @@ export const deleteNgo = async (req, res, next) => {
     const ngoId = req.ngo._id;
 
     await deleteLogoGdrive(req.ngo.logo, next);
+    await deleteGallery(req.gallery, next);
+
+    await Campaign.deleteMany({ organizerId: ngoId });
+
     const deletedNgo = await NGO.findByIdAndDelete(ngoId);
 
     if (!deletedNgo) {
@@ -247,7 +277,7 @@ export const donateToNgo = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const ngo = await NGO.findOne(req.query.ngoAlias);
+    const ngo = await NGO.findOne({ alias: req.query.ngoAlias });
 
     if (!ngo) return next(new ErrorHandler("NGO not found", 404));
     if (!ngo.verified) {
@@ -276,9 +306,9 @@ export const donateToNgo = async (req, res, next) => {
 
     await session.commitTransaction();
     session.endSession();
-    message =
+    let message =
       "Thanks for your donation. This is a confirmation email that your donation was successful.";
-    await sendEmail(data.email, `Donation to ${ngo.name}`, message);
+    await sendEmail(data.donorEmail, `Donation to ${ngo.name}`, message);
     res.status(201).json({
       success: true,
       message: "Donation made successfully.",
@@ -291,11 +321,14 @@ export const donateToNgo = async (req, res, next) => {
 };
 
 export const getCampaigns = async (req, res, next) => {
-  const ngoAlias = req.query.alias; // Replace with actual parameter name if different
+  const ngoAlias = req.query.ngoAlias;
 
   try {
     const ngo = await NGO.findOne({ alias: ngoAlias });
-    const campaigns = await Campaign.find({ organizer: ngo._id });
+    if (!ngo) {
+      return next(new ErrorHandler("NGO not found.", 404));
+    }
+    const campaigns = await Campaign.find({ organizerId: ngo._id });
     res.status(200).json({
       success: true,
       campaigns: campaigns,
@@ -481,13 +514,12 @@ export const getLogo = async (req, res, next) => {
     if (ngo.logo === null) {
       return next(new ErrorHandler("No Logo Image Found.", 400));
     }
-    const imgPath = await getLogoGdrive(ngo.logo, next);
-    res.sendFile(imgPath);
+    const img = await getLogoGdrive(ngo.logo, next);
 
-    res.on("finish", async () => {
-      // Delete the file after it has been sent successfully
-      await fs.promises.unlink(imgPath);
-      // console.log(`File ${imgPath} has been deleted.`);
+    if (!img) return next(new ErrorHandler("Error getting image.", 500));
+    const base64img = img.toString("base64");
+    res.status(201).json({
+      logo: base64img,
     });
   } catch (error) {
     next(error);
@@ -557,17 +589,6 @@ export const getGallery = async (req, res, next) => {
 
     if (!images) return next(new ErrorHandler("Error getting images.", 402));
 
-    // Set the response content type to JPEG
-    res.type("image/jpeg");
-
-    // for (const image of images) {
-    //   res.write(image);
-    //   console.log("Image sent.");
-    //   // await new Promise(resolve => setTimeout(resolve, 100));
-    // }
-
-    // res.end();
-
     // Converting each image buffer to base64
     const base64Images = images.map((image) => image.toString("base64"));
 
@@ -608,6 +629,11 @@ export const deleteGallery = async (req, res, next) => {
 
 export const uploadCampaignCover = async (req, res, next) => {
   try {
+    if (!req.query.campaignAlias) {
+      return next(
+        new ErrorHandler("campaignAlias required in URL query param.", 400)
+      );
+    }
     req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
     if (req.campaign.organizerId.toString() !== req.ngo._id.toString())
       return next(

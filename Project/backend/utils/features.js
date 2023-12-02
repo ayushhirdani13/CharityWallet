@@ -1,13 +1,14 @@
 // ./utils/features.js
 import jwt from "jsonwebtoken";
 import ErrorHandler from "../middlewares/error.js";
+import nodemailer from "nodemailer";
 
 export const sendNgoCookie = (ngo, res, message, statusCode = 200) => {
   const token = jwt.sign({ _id: ngo._id }, process.env.JWT_SECRET);
   res
     .status(statusCode)
     .cookie("ngoToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,
@@ -23,7 +24,7 @@ export const sendOrganizerCookie = (ngo, res, message, statusCode = 200) => {
   res
     .status(statusCode)
     .cookie("organizerToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,
@@ -33,7 +34,7 @@ export const sendOrganizerCookie = (ngo, res, message, statusCode = 200) => {
       message,
     });
 };
-export const sendFundRaiserCookieCookie = (
+export const sendFundRaiserCookie = (
   fr,
   res,
   message,
@@ -43,7 +44,7 @@ export const sendFundRaiserCookieCookie = (
   res
     .status(statusCode)
     .cookie("frToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
       secure: process.env.NODE_ENV === "Development" ? false : true,

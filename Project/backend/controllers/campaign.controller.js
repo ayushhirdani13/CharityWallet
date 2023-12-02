@@ -16,8 +16,12 @@ export const registerCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const allowedFields = ["title", "vision", "alias", "images"];
+    const allowedFields = ["title", "vision", "description"];
     const campaignData = lodash.pick(data, allowedFields);
+
+    if (req.file) {
+      campaignData.cover = await uploadLogoGdrive(req.file, next);
+    }
 
     let alias = data.title.toLowerCase().replace(/ /g, "_");
     let newAlias = alias;
@@ -83,10 +87,9 @@ export const updateCampaign = async (req, res, next) => {
     const campaignId = req.campaign._id;
     const data = req.body;
 
-    const allowedFields = ["vision", "images"];
+    const allowedFields = ["vision"];
 
     const updateData = lodash.pick(data, allowedFields);
-    // console.log(updateData);
 
     // Find the NGO by id and update it with the new data
     const updatedCampaign = await Campaign.findByIdAndUpdate(
@@ -103,7 +106,6 @@ export const updateCampaign = async (req, res, next) => {
 
     return updatedCampaign;
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -120,7 +122,6 @@ export const deleteCampaign = async (req, res, next) => {
 
     return deletedCampaign;
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -131,7 +132,9 @@ export const donateToCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const campaign = await Campaign.findOne({ alias: req.params.alias });
+    const campaign = await Campaign.findOne({
+      alias: req.params.campaignAlias,
+    });
 
     if (!campaign) return next(new ErrorHandler("Campaign not found", 404));
     if (!campaign.verified) {
@@ -162,9 +165,9 @@ export const donateToCampaign = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
-    message =
+    let message =
       "Thanks for your donation. This is a confirmation email that your donation was successful.";
-    await sendEmail(data.email, `Donation to ${campaign.title}`, message);
+    await sendEmail(data.donorEmail, `Donation to ${campaign.title}`, message);
 
     res.status(201).json({
       success: true,
@@ -217,14 +220,12 @@ export const getCoverCampaign = async (req, res, next) => {
       return next(new ErrorHandler("No Cover Image Found.", 404));
     }
 
-    const imgPath = await getLogoGdrive(cover, next);
+    const img = await getLogoGdrive(cover, next);
 
-    if (!imgPath) return next(new ErrorHandler("Error getting images.", 402));
-    res.sendFile(imgPath);
-    res.on("finish", async () => {
-      // Delete the file after it has been sent successfully
-      await fs.promises.unlink(imgPath);
-      // console.log(`File ${imgPath} has been deleted.`);
+    if (!img) return next(new ErrorHandler("Error getting image.", 500));
+    const base64img = img.toString("base64");
+    res.status(201).json({
+      cover: base64img,
     });
   } catch (error) {
     next(error);

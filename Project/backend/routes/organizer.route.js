@@ -28,22 +28,22 @@ router.get("/logout", isOrganizerLoggedIn, logoutOrganizer);
 router
   .route("/myProfile")
   .get(isOrganizerLoggedIn, getMyProfile)
-  .put(isOrganizerLoggedIn, updateOrganizerProfile)
+  .patch(isOrganizerLoggedIn, updateOrganizerProfile)
   .delete(isOrganizerLoggedIn, deleteOrganizer);
 
 router.post("/addCampaign", isOrganizerLoggedIn, addCampaign);
-router.put("/updateCampaign", isOrganizerLoggedIn, updateMyCampaign);
+router.patch("/updateCampaign", isOrganizerLoggedIn, updateMyCampaign);
 router.delete("/deleteCampaign", isOrganizerLoggedIn, deleteMyCampaign);
 router.post("/changePassword", changePassword);
 router.post("/changePasswordConfirm", changePasswordConfirmation);
 router.post(
-  "/campaign/uploadGallery",
-  upload.array("gallery", 3),
+  "/campaign/cover",
+  upload.single("cover"),
   isOrganizerLoggedIn,
   uploadCampaignGallery
 );
 router.delete(
-  "/campaign/deleteGallery",
+  "/campaign/cover",
   isOrganizerLoggedIn,
   deleteCampaignGallery
 );

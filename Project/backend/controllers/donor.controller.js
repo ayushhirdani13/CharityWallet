@@ -28,12 +28,14 @@ export const verifyEmail = async (req, res, next) => {
     if (!isVerified)
       return next(new ErrorHandler("OTP Validation Failed.", 500));
 
-    const donations = await Donation.find({ donorEmail: data.email });
+    const donations = await Donation.find({ donorEmail: data.email }).populate(
+      "receiverId"
+    );
 
     res.status(201).json({
       success: true,
       donations: donations,
-    })
+    });
   } catch (error) {
     next(error);
   }

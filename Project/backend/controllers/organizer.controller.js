@@ -193,10 +193,11 @@ export const logoutOrganizer = async (req, res, next) => {
 
 export const deleteOrganizer = async (req, res, next) => {
   try {
-    const organizerId = req.ngo._id;
+    const organizerId = req.organizer._id;
 
     const deletedOrganizer = await Organizer.findByIdAndDelete(organizerId);
 
+    await Campaign.deleteMany({ organizerId: organizerId });
     if (!deletedOrganizer) {
       return next(new ErrorHandler("Organizer not found", 404));
     }
