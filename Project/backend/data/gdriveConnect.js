@@ -17,8 +17,9 @@ export const gdriveConnect = async () => {
   try {
     await driveService.files.list({
       pageSize: 1,
+      fields: "files(id)",
     });
-    console.log("Google Drive connected successfully!");
+    console.log("Google Drive Connected Successfully.");
   } catch (error) {
     console.error("Error connecting to Google Drive:", error.message);
   }

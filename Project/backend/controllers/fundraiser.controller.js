@@ -78,12 +78,7 @@ export const completeFrRegistration = async (req, res, next) => {
     // console.log(ngo_form);
 
     const fr = await FundRaiser.create(fr_form);
-    sendFundRaiserCookie(
-      fr,
-      res,
-      "FundRaiser registered Successfully.",
-      200
-    );
+    sendFundRaiserCookie(fr, res, "FundRaiser registered Successfully.", 200);
 
     await redisClient.del(data.email);
   } catch (error) {
@@ -218,7 +213,7 @@ export const donateToFr = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const fr = await FundRaiser.findOne({ alias: req.params.alias });
+    const fr = await FundRaiser.findOne({ alias: req.query.frAlias });
 
     if (!fr) return next(new ErrorHandler("Fund raiser not found", 404));
     if (!fr.verified) {
@@ -250,7 +245,7 @@ export const donateToFr = async (req, res, next) => {
 
     let message =
       "Thanks for your donation. This is a confirmation mail that your donation was successful.";
-    await sendEmail(data.email, `Donation to ${fr.title}`, message);
+    await sendEmail(data.donorEmail, `Donation to ${fr.title}`, message);
 
     if (fr.donationTillNow === fr.donationReq) {
       message = `
@@ -261,7 +256,11 @@ This urgent notice is to inform you that the required donation for your FundRais
 Sincerely,
 Charity Wallet
 `;
-      await sendEmail(fr.email, `Donation Amount Collected for ${fr.title}.`, message);
+      await sendEmail(
+        fr.email,
+        `Donation Amount Collected for ${fr.title}.`,
+        message
+      );
     }
     res.status(201).json({
       success: true,
@@ -312,7 +311,12 @@ export const changePasswordConfirmation = async (req, res, next) => {
 
     await fr.updateOne({ password: hashedPassword });
 
-    sendFundRaiserCookie(fr, res, "FundRaiser Password Updated Successfully.", 200);
+    sendFundRaiserCookie(
+      fr,
+      res,
+      "FundRaiser Password Updated Successfully.",
+      200
+    );
   } catch (error) {
     next(error);
   }

@@ -60,11 +60,23 @@ router.get("/campaigns", getCampaigns);
 router
   .route("/myNgo")
   .get(isNgoLoggedIn, getMyNgo)
-  .patch(isNgoLoggedIn, updateNgoProfile)
+  .patch(
+    isNgoLoggedIn,
+    upload.fields([
+      { name: "logo", maxCount: 1 },
+      { name: "gallery", maxCount: 3 },
+    ]),
+    updateNgoProfile
+  )
   .delete(isNgoLoggedIn, deleteNgo); // Careful while using this as all the images, and campaigns associated with the NGO will be deleted when this route is called.
 
 // Adding a Campaign, updating it, or deleting it, all of it done here.
-router.post("/myNgo/addCampaign", isNgoLoggedIn, addCampaign);
+router.post(
+  "/myNgo/addCampaign",
+  isNgoLoggedIn,
+  upload.single("cover"),
+  addCampaign
+);
 router.patch("/myNgo/updateCampaign", isNgoLoggedIn, updateMyCampaign); // NOTE: Here, campaignAlias is required in the url query params.
 router.delete("/myNgo/deleteCampaign", isNgoLoggedIn, deleteMyCampaign);
 
@@ -93,13 +105,13 @@ router.get("/gallery", getGallery); // This function also required ngoAlias in t
 router.delete("/myNgo/gallery", isNgoLoggedIn, deleteGallery); // Here, in the body of the request, an array with field 'images' is required, and the images should be present on our database.
 
 router.post(
-  "/myNgo/campaign/uploadGallery", // NOTE: campaignAlias required in query params.
-  upload.array("gallery", 3),
+  "/myNgo/campaign/cover", // NOTE: campaignAlias required in query params.
+  upload.single("cover"),
   isNgoLoggedIn,
   uploadCampaignCover
 );
 router.delete(
-  "/myNgo/campaign/deleteGallery", // Same as deleting gallery in NGOs, but campaignAlias is required in the query params.
+  "/myNgo/campaign/cover", // Same as deleting gallery in NGOs, but campaignAlias is required in the query params.
   isNgoLoggedIn,
   deleteCampaignCover
 );

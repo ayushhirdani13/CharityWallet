@@ -16,8 +16,12 @@ export const registerCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const allowedFields = ["title", "vision"];
+    const allowedFields = ["title", "vision", "description"];
     const campaignData = lodash.pick(data, allowedFields);
+
+    if (req.file) {
+      campaignData.cover = await uploadLogoGdrive(req.file, next);
+    }
 
     let alias = data.title.toLowerCase().replace(/ /g, "_");
     let newAlias = alias;
@@ -128,7 +132,9 @@ export const donateToCampaign = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const campaign = await Campaign.findOne({ alias: req.params.alias });
+    const campaign = await Campaign.findOne({
+      alias: req.params.campaignAlias,
+    });
 
     if (!campaign) return next(new ErrorHandler("Campaign not found", 404));
     if (!campaign.verified) {
@@ -159,9 +165,9 @@ export const donateToCampaign = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
-    message =
+    let message =
       "Thanks for your donation. This is a confirmation email that your donation was successful.";
-    await sendEmail(data.email, `Donation to ${campaign.title}`, message);
+    await sendEmail(data.donorEmail, `Donation to ${campaign.title}`, message);
 
     res.status(201).json({
       success: true,
@@ -217,7 +223,7 @@ export const getCoverCampaign = async (req, res, next) => {
     const img = await getLogoGdrive(cover, next);
 
     if (!img) return next(new ErrorHandler("Error getting image.", 500));
-    base64img = img.toString("base64");
+    const base64img = img.toString("base64");
     res.status(201).json({
       cover: base64img,
     });

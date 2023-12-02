@@ -5,6 +5,7 @@ import campaignRouter from "./routes/campaign.route.js";
 import organizerRouter from "./routes/organizer.route.js";
 import fundraiserRouter from "./routes/fundraiser.route.js";
 import donorRouter from "./routes/donor.route.js";
+import miscRouter from "./routes/misc.route.js";
 import { config } from "dotenv";
 import { errorMiddleware } from "./middlewares/error.js";
 import cookieParser from "cookie-parser";
@@ -48,6 +49,7 @@ app.use("/campaign", campaignRouter);
 app.use("/organizer", organizerRouter);
 app.use("/fundraiser", fundraiserRouter);
 app.use("/donor", donorRouter);
+app.use("/misc", miscRouter);
 
 app.get("/", (req, res) => {
   res.send("Server Working Fine.");

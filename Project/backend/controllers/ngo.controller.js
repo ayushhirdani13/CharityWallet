@@ -166,9 +166,32 @@ export const updateNgoProfile = async (req, res, next) => {
     const ngoId = req.ngo._id; // Obtain NGO ID for updation from the request modified in isLoggedIn
     const formData = req.body;
 
-    const allowedFields = ["name", "vision", "contactNo", "description", "address"];
+    const allowedFields = ["vision", "contactNo", "description"];
 
     const updateData = lodash.pick(formData, allowedFields);
+
+    const ngo = await NGO.findById(ngoId);
+
+    if (req.files) {
+      if (req.files["logo"]) {
+        if (ngo.logo) {
+          updateData.logo = await updateLogoGdrive(
+            ngo.logo,
+            req.files["logo"][0],
+            next
+          );
+        } else {
+          updateData.logo = await uploadLogoGdrive(req.file, next);
+        }
+      }
+      if (req.files["gallery"]) {
+        let images = await uploadMultipleImagesGdrive(
+          req.files["gallery"],
+          next
+        );
+        updateData.gallery = [...ngo.gallery, ...images];
+      }
+    }
 
     // Find the NGO by id and update it with the new data
     const updatedNgo = await NGO.findByIdAndUpdate(ngoId, updateData, {
@@ -185,7 +208,6 @@ export const updateNgoProfile = async (req, res, next) => {
       data: updatedNgo,
     });
   } catch (error) {
-    // console.log(error);
     next(error);
   }
 };
@@ -255,7 +277,7 @@ export const donateToNgo = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const ngo = await NGO.findOne(req.query.ngoAlias);
+    const ngo = await NGO.findOne({ alias: req.query.ngoAlias });
 
     if (!ngo) return next(new ErrorHandler("NGO not found", 404));
     if (!ngo.verified) {
@@ -284,9 +306,9 @@ export const donateToNgo = async (req, res, next) => {
 
     await session.commitTransaction();
     session.endSession();
-    message =
+    let message =
       "Thanks for your donation. This is a confirmation email that your donation was successful.";
-    await sendEmail(data.email, `Donation to ${ngo.name}`, message);
+    await sendEmail(data.donorEmail, `Donation to ${ngo.name}`, message);
     res.status(201).json({
       success: true,
       message: "Donation made successfully.",

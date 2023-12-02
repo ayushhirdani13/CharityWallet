@@ -75,7 +75,6 @@ export const sendEmail = async (email, subject, message) => {
 
     await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.log(error);
     throw new ErrorHandler("Could not send email.", 500);
   }
 };
