@@ -28,6 +28,10 @@ const schema = new mongoose.Schema({
     required: true,
     enum: ["Medical", "Animal", "Other"],
   },
+  description: {
+    type: String,
+    required: false,
+  },
   donationReq: {
     type: Number,
     required: true,

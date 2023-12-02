@@ -25,6 +25,10 @@ const schema = new mongoose.Schema({
     required: false,
     type: String,
   },
+  description: {
+    required: false,
+    type: String,
+  },
   alias: {
     type: String,
     unique: true,

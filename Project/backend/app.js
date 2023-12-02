@@ -5,6 +5,7 @@ import campaignRouter from "./routes/campaign.route.js";
 import organizerRouter from "./routes/organizer.route.js";
 import fundraiserRouter from "./routes/fundraiser.route.js";
 import donorRouter from "./routes/donor.route.js";
+import miscRouter from "./routes/misc.route.js";
 import { config } from "dotenv";
 import { errorMiddleware } from "./middlewares/error.js";
 import cookieParser from "cookie-parser";
@@ -18,9 +19,10 @@ export const app = express();
 
 config();
 
-// Starting mongoose and redis clients
-export const drive = gdriveConnect();
+// Connecting to Google Drive API
+export const drive = await gdriveConnect();
 
+// Starting mongoose and redis clients
 export const redisClient = await createClient({ url: process.env.REDIS_URI })
   .on("error", (err) => console.log("Redis Client Error", err))
   .connect();
@@ -47,6 +49,7 @@ app.use("/campaign", campaignRouter);
 app.use("/organizer", organizerRouter);
 app.use("/fundraiser", fundraiserRouter);
 app.use("/donor", donorRouter);
+app.use("/misc", miscRouter);
 
 app.get("/", (req, res) => {
   res.send("Server Working Fine.");

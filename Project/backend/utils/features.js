@@ -1,6 +1,7 @@
 // ./utils/features.js
 import jwt from "jsonwebtoken";
 import ErrorHandler from "../middlewares/error.js";
+import nodemailer from "nodemailer";
 
 export const sendNgoCookie = (ngo, res, message, statusCode = 200) => {
   const token = jwt.sign({ _id: ngo._id }, process.env.JWT_SECRET);
@@ -33,7 +34,7 @@ export const sendOrganizerCookie = (ngo, res, message, statusCode = 200) => {
       message,
     });
 };
-export const sendFundRaiserCookieCookie = (
+export const sendFundRaiserCookie = (
   fr,
   res,
   message,

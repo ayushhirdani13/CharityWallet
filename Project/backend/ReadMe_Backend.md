@@ -6,8 +6,8 @@
 2. [Features](#features)
 3. [Prerequisites](#prerequisites)
 4. [Getting Started](#getting-started)
-    - [Installation](#installation)
-    - [Configuration](#configuration)
+   - [Installation](#installation)
+   - [Configuration](#configuration)
 5. [Folder Structure](#folder-structure)
 6. [API Endpoints](#api-endpoints)
 7. [Database Schema](#database-schema)
@@ -31,19 +31,21 @@ The Charity Wallet Website Backend serves as the foundational infrastructure sup
 
 - **Description:** Similar to NGO authentication but tailored for organizers.
 
-### 2.2 OTP Verification
+### 2.2 OTP Validation
 
 #### 2.2.1 Generate OTP
+
 -**Description:** Utility function for generating an OTP, saving it to the database, and sending it to the user's email.
 
 #### 2.2.2 Verify OTP
+
 -**Description:** Utility function for verifying the provided OTP against the stored OTP in the database.
 
-#### 2.3 Donation Management 
+#### 2.3 Donation Management
 
-#### 2.4 Campaign Management 
+#### 2.4 Campaign Management
 
-#### 2.5 Fundraiser Management 
+#### 2.5 Fundraiser Management
 
 ## Prerequisites
 
@@ -75,20 +77,22 @@ Before setting up the backend, ensure you have the following prerequisites insta
 
 We assume that you already have the repository cloned in your device and up-to-date with the original repo.
 
-Navigate to the project directory in the backend folder 
+Navigate to the project directory in the backend folder
 
 ### Install dependencies
+
 npm install
 
 Install the required dependencies:
 
 npm install bcrypt cookie-parser cors dotenv express jsonwebtoken lodash mongoose multer nodemailer otp-generator redis sharp
 
-
 ### Configuration
+
 Configure the backend by setting up environment variables, connecting to databases, etc. Make sure to create a .env file in the root directory and add the necessary environment variables.
 
-*Example for a .env file*
+_Example for a .env file_
+
 ```bash
 PORT=3000
 MONGO_URI=mongodb://localhost:27017/
@@ -107,9 +111,10 @@ REDIS_URL=your_redis_url
   /middlewares
   /models
   /routes
-  /utils 
+  /utils
 
 ```
+
 ## API Endpoints
 
 ### Routing Information
@@ -117,105 +122,135 @@ REDIS_URL=your_redis_url
 #### NGO Routes
 
 - **Get All NGOs:**
-  - Endpoint: `GET /ngos`
+
+  - Endpoint: `GET /ngo`
   - Controller: `getNgos`
 
 - **Register NGO:**
-  - Endpoint: `POST /ngos/register`
+
+  - Endpoint: `POST /ngo/register`
   - Controller: `registerNgo`
 
 - **Complete NGO Registration:**
-  - Endpoint: `POST /ngos/confirm-registration`
+
+  - Endpoint: `POST /ngo/confirm-registration`
   - Controller: `completeNgoRegistration`
 
 - **Login NGO:**
-  - Endpoint: `POST /ngos/login`
+
+  - Endpoint: `POST /ngo/login`
   - Controller: `loginNgo`
 
 - **Get NGO Dashboard:**
-  - Endpoint: `GET /ngos/dashboard`
+
+  - Endpoint: `GET /ngo/dashboard?ngoAlias=<ngoAlias>`
   - Controller: `getNgoByAlias`
   - Note: You need to send a query here as ngoAlias='Alias for NGO'
 
 - **Donate to NGO:**
-  - Endpoint: `POST /ngos/donate`
+
+  - Endpoint: `POST /ngo/donate?ngoAlias=<ngoAlias>`
   - Controller: `donateToNgo`
 
 - **Get Campaigns by NGO:**
-  - Endpoint: `GET /ngos/campaigns`
+
+  - Endpoint: `GET /ngo/campaigns`
   - Controller: `getCampaigns`
 
 - **Manage NGO Account:**
-  - Endpoint: `GET /ngos/myNgo`
+
+  - Endpoint: `GET /ngo/myNgo`
   - Controller: `getMyNgo` (Authenticated)
-  - Endpoint: `PUT /ngos/myNgo`
+  - Endpoint: `PUT /ngo/myNgo`
   - Controller: `updateNgoProfile` (Authenticated)
-  - Endpoint: `DELETE /ngos/myNgo`
+  - Endpoint: `DELETE /ngo/myNgo`
   - Controller: `deleteNgo` (Authenticated)
 
 - **Manage NGO Campaigns:**
-  - Endpoint: `POST /ngos/myNgo/addCampaign`
+
+  - Endpoint: `POST /ngo/myNgo/addCampaign`
   - Controller: `addCampaign` (Authenticated)
-  - Endpoint: `PUT /ngos/myNgo/updateCampaign`
+  - Endpoint: `PUT /ngo/myNgo/updateCampaign?campaignAlias=<campaignAlias>`
   - Controller: `updateMyCampaign` (Authenticated)
-  - Endpoint: `DELETE /ngos/myNgo/deleteCampaign`
+  - Endpoint: `DELETE /ngo/myNgo/deleteCampaign`
   - Controller: `deleteMyCampaign` (Authenticated)
 
 - **Change Password and Logo:**
-  - Endpoint: `POST /ngos/myNgo/changePassword`
+
+  - Endpoint: `POST /ngo/myNgo/changePassword`
   - Controller: `changePassword` (Authenticated)
-  - Endpoint: `POST /ngos/myNgo/uploadLogo`
+  - Endpoint: `POST /ngo/myNgo/uploadLogo`
   - Controller: `uploadLogo` (Authenticated)
-  - Endpoint: `DELETE /ngos/myNgo/logo`
+  - Endpoint: `DELETE /ngo/myNgo/logo?ngoAlias=<ngoAlias>`
   - Controller: `deleteLogo` (Authenticated)
 
 - **Manage NGO Gallery:**
-  - Endpoint: `POST /ngos/myNgo/gallery`
+  - Endpoint: `POST /ngo/myNgo/gallery`
   - Controller: `uploadGallery` (Authenticated)
+  - Endpoint: `GET /ngo/gallery?ngoAlias=<ngoAlias>`
+  - Controller: `getGallery` (Open to All)
+  - Endpoint: `DELETE /ngo/myNgo/gallery`
+  - Controller: `deleteGallery` (Authenticated)
 
 #### Campaign Routes
 
 - **Get All Campaigns:**
+
   - Endpoint: `GET /campaigns`
   - Controller: `getCampaigns`
 
 - **Get Campaign by Alias:**
+
   - Endpoint: `GET /campaigns/:alias`
   - Controller: `getCampaignByAlias`
 
 - **Donate to Campaign:**
-  - Endpoint: `GET /campaigns/donate`
+
+  - Endpoint: `GET /campaigns/donate?campaignAlias=<campaignAlias>`
   - Controller: `donateToCampaign`
+
+- **Get Campaign Cover Photo**
+  - Endpoint: `GET /campaign/cover?campaignAlias=<campaignAlias>`
+  - Controller: `getCoverCampaign`
 
 #### Fundraiser Routes
 
+- **Create FundRaiser**
+  - Endpoint: `POST fundraiser/register`
+
 - **Get All Fundraisers:**
+
   - Endpoint: `GET /fundraisers`
   - Controller: `getFundRaiser`
 
 - **Get Fundraiser by Alias:**
-  - Endpoint: `GET /fundraisers/:alias`
-  - Controller: `getFundRaiserById`
+
+  - Endpoint: `GET /fundraisers/dashboard?frAlias=<frAlias>`
+  - Controller: `getFundRaiserByAlias`
 
 - **Donate to Fundraiser:**
-  - Endpoint: `GET /fundraisers/donate`
+  - Endpoint: `GET /fundraisers/donate?frAlias=<frAlias>`
   - Controller: `donate`
 
 #### Organizer Routes
 
 - **Register Organizer:**
+
   - Endpoint: `POST /organizers/register`
   - Controller: `registerOrganizer`
 
 - **Complete Organizer Registration:**
+
   - Endpoint: `POST /organizers/confirm-registration`
   - Controller: `completeOrganizerRegistration`
 
 - **Login Organizer:**
+
   - Endpoint: `POST /organizers/login`
   - Controller: `loginOrganizer`
 
 - **Manage Organizer Profile:**
+
   - Endpoint: `GET /organizers/myProfile`
   - Controller: `getMyProfile` (Authenticated)
   - Endpoint: `PUT /organizers/myProfile`
@@ -224,6 +259,7 @@ REDIS_URL=your_redis_url
   - Controller: `deleteOrganizer` (Authenticated)
 
 - **Manage Organizer Campaigns:**
+
   - Endpoint: `POST /organizers/addCampaign`
   - Controller: `addCampaign` (Authenticated)
   - Endpoint: `PUT /organizers/updateCampaign`
@@ -232,10 +268,9 @@ REDIS_URL=your_redis_url
   - Controller: `deleteMyCampaign` (Authenticated)
 
 - **Change Password:**
+
   - Endpoint: `POST /organizers/changePassword`
   - Controller: `changePassword`
-
-- **Confirm Password Change:**
   - Endpoint: `POST /organizers/changePasswordConfirm`
   - Controller: `changePasswordConfirmation`
 
@@ -247,30 +282,41 @@ REDIS_URL=your_redis_url
 
 - **Description:** Middleware to authenticate NGO requests using JWT tokens.
 - **Usage:**
+
   ```javascript
   import { isNgoLoggedIn } from "./middlewares/auth.js";
-  
+
   app.get("/api/some-ngo-protected-endpoint", isNgoLoggedIn, (req, res) => {
     // Route logic for authenticated NGOs
   });
   ```
+
 #### Organizer Authentication
 
 ##### Middleware: isOrganizerLoggedIn
+
 Description: Middleware to authenticate organizer requests using JWT tokens.
 Usage:
+
 ```javascript
 import { isOrganizerLoggedIn } from "./middlewares/auth.js";
 
-app.get("/api/some-organizer-protected-endpoint", isOrganizerLoggedIn, (req, res) => {
-  // Route logic for authenticated organizers
-});
+app.get(
+  "/api/some-organizer-protected-endpoint",
+  isOrganizerLoggedIn,
+  (req, res) => {
+    // Route logic for authenticated organizers
+  }
+);
 ```
+
 #### Error Handling
 
 ##### Middleware: errorMiddleware
+
 Description: Middleware to handle errors and send appropriate responses.
 Usage:
+
 ```javascript
 import { errorMiddleware } from "./middlewares/error.js";
 
@@ -281,9 +327,12 @@ app.use(errorMiddleware);
 #### File Upload
 
 ##### Middleware: File Upload
+
 ###### upload
+
 Description: Middleware for handling file uploads.
 Usage:
+
 ```javascript
 import { upload } from "./middlewares/auth.js";
 
@@ -291,41 +340,54 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   // Route logic for handling file uploads
 });
 ```
+
 #### Google Drive Integration
 
 ##### uploadLogoGdrive
+
 Description: Upload a logo to Google Drive.
 Usage:
+
 ```javascript
 import { uploadLogoGdrive } from "./middlewares/auth.js";
 const fileId = await uploadLogoGdrive(file, next);
 ```
+
 ##### updateLogoGdrive
+
 Description: Update a logo on Google Drive.
 Usage:
+
 ```javascript
 import { updateLogoGdrive } from "./middlewares/auth.js";
 const fileId = await updateLogoGdrive(fileId, file, next);
 ```
 
 ##### getLogoGdrive
+
 Description: Get a logo from Google Drive.
 Usage:
+
 ```javascript
 import { getLogoGdrive } from "./middlewares/auth.js";
 const filePath = await getLogoGdrive(imgId);
 ```
 
 ##### deleteLogoGdrive
+
 Description: Delete a logo from Google Drive.
 Usage:
+
 ```javascript
 import { deleteLogoGdrive } from "./middlewares/auth.js";
 const response = await deleteLogoGdrive(imgId, next);
 ```
+
 ##### uploadMultipleImagesGdrive
+
 Description: Upload multiple images to Google Drive.
 Usage:
+
 ```javascript
 import { uploadMultipleImagesGdrive } from "./middlewares/auth.js";
 const uploadedImageIds = await uploadMultipleImagesGdrive(files, next);
@@ -334,6 +396,7 @@ const uploadedImageIds = await uploadMultipleImagesGdrive(files, next);
 ## Database Schema
 
 ### Campaign
+
 ```javascript
 - title: String (required)
 - vision: String (required)
@@ -346,7 +409,7 @@ const uploadedImageIds = await uploadMultipleImagesGdrive(files, next);
 - createdAt: Date, Default current date
 ```
 
-### Donation 
+### Donation
 
 ```javascript
 
@@ -414,6 +477,7 @@ const uploadedImageIds = await uploadMultipleImagesGdrive(files, next);
 - createdAt: Date, Default current date
 
 ```
+
 ### OTP
 
 ```javascript
@@ -426,10 +490,12 @@ const uploadedImageIds = await uploadMultipleImagesGdrive(files, next);
 
 ## Deployment
 
-## Testing 
+## Testing
 
 ## Packages
+
 The project is distributed under the following packages :
+
 ```json
 {
   "name": "charity-wallet-api",
