@@ -133,7 +133,7 @@ export const donateToCampaign = async (req, res, next) => {
     const data = req.body;
 
     const campaign = await Campaign.findOne({
-      alias: req.params.campaignAlias,
+      alias: req.query.campaignAlias,
     });
 
     if (!campaign) return next(new ErrorHandler("Campaign not found", 404));
@@ -155,7 +155,7 @@ export const donateToCampaign = async (req, res, next) => {
     if (!donation) return next(new ErrorHandler("Donation Unsuccessful.", 400));
 
     const updatedCampaign = await campaign.updateOne(
-      { donationsTillNow: Campaign.donationsTillNow + data.donationAmount },
+      { donationsTillNow: campaign.donationsTillNow + data.donationAmount },
       { session }
     );
 
@@ -169,7 +169,7 @@ export const donateToCampaign = async (req, res, next) => {
       "Thanks for your donation. This is a confirmation email that your donation was successful.";
     await sendEmail(data.donorEmail, `Donation to ${campaign.title}`, message);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Donation made successfully.",
     });

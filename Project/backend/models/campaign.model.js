@@ -13,7 +13,7 @@ const schema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   organizerType: {
     type: String,
@@ -34,7 +34,7 @@ const schema = new mongoose.Schema({
   },
   cover: {
     type: String,
-    required: true,
+    required: false,
   },
   donationsTillNow: {
     type: Number,

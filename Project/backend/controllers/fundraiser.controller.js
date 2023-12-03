@@ -213,7 +213,7 @@ export const donateToFr = async (req, res, next) => {
   try {
     const data = req.body;
 
-    const fr = await FundRaiser.findOne({ alias: req.query.frAlias });
+    const fr = await FundRaiser.findOne({ alias: req.query.fundraiserAlias });
 
     if (!fr) return next(new ErrorHandler("Fund raiser not found", 404));
     if (!fr.verified) {
@@ -262,7 +262,7 @@ Charity Wallet
         message
       );
     }
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Donation made successfully.",
     });

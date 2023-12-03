@@ -309,7 +309,7 @@ export const donateToNgo = async (req, res, next) => {
     let message =
       "Thanks for your donation. This is a confirmation email that your donation was successful.";
     await sendEmail(data.donorEmail, `Donation to ${ngo.name}`, message);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Donation made successfully.",
     });

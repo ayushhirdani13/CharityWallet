@@ -21,7 +21,7 @@ const router = express.Router();
 router.get("/", getFundRaisers);
 
 // donate to the FundRaiser, whose frAlias is required in URL query param.
-router.get("/donate", donateToFr);
+router.post("/donate", donateToFr);
 
 // Open a Fundraiser and get its details, frAlias is required here as well.
 router.get("/dashboard", getFundRaiserByAlias);
