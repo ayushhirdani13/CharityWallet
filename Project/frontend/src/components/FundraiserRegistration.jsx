@@ -14,41 +14,19 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Paper from "@mui/material/Paper";
-import Draggable from "react-draggable";
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-function PaperComponent(props) {
-  return (
-    <Draggable
-      handle="#draggable-dialog-title"
-      cancel={'[class*="MuiDialogContent-root"]'}
-    >
-      <Paper {...props} />
-    </Draggable>
-  );
-}
+import { Numbers } from "@mui/icons-material";
 
-const steps = ["Ngo Information", "Ngo Address", "Create Password", "OTP"];
+const steps = [
+  "Fundraiser Information",
+  "Issue And Donation Request and Address",
+  "Create Password",
+  "OTP",
+];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [error1, setErrors1] = useState({});
-
-  const handleClose = () => {
-    setOpen(false);
-    // navigate("/signin");
-    // window.location.reload();
-  };
+  const err = true;
   const section1 = {
     visibility: "hidden",
   };
@@ -70,22 +48,23 @@ export default function HorizontalLinearStepper() {
     return skipped.has(step);
   };
   const [data, setdata] = useState();
-  // const date = new Date();
-  const [Ngo, setNgo] = useState({
+  const date = new Date();
+  const [Fundraiser, setFundraiser] = useState({
     name: "",
-    contactNo: "",
+    phoneNo: "",
     email: "",
-    licenseNo: "",
+    title: "",
+    issue: "",
+    donationReq: Numbers,
     address: {
       city: "",
       state: "",
       pincode: "",
     },
-    dateOfReg:null,
     password: "",
   });
 
-  const [verifyngo, setverify] = useState({
+  const [verifyFundraiser, setverify] = useState({
     email: "",
     otp: "",
   });
@@ -97,33 +76,31 @@ export default function HorizontalLinearStepper() {
   const handleNext = () => {
     const validationerrors = {};
     const error_email_patten = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
-    const error_contactNO_patten = /^\(?([6-9]{1})\)?([0-9]{9})$/;
+    const error_phoneNo_patten = /^\(?([6-9]{1})\)?([0-9]{9})$/;
     const error_pincode_patten = /^\d{6}$/;
     const error_password_patten =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
 
     if (activeStep === 0) {
-      if (!Ngo.email.trim()) {
+      if (!Fundraiser.email.trim()) {
         validationerrors.email = "Email is required";
-      } else if (!error_email_patten.test(Ngo.email)) {
+      } else if (!error_email_patten.test(Fundraiser.email)) {
         validationerrors.email = "Email is not valid";
       }
 
-      if (!Ngo.name.trim()) {
-        validationerrors.name = "Ngo name is required";
+      if (!Fundraiser.name.trim()) {
+        validationerrors.name = "Fundraiser name is required";
       }
 
-      if (!Ngo.contactNo.trim()) {
-        validationerrors.contactNo = "Contact number is required";
-      } else if (!error_contactNO_patten.test(Ngo.contactNo)) {
-        validationerrors.contactNo =
+      if (!Fundraiser.phoneNo.trim()) {
+        validationerrors.phoneNo = "Contact number is required";
+      } else if (!error_phoneNo_patten.test(Fundraiser.phoneNo)) {
+        validationerrors.phoneNo =
           "First Digit start from 6,7,8,9 if invalid contact number";
       }
 
-      if (!Ngo.licenseNo.trim()) {
-        validationerrors.licenseNo = "license number is required";
-      } else if (Ngo.licenseNo.length < 12) {
-        validationerrors.licenseNo = "Invalid license number";
+      if (!Fundraiser.title.trim()) {
+        validationerrors.title = "Title is required";
       }
 
       // if(!data.success)
@@ -131,30 +108,38 @@ export default function HorizontalLinearStepper() {
       //   alert(data.message);
       // }
     } else if (activeStep === 1) {
-      if (!Ngo.address.city.trim()) {
+      if (!Fundraiser.issue.trim()) {
+        validationerrors.issue = "Issue is required";
+      }
+
+      if (!Fundraiser.donationReq.trim()) {
+        validationerrors.donationReq = "Donation amount is required";
+      }
+
+      if (!Fundraiser.address.city.trim()) {
         validationerrors.city = "City name is required";
       }
 
-      if (!Ngo.address.state.trim()) {
+      if (!Fundraiser.address.state.trim()) {
         validationerrors.state = "State name is required";
       }
 
-      if (!Ngo.address.pincode.trim()) {
+      if (!Fundraiser.address.pincode.trim()) {
         validationerrors.pincode = "Pincode number is required";
-      } else if (!error_pincode_patten.test(Ngo.address.pincode)) {
+      } else if (!error_pincode_patten.test(Fundraiser.address.pincode)) {
         validationerrors.pincode = "Pincode required only 6 digits";
       }
     } else if (activeStep === 2) {
-      if (!Ngo.password.trim()) {
+      if (!Fundraiser.password.trim()) {
         validationerrors.password = "Password is required";
-      } else if (!error_password_patten.test(Ngo.password)) {
+      } else if (!error_password_patten.test(Fundraiser.password)) {
         validationerrors.password =
           "Password between 7 to 15 characters which contain at least one numeric digit and a special character";
       }
 
       if (!confpass.confirmpassword.trim()) {
         validationerrors.confirmpassword = "confirm password is required";
-      } else if (Ngo.password !== confpass.confirmpassword) {
+      } else if (Fundraiser.password !== confpass.confirmpassword) {
         validationerrors.confirmpassword =
           "Confirm password is not match with password";
       }
@@ -228,20 +213,20 @@ export default function HorizontalLinearStepper() {
       setverify((prev) => {
         return { ...prev, [name]: value };
       });
-      // const date = new Date();
-      // setNgo((prev) => {
-      //   return { ...prev, dateOfReg: date };
-      // });
+      const date = new Date();
+      setFundraiser((prev) => {
+        return { ...prev, dateOfReg: date };
+      });
     }
 
-    setNgo((prev) => {
+    setFundraiser((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
   function handlechangeadd(event) {
     const { name, value } = event.target;
-    setNgo((prev) => {
+    setFundraiser((prev) => {
       return { ...prev, address: { ...prev.address, [name]: value } };
     });
   }
@@ -255,24 +240,24 @@ export default function HorizontalLinearStepper() {
     });
   }
 
-  console.log(Ngo);
-  console.log(verifyngo);
+  console.log(Fundraiser);
+  console.log(verifyFundraiser);
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
     const error_password_patten =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
 
-    if (!Ngo.password.trim()) {
+    if (!Fundraiser.password.trim()) {
       validationerrors.password = "Password is required";
-    } else if (!error_password_patten.test(Ngo.password)) {
+    } else if (!error_password_patten.test(Fundraiser.password)) {
       validationerrors.password =
         "Password between 7 to 15 characters which contain at least one numeric digit and a special character";
     }
 
     if (!confpass.confirmpassword.trim()) {
       validationerrors.confirmpassword = "confirm password is required";
-    } else if (Ngo.password !== confpass.confirmpassword) {
+    } else if (Fundraiser.password !== confpass.confirmpassword) {
       validationerrors.confirmpassword =
         "Confirm password is not match with password";
     }
@@ -280,20 +265,21 @@ export default function HorizontalLinearStepper() {
     setErrors(validationerrors);
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await fetch("/ngo/register", {
+        const response = await fetch("/fundraiser/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(Ngo),
+          body: JSON.stringify(Fundraiser),
         });
         const data1 = await response.json(); // Parse the response JSON
         setdata(data1);
         console.log(data);
-        if (!data1.success) {
-          setErrors1(data.message);
-          setOpen(true);
-        }
+        //   if(!data1.success)
+        //   {
+        //     alert(data1.message);
+        //     window.location.href="fundraiser/Registration";
+        //   }
         console.log(response.message);
 
         if (!response.ok) {
@@ -311,31 +297,21 @@ export default function HorizontalLinearStepper() {
     e.preventDefault();
     const validationerrors = {};
     const error_otp_patten = /^\d{6}$/;
-    if (!verifyngo.otp.trim()) {
+    if (!verifyFundraiser.otp.trim()) {
       validationerrors.pincode = "OTP is required";
-    } else if (!error_otp_patten.test(verifyngo.otp)) {
+    } else if (!error_otp_patten.test(verifyFundraiser.otp)) {
       validationerrors.pincode = "Pincode required only 6 digits";
     }
     try {
-      const response = await fetch("/ngo/confirm-registration", {
+      const response = await fetch("/fundraiser/completeRegistration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(verifyngo),
+        body: JSON.stringify(verifyFundraiser),
       });
-      const data1 = await response.json(); // Parse the response JSON
 
-      if (data1.success) {
-        sessionStorage.setItem("loggedIn", true);
-        sessionStorage.setItem("userType", "NGO");
-        console.log(sessionStorage);
-        window.location.href = "/edit_profile_ngo";
-      } else {
-        setErrors1(data1.message);
-        setOpen(true);
-      }
-      console.log(response.message);
+      console.log(response);
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
@@ -363,7 +339,11 @@ export default function HorizontalLinearStepper() {
               >
                 Registration From
               </span>
-              <Stepper activeStep={activeStep} orientation="vertical">
+              <Stepper
+                activeStep={activeStep}
+                orientation="vertical"
+                style={{ marginLeft: "10%" }}
+              >
                 {steps.map((label, index) => {
                   const stepProps = {};
                   const labelProps = {};
@@ -457,7 +437,7 @@ export default function HorizontalLinearStepper() {
                         paddingTop: "20px",
                       }}
                     >
-                      Ngo Information
+                      Fundraiser Information
                     </span>
 
                     <form
@@ -473,8 +453,8 @@ export default function HorizontalLinearStepper() {
                         name="name"
                         onChange={handlechange}
                         id="filled-error"
-                        defaultValue={Ngo.name}
-                        label="ngo name"
+                        defaultValue={Fundraiser.name}
+                        label="Fundraiser name"
                         helperText={errors.name}
                         sx={{ width: "85%", height: "50px" }}
                         variant="filled"
@@ -486,7 +466,7 @@ export default function HorizontalLinearStepper() {
                         name="email"
                         onChange={handlechange}
                         id="filled-error"
-                        defaultValue={Ngo.email}
+                        defaultValue={Fundraiser.email}
                         label="Email"
                         helperText={errors.email}
                         sx={{ width: "85%", height: "50px" }}
@@ -495,26 +475,26 @@ export default function HorizontalLinearStepper() {
                       />
 
                       <TextField
-                        error={errors.contactNo}
-                        name="contactNo"
+                        error={errors.phoneNo}
+                        name="phoneNo"
                         onChange={handlechange}
                         id="filled-error"
-                        defaultValue={Ngo.contactNo}
+                        defaultValue={Fundraiser.phoneNo}
                         label="Contact Number"
-                        helperText={errors.contactNo}
+                        helperText={errors.phoneNo}
                         sx={{ width: "85%", height: "50px" }}
                         variant="filled"
                         size="small"
                       />
 
                       <TextField
-                        error={errors.licenseNo}
-                        name="licenseNo"
+                        error={errors.title}
+                        name="title"
                         onChange={handlechange}
                         id="filled-error"
-                        defaultValue={Ngo.licenseNo}
-                        label="Ngo License Number"
-                        helperText={errors.licenseNo}
+                        defaultValue={Fundraiser.title}
+                        label="Fundraiser Title"
+                        helperText={errors.title}
                         sx={{ width: "85%", height: "50px" }}
                         variant="filled"
                         size="small"
@@ -585,64 +565,89 @@ export default function HorizontalLinearStepper() {
                     <div className="section1" style={section2}>
                       <span
                         style={{
-                          fontSize: "40px",
+                          fontSize: "30px",
                           color: "black",
-                          alignContent: "left",
-                          marginRight: "210px",
-                          marginBottom: "10px",
+                          justifyContent: "center",
+                          alignContent: "center",
+                          marginRight: "10px",
+                          marginLeft: "50px",
+                          //   marginBottom:"10px"
                         }}
                       >
-                        Ngo Address
+                        Issue,Donation Request And Address
                       </span>
 
                       <TextField
-                        error={errors.city}
-                        name="city"
-                        onChange={handlechangeadd}
-                        id="filled-error"
-                        defaultValue={Ngo.address.city}
-                        label="City"
-                        helperText={errors.city}
-                        sx={{ width: "85%", height: "50px" }}
-                        variant="filled"
-                      />
-
-                      <TextField
-                        error={errors.state}
-                        name="state"
-                        onChange={handlechangeadd}
-                        id="filled-error"
-                        defaultValue={Ngo.address.state}
-                        label="State"
-                        helperText={errors.state}
-                        sx={{ width: "85%", height: "50px" }}
-                        variant="filled"
-                      />
-                      <TextField
-                        error={errors.pincode}
-                        name="pincode"
-                        onChange={handlechangeadd}
-                        id="filled-error"
-                        defaultValue={Ngo.address.pincode}
-                        label="Area PIN"
-                        helperText={errors.pincode}
-                        sx={{ width: "85%", height: "50px" }}
-                        variant="filled"
-                      />
-
-                      <TextField
-                      type="date"
-                        error={errors.dateOfReg}
-                        name="dateOfReg"
+                        error={errors.issue}
+                        name="issue"
                         onChange={handlechange}
                         id="filled-error"
-                        defaultValue={Ngo.dateOfReg}
-                        label="Date of Ngo Registration"
-                        helperText={errors.dateOfReg}
+                        defaultValue={Fundraiser.issue}
+                        label="Issue"
+                        helperText={errors.issue}
+                        sx={{ width: "85%", height: "70px" }}
+                        variant="filled"
+                        multiline
+                        rows={2}
+                      />
+
+                      <TextField
+                        error={errors.donationReq}
+                        name="donationReq"
+                        onChange={handlechange}
+                        id="filled-error"
+                        defaultValue={Fundraiser.donationReq}
+                        label="Donation Request"
+                        type="number"
+                        helperText={errors.donationReq}
                         sx={{ width: "85%", height: "50px" }}
                         variant="filled"
                       />
-                     
+
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <TextField
+                          error={errors.city}
+                          name="city"
+                          onChange={handlechangeadd}
+                          id="filled-error"
+                          defaultValue={Fundraiser.address.city}
+                          label="City"
+                          helperText={errors.city}
+                          sx={{ width: "28%", height: "50px" }}
+                          variant="filled"
+                        />
+
+                        <TextField
+                          error={errors.state}
+                          name="state"
+                          onChange={handlechangeadd}
+                          id="filled-error"
+                          defaultValue={Fundraiser.address.state}
+                          label="State"
+                          helperText={errors.state}
+                          sx={{ width: "26%", height: "50px" }}
+                          variant="filled"
+                        />
+                        <TextField
+                          error={errors.pincode}
+                          name="pincode"
+                          onChange={handlechangeadd}
+                          id="filled-error"
+                          defaultValue={Fundraiser.address.pincode}
+                          label="Area PIN"
+                          helperText={errors.pincode}
+                          sx={{ width: "28%", height: "50px" }}
+                          variant="filled"
+                        />
+                      </div>
                     </div>
                   </Typography>
                   <Box
@@ -725,7 +730,7 @@ export default function HorizontalLinearStepper() {
                           Password
                         </InputLabel>
                         <FilledInput
-                          defaultValue={Ngo.password}
+                          defaultValue={Fundraiser.password}
                           name="password"
                           id="filled-adornment-password"
                           type={showPassword ? "text" : "password"}
@@ -878,7 +883,7 @@ export default function HorizontalLinearStepper() {
                         name="otp"
                         onChange={handleotp}
                         id="filled-error"
-                        value={verifyngo.otp}
+                        value={verifyFundraiser.otp}
                         label="OTP"
                         helperText={errors.otp}
                         sx={{ width: "85%", height: "50px" }}
@@ -931,26 +936,6 @@ export default function HorizontalLinearStepper() {
                     >
                       {activeStep === steps.length - 1 ? "Submit" : "Next"}
                     </Button>
-                    <Dialog
-                      open={open}
-                      onClose={handleClose}
-                      PaperComponent={PaperComponent}
-                      maxWidth={"xl"}
-                      aria-labelledby="draggable-dialog-title"
-                    >
-                      <DialogTitle
-                        style={{ cursor: "move" }}
-                        id="draggable-dialog-title"
-                      >
-                        Error
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText>{error1}</DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose}>Re Enter</Button>
-                      </DialogActions>
-                    </Dialog>
                   </Box>
                 </React.Fragment>
               )}

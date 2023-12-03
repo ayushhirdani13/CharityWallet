@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar';
 import Footer from '../components/footer';
-import Donarinput2 from '../components/Donation_records';
+import Donarinput2 from '../components/DonationRecords';
 function donarConfirm() {
   return (
    <>

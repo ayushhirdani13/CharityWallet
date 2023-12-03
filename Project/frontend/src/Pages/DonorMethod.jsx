@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar';
 import Footer from '../components/footer';
-import PageThree from '../components/Donation_paymethod';
+import PageThree from '../components/DonationPaymethod';
 function donarMethod() {
   return (
     <>

@@ -1,6 +1,6 @@
 import React from "react";
-import "../Styles/AboutUs_res.css";
-function AboutUs1() {
+import "../Styles/AboutUs.css";
+function AboutUs() {
   return (
     <div class="container-fluid bcolor_11 py-5">
       <div class="heading text-center text py-4">
@@ -135,4 +135,4 @@ function AboutUs1() {
   );
 }
 
-export default AboutUs1;
+export default AboutUs;

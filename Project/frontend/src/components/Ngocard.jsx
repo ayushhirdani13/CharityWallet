@@ -1,10 +1,10 @@
-import { WindowSharp } from "@mui/icons-material";
+// import { WindowSharp } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import Axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
-function Ngocard(props) {
+function NgoCard(props) {
   const [logo, setLogo] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -65,4 +65,4 @@ function Ngocard(props) {
   );
 }
 
-export default Ngocard;
+export default NgoCard;

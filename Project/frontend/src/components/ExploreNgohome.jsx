@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/campaignhome.css";
 import Axios from "axios";
-import Ngocard from "./Ngocard";
+import NgoCard from "./Ngocard";
 import CircularProgress from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
 import HashLoader from "react-spinners/HashLoader";
@@ -69,7 +69,7 @@ function ExploreNgohome() {
               {searchItem === ""
                 ? Ngode.map((ngoterm) => (
                     // <Link to={`/ExploreNgo/${ngoterm.name}`}>
-                    <Ngocard
+                    <NgoCard
                       key={ngoterm.id}
                       name={ngoterm.name}
                       description={ngoterm.description}
@@ -79,7 +79,7 @@ function ExploreNgohome() {
                     // </Link>
                   ))
                 : filteredUsers.map((ngoterm) => (
-                    <Ngocard
+                    <NgoCard
                       key={ngoterm.id}
                       name={ngoterm.name}
                       description={ngoterm.description}

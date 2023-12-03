@@ -10,7 +10,7 @@ function View_records() {
       <div className="container">
         <div className="card">
           <div className="card-header">
-            <span> View Donar Records </span>
+            <span> View Donor Records </span>
           </div>
           <div className="card-body">
             <div
@@ -22,7 +22,7 @@ function View_records() {
                   <thead>
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">NGO Name</th>
+                      <th scope="col">Receiver Name</th>
                       <th scope="col">Donation Amount</th>
                       <th scope="col">Date</th>
                     </tr>
@@ -31,7 +31,7 @@ function View_records() {
                     {data.map((donor,index) => (
                       <tr>
                         <th scope="row">{index+1}</th>
-                        <td>{donor.receiverId.name}</td>
+                        <td>{donor.receiverType==="NGO"? (donor.receiverId.name):(donor.receiverId.title)}</td>
                         <td>{donor.donationAmount}</td>
                         <td>{donor.donationTime}</td>
                       </tr>

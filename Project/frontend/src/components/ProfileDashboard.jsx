@@ -10,7 +10,7 @@ import "../Styles/profile_d_res.css";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import HashLoader from "react-spinners/HashLoader";
 import { Box } from "@mui/material";
-import CampaignCard from "./CampaingnCard";
+import CampaignCard from "./CampaignCardEditable";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -284,7 +284,7 @@ function Profile_Dashboard() {
                       <div className="modal-dialog modal-dialog-centered modal-xl">
                         <div className="modal-content">
                           <div className="modal-header">
-                            <h5 className="modal-title">Gallary</h5>
+                            <h5 className="modal-title">Gallery</h5>
                             <button
                               type="button"
                               className="btn-close"

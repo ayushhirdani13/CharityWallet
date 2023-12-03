@@ -4,13 +4,14 @@ import { useLocation } from "react-router-dom";
 import "../Styles/Don_details.css";
 import "../Styles/boot.css";
 import { Numbers } from "@mui/icons-material";
+import axios from "axios";
 // import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 function DonationDetails() {
   const location = useLocation();
   const Type = location.state;
-  // const navigate = useNavigate();
-console.log(Type);
+  const navigate = useNavigate();
+  // console.log(Type);
   const [DonationDetails, setUser] = useState({
     donorName: "",
     donorEmail: "",
@@ -25,33 +26,30 @@ console.log(Type);
     const { name, value } = event.target;
 
     setUser((prev) => {
-      return { ...prev, [name]: value };
+      return {
+        ...prev,
+        [name]: name === "donationAmount" ? parseFloat(value) : value,
+      };
     });
   }
 
   async function handleChange(e) {
-      e.preventDefault();
+    e.preventDefault();
     try {
-      
-      const response = await fetch(`/${Type.type}/donate?${Type.type}Alias=${Type.alias}`,
+      const response = await axios.post(
+        `http://localhost:5000/${Type.type}/donate?${Type.type}Alias=${Type.alias}`,
+        DonationDetails,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(DonationDetails),
         }
       );
+
       const data = await response.json(); // Parse the response JSON
-      console.log(data);
-      // if (data.success) {
-       
-      //   setDisabled(true);
-      //   setErrors(validationerrors);
-      // } else {
-      //   setErrors1(data.message);
-      //   setOpen(true);
-      // }
+      if (data.success) {
+        navigate("/");
+      }
 
       if (!response.ok) {
         throw new Error(`Request failed with status: ${response.status}`);
@@ -126,8 +124,8 @@ console.log(Type);
                     name="donorPhoneNo"
                     required
                   />
-                  <label for="floatingInput">Address</label>
-                  <div className="invalid-feedback">Invaild Address</div>
+                  <label for="floatingInput">Phone No.</label>
+                  <div className="invalid-feedback">Invaild Phone</div>
                 </div>
                 <div className="form-floating mb-3">
                   <input
@@ -160,8 +158,7 @@ console.log(Type);
 
                 <button
                   class="btn"
-                  onClick={(e)=>(handleChange(e))}
-                  
+                  onClick={(e) => handleChange(e)}
                   style={{
                     fontFamily: "initial",
                     height: "50px",

@@ -1,16 +1,16 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
-import ExploreNgohome from "../components/ExploreNgohome";
+import EditProfileOrg from "../components/EditProfileOrganizer";
 
-function ExploreNGOhome() {
+function EditProfileOrganizer() {
   return (
     <>
       <Navbar color="linear-gradient(270deg, #7DB9E1 0.29%, rgba(216, 244, 250, 0.37) 98.4%)" />
-      <ExploreNgohome />
+      <EditProfileOrg />
       <Footer />
     </>
   );
 }
 
-export default ExploreNGOhome;
+export default EditProfileOrganizer;

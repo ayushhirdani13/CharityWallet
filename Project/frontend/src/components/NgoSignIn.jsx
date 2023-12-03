@@ -138,7 +138,7 @@ function NgoSignIn() {
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem("userType", Type.type);
           console.log(sessionStorage);
-          window.location.href = "/home";
+          window.location.href = "/";
         } else {
           setErrors1(data.message);
           setOpen(true);

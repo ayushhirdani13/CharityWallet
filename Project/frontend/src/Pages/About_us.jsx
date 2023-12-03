@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
-import AboutUs from "../components/AboutUs_res";
+import AboutUs from "../components/AboutUs";
 
 function AboutUs1() {
   return (

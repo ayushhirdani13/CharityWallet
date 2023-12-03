@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbardonor from "../components/Navbardonor";
-import Profile_home from "../components/profile_home_res";
+import ProfileHome from "../components/ProfileHome";
 
 
 function DonorHome() {
@@ -9,7 +9,7 @@ function DonorHome() {
     return(
         <>
         <Navbardonor color="white"/>
-        <Profile_home />
+        <ProfileHome />
     <Footer/>
     </>
     );

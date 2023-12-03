@@ -4,13 +4,13 @@ import "../Styles/Navbar.css";
 function Navbar(prop) {
   return (
     <div
-      class="container-fluid py-2 px-0 customstyle fix-top text-center"
+      className="container-fluid py-2 px-0 customstyle fix-top text-center"
       style={{ background: prop.color, position: "relative" }}
     >
-      <header class="d-flex flex-wrap justify-content-center   ">
+      <header className="d-flex flex-wrap justify-content-center   ">
         <a
           href="/"
-          class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
+          className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
         >
           <img
             style={{ height: "80px", width: "200px" }}
@@ -19,16 +19,16 @@ function Navbar(prop) {
           />
         </a>
 
-        <ul class="nav nav-pills ">
-          <li class="align-item-center d-flex ">
-            <a href="/home" class="nav-link px-4 text-black  fs-4 mt-2">
+        <ul className="nav nav-pills ">
+          <li className="align-item-center d-flex ">
+            <a href="/home" className="nav-link px-4 text-black  fs-4 mt-2">
               Home
             </a>
           </li>
 
-          <li class="nav-item dropdown align-item-center d-flex ">
+          <li className="nav-item dropdown align-item-center d-flex ">
             <a
-              class="nav-link dropdown-toggle text-black text-center px-4 fs-4 mt-2"
+              className="nav-link dropdown-toggle text-black text-center px-4 fs-4 mt-2"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
@@ -36,48 +36,53 @@ function Navbar(prop) {
             >
               Donate
             </a>
-            <ul class="dropdown-menu">
+            <ul className="dropdown-menu">
               <li>
-                <a class="dropdown-item text-center" href="/ExploreNgo">
+                <a className="dropdown-item text-center" href="/ExploreNgo">
                   NGO
                 </a>
               </li>
               <li>
-                <hr class="dropdown-divider" />
+                <hr className="dropdown-divider" />
               </li>
               <li>
-                <a class="dropdown-item text-center" href="/Campaignhome">
+                <a className="dropdown-item text-center" href="/Campaignhome">
                   Campaign
                 </a>
               </li>
               <li>
-                <hr class="dropdown-divider" />
+                <hr className="dropdown-divider" />
               </li>
               <li>
-                <a class="dropdown-item text-center" href="/Emergency">
+                <a className="dropdown-item text-center" href="/Emergency">
                   Emergency Help
                 </a>
               </li>
             </ul>
           </li>
 
-          
-            {sessionStorage.getItem("loggedIn")? (<li class="align-item-center d-flex ">
-              <a href="/Ngoprofile" class="nav-link px-4 text-black  fs-4 mt-2">
+          {sessionStorage.getItem("loggedIn") ? (
+            <li className="align-item-center d-flex ">
+              <a
+                href="/Ngoprofile"
+                className="nav-link px-4 text-black  fs-4 mt-2"
+              >
                 Profile
               </a>
-              </li>
-            ) : (
-                <li class="align-item-center d-flex ">
-                <a href="/donor_confirm" class="nav-link px-4 text-black  fs-4 mt-2">
+            </li>
+          ) : (
+            <li className="align-item-center d-flex ">
+              <a
+                href="/donor_confirm"
+                className="nav-link px-4 text-black  fs-4 mt-2"
+              >
                 Donation Records
-                </a>
-                </li>
-            )}
-          
+              </a>
+            </li>
+          )}
 
-          <li class="align-item-center d-flex ">
-            <a href="/AboutUs" class="nav-link px-4 text-black  fs-4 mt-2">
+          <li className="align-item-center d-flex ">
+            <a href="/AboutUs" className="nav-link px-4 text-black  fs-4 mt-2">
               About Us
             </a>
           </li>

@@ -19,16 +19,14 @@ function Number({ n }) {
   return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
 }
 
-function Ngoprofile() {
+function NgoProfile() {
   const { alias } = useParams();
   const [loading, setloading] = useState(true);
 
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(
-        `/ngo/dashboard?ngoAlias=${alias}`
-      );
+      const res = await Axios.get(`/ngo/dashboard?ngoAlias=${alias}`);
       setNgo(res.data);
       setloading(false);
     };
@@ -39,21 +37,19 @@ function Ngoprofile() {
   const [logo, setLogo] = useState({});
   const [loading1, setloading1] = useState(true);
   const [loading2, setloading2] = useState(true);
-  const [donationData,setdonationData]=useState({
-    type:"ngo",
-    alias:alias,
-  })
-  const navigate=useNavigate();
+  const [donationData, setdonationData] = useState({
+    type: "ngo",
+    alias: alias,
+  });
+  const navigate = useNavigate();
 
   console.log(donationData);
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(
-        `/ngo/gallery?ngoAlias=${alias}`
-      );
+      const res = await Axios.get(`/ngo/gallery?ngoAlias=${alias}`);
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setGallery(res.data.gallery);
-      
+
       //    setlogo(res1.data);
       setloading1(false);
     };
@@ -61,9 +57,7 @@ function Ngoprofile() {
   }, []);
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(
-        `/ngo/logo?ngoAlias=${alias}`
-      );
+      const res = await Axios.get(`/ngo/logo?ngoAlias=${alias}`);
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setLogo(res.data.logo);
       //    setlogo(res1.data);
@@ -71,8 +65,6 @@ function Ngoprofile() {
     };
     getabs();
   }, []);
-
-
 
   return (
     <>
@@ -172,14 +164,14 @@ function Ngoprofile() {
                       </div>
                     ))}
                     <div class="d-flex justify-content-center ">
-                    <button
-                      type="button"
-                      class="btn btn-primary btn-lg btn-clr rounded-4 px-5"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                    >
-                      Show gallery
-                    </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-lg btn-clr rounded-4 px-5"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                      >
+                        Show gallery
+                      </button>
                     </div>
                     <div
                       class="modal"
@@ -270,19 +262,18 @@ function Ngoprofile() {
                     </div>
                   </>
                 )}
-                
               </div>
               <div className="pb-3 d-flex justify-content-center">
-              <button
-                onClick={() => {
-                  navigate("/donor_details", { state:donationData });
-                }}
-                type="button"
-                class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
-              >
-                Donate
-              </button>
-            </div>
+                <button
+                  onClick={() => {
+                    navigate("/donor_details", { state: donationData });
+                  }}
+                  type="button"
+                  class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
+                >
+                  Donate
+                </button>
+              </div>
             </div>
 
             <div class="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4">
@@ -296,7 +287,6 @@ function Ngoprofile() {
                 </p>
               </div>
             </div>
-            
           </div>
         </div>
       )}
@@ -304,4 +294,4 @@ function Ngoprofile() {
   );
 }
 
-export default Ngoprofile;
+export default NgoProfile;
