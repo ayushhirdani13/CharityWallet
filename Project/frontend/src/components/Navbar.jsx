@@ -21,7 +21,7 @@ function Navbar(prop) {
 
         <ul className="nav nav-pills ">
           <li className="align-item-center d-flex ">
-            <a href="/home" className="nav-link px-4 text-black  fs-4 mt-2">
+            <a href="/" className="nav-link px-4 text-black  fs-4 mt-2">
               Home
             </a>
           </li>
@@ -61,7 +61,7 @@ function Navbar(prop) {
             </ul>
           </li>
 
-          {sessionStorage.getItem("loggedIn") ? (
+          {sessionStorage.getItem("loggedIn") === true ? (
             <li className="align-item-center d-flex ">
               <a
                 href="/Ngoprofile"

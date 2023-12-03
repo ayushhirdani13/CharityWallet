@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 function CampaignCard(props) {
   async function handleDelete() {
     const response = await Axios.delete(
-      `http://localhost:5000/ngo/myNgo/deleteCampaign?campaignAlias=${props.alias}`,
+      `${process.env.REACT_APP_API}/ngo/myNgo/deleteCampaign?campaignAlias=${props.alias}`,
       { withCredentials: true }
     );
 
@@ -14,7 +14,7 @@ function CampaignCard(props) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     Axios.get(
-      `http://localhost:5000/campaign/cover?campaignAlias=${props.alias}`
+      `${process.env.REACT_APP_API}/campaign/cover?campaignAlias=${props.alias}`
     )
       .then((res) => {
         setCover(res.data.cover);

@@ -30,7 +30,7 @@ import DonorMethod from "./DonorMethod";
 import DonorRecords from "./DonorRecords";
 
 function App() {
-  console.log(process.env.REACT_APP_API);
+  sessionStorage.setItem("loggedIn", false);
   return (
     <Router>
       <Routes>
@@ -39,15 +39,15 @@ function App() {
         {/* <Route path="/footer" element={<Footer />} /> */}
         {/* <Route path="/Card" element={<Card/>} /> */}
 
-        {sessionStorage.getItem("loggedIn") ? (
+        {sessionStorage.getItem("loggedIn") === true ? (
           <>
+            <Route path="/" element={<ProfileHome />} />
             <Route path="/edit_profile_ngo" element={<EditProfileNgo />} />
             <Route path="/edit_profile_org" element={<EditProfileOrg />} />
             <Route
               path="/Campaignhome/:alias"
               element={<AfterCreateCampaign />}
             />
-            <Route path="/" element={<ProfileHome />} />
             <Route path="/AboutUs" element={<AboutUs />} />
             <Route path="/Campaignhome" element={<CampaignHome />} />
             <Route path="/ExploreNgo" element={<ExploreNgoHome />} />
@@ -66,6 +66,7 @@ function App() {
           </>
         ) : (
           <>
+            <Route path="/" element={<ProfileHome />} />
             <Route path="/Registrationas" element={<Login />} />
             <Route path="/ngo/Registration" element={<NgoRegistration />} />
             <Route
@@ -98,10 +99,7 @@ function App() {
           </>
         )}
 
-        <Route
-          path="/Fundraiser_dashboard"
-          element={<FundraiserDashboard />}
-        />
+        <Route path="/Fundraiser_dashboard" element={<FundraiserDashboard />} />
         {/* <Route path="/Card" element={<Card/>} />
         <Route path="/Card" element={<Card/>} />
         <Route path="/Card" element={<Card/>} /> */}

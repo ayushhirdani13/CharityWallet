@@ -19,7 +19,7 @@ function Aftercreatecampaign() {
   useEffect(() => {
     const getabs = async () => {
       const res = await axios.get(
-        `http://localhost:5000/campaign/dashboard?campaignAlias=${alias}`
+        `${process.env.REACT_APP_API}/campaign/dashboard?campaignAlias=${alias}`
       );
 
       console.log(res);
@@ -33,7 +33,7 @@ function Aftercreatecampaign() {
   const [cover, setCover] = useState({});
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/campaign/cover?campaignAlias=${alias}`)
+      .get(`${process.env.REACT_APP_API}/campaign/cover?campaignAlias=${alias}`)
       .then((res) => {
         setCover(res.data.cover);
       })

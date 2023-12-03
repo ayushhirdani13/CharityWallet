@@ -16,9 +16,9 @@ function Number({ n }) {
 function Profile_home() {
   const naviGate = useNavigate();
   function handleSignout() {
-    sessionStorage.removeItem("loggedIn");
+    sessionStorage.setItem("loggedIn", false);
 
-    naviGate("/home");
+    naviGate("/");
     window.location.reload();
   }
   const [ngo, SetNgo] = useState({});
@@ -28,7 +28,7 @@ function Profile_home() {
   const [campaignCover, setCampaignCover] = useState({});
   useEffect(() => {
     axios
-      .get("http://localhost:5000/misc/current")
+      .get(`${process.env.REACT_APP_API}/misc/current`)
       .then((res) => {
         SetNgo(res.data.ngo);
         setCampaign(res.data.campaign);
@@ -40,7 +40,7 @@ function Profile_home() {
   useEffect(() => {
     if (ngo.logo) {
       axios
-        .get(`http://localhost:5000/ngo/logo?ngoAlias=${ngo.alias}`)
+        .get(`${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${ngo.alias}`)
         .then((res1) => {
           setNgoLogo(res1.data.logo);
         })
@@ -50,7 +50,7 @@ function Profile_home() {
     if (campaign.cover) {
       axios
         .get(
-          `http://localhost:5000/campaign/cover?campaignAlias=${campaign.alias}`
+          `${process.env.REACT_APP_API}/campaign/cover?campaignAlias=${campaign.alias}`
         )
         .then((res1) => {
           setCampaignCover(res1.data.cover);
@@ -64,7 +64,7 @@ function Profile_home() {
       style={{ borderTopLeftRadius: "50px", borderTopRightRadius: "50px" }}
     >
       <div className="d-grid gap-2 py-10 d-md-flex justify-content-md-end">
-        {sessionStorage.getItem("loggedIn") ? (
+        {sessionStorage.getItem("loggedIn") === true ? (
           <button
             type="button"
             onClick={handleSignout}
@@ -184,23 +184,13 @@ function Profile_home() {
                 </div>
                 <div className="col-12 col-xxl-6 mt-0 ">
                   <h1 className="lh-1 my-3 rounded-4 text-center text-white bg-dark py-2 font fs-1">
-                    {fundraiser
-                      ? () => {
-                          return fundraiser.title;
-                        }
-                      : () => {
-                          return `Sample Fundraiser`;
-                        }}
+                    {fundraiser !== null ? fundraiser.title : `Sample Title`}
                   </h1>
                   <div className="bgd-clr p-3 rounded-4">
                     <p className="text-center">
-                      {fundraiser
-                        ? () => {
-                            return fundraiser.description;
-                          }
-                        : () => {
-                            return `Sample Fundraiser Description`;
-                          }}
+                      {fundraiser !== null
+                        ? fundraiser.description
+                        : `Sample Fundraiser Description`}
                     </p>
                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                       <button

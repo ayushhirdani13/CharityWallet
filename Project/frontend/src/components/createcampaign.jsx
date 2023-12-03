@@ -38,7 +38,7 @@ function CreateCampaign() {
 
     try {
       const response = await Axios.post(
-        "http://localhost:5000/ngo/myNgo/addCampaign",
+        `${process.env.REACT_APP_API}/ngo/myNgo/addCampaign`,
         Campaign,
         {
           headers: { "Content-Type": "multipart/form-data" },

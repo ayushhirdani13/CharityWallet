@@ -8,7 +8,7 @@ function CampaignCard(props) {
   const [cover, setCover] = useState({});
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/campaign/cover?campaignAlias=${props.alias}`)
+      .get(`${process.env.REACT_APP_API}/campaign/cover?campaignAlias=${props.alias}`)
       .then((res) => {
         setCover(res.data.cover);
       })

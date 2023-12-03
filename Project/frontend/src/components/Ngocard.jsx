@@ -10,7 +10,7 @@ function NgoCard(props) {
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(
-        `http://localhost:5000/ngo/logo?ngoAlias=${props.alias}`
+        `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${props.alias}`
       );
       setLogo(res.data.logo);
       setLoading(false);

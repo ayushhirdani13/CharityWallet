@@ -64,7 +64,7 @@ function Profile_Dashboard() {
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get("http://localhost:5000/ngo/myNgo", {
+      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/myNgo`, {
         withCredentials: true,
       }).catch((err) => {
         console.log(err.response.data);
@@ -76,7 +76,7 @@ function Profile_Dashboard() {
 
       setloading(false);
       const res1 = await Axios.get(
-        `http://localhost:5000/ngo/campaigns?ngoAlias=${res.data.ngo.alias}`
+        `${process.env.REACT_APP_API}/ngo/campaigns?ngoAlias=${res.data.ngo.alias}`
       );
 
       setCampaign(res1.data.campaigns);
@@ -84,14 +84,14 @@ function Profile_Dashboard() {
       setLoading2(false);
 
       const res2 = await Axios.get(
-        `http://localhost:5000/ngo/gallery?ngoAlias=${res.data.ngo.alias}`
+        `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${res.data.ngo.alias}`
       );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       //   console.log(res);
       setGallery(res2.data.gallery);
 
       const res3 = await Axios.get(
-        `http://localhost:5000/ngo/logo?ngoAlias=${res.data.ngo.alias}`
+        `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${res.data.ngo.alias}`
       );
       setLogo(res3.data.logo);
       setloading1(false);

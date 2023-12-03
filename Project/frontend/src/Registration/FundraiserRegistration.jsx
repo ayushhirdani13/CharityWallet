@@ -112,7 +112,7 @@ export default function HorizontalLinearStepper() {
         validationerrors.issue = "Issue is required";
       }
 
-      if (!Fundraiser.donationReq.trim()) {
+      if (Fundraiser.donationReq === 0) {
         validationerrors.donationReq = "Donation amount is required";
       }
 
@@ -220,14 +220,23 @@ export default function HorizontalLinearStepper() {
     }
 
     setFundraiser((prev) => {
-      return { ...prev, [name]: value };
+      return {
+        ...prev,
+        [name]: name === "donationReq" ? parseFloat(value) || 0 : value,
+      };
     });
   }
 
   function handlechangeadd(event) {
     const { name, value } = event.target;
     setFundraiser((prev) => {
-      return { ...prev, address: { ...prev.address, [name]: value } };
+      return {
+        ...prev,
+        address: {
+          ...prev.address,
+          [name]: value,
+        },
+      };
     });
   }
 

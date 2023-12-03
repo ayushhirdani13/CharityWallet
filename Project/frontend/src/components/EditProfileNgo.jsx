@@ -107,7 +107,7 @@ function Edit_profile_ngo() {
   function handlesubmit(e) {
     e.preventDefault();
 
-    Axios.patch("http://localhost:5000/ngo/myNgo", editNgo, {
+    Axios.patch(`${process.env.REACT_APP_API}/ngo/myNgo`, editNgo, {
       headers: {
         "Content-Type": "application/json",
       },

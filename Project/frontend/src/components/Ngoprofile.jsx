@@ -46,7 +46,7 @@ function NgoProfile() {
   console.log(donationData);
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(`/ngo/gallery?ngoAlias=${alias}`);
+      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`);
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setGallery(res.data.gallery);
 
@@ -57,7 +57,7 @@ function NgoProfile() {
   }, []);
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(`/ngo/logo?ngoAlias=${alias}`);
+      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`);
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setLogo(res.data.logo);
       //    setlogo(res1.data);
