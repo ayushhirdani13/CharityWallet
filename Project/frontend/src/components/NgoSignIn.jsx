@@ -29,6 +29,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
+import axios from "axios";
 
 function PaperComponent(props) {
   return (
@@ -45,12 +46,12 @@ function NgoSignIn() {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    otp:"",
+    otp: "",
   });
 
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
-  const [disabled,setDisabled]=useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [error1, setErrors1] = useState({});
 
   const [Type, setType] = useState({
@@ -100,11 +101,11 @@ function NgoSignIn() {
     const error_email_patten = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
     // const error_password_patten=/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
     if (!user.password.trim()) {
-          validationerrors.password = "Password is required";
-       } //else if (!error_password_patten.test(user.password)) {
-        //   validationerrors.password="Password between 7 to 15 characters which contain at least one numeric digit and a special character";
-        // }
-    
+      validationerrors.password = "Password is required";
+    } //else if (!error_password_patten.test(user.password)) {
+    //   validationerrors.password="Password between 7 to 15 characters which contain at least one numeric digit and a special character";
+    // }
+
     if (!Type.type.trim()) {
       validationerrors.type = "Type is required";
     }
@@ -124,19 +125,21 @@ function NgoSignIn() {
 
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await axios.post(`${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/login`, {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/login`,
           user,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json(); // Parse the response JSON
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.data; // Parse the response JSON
 
         if (data.success) {
-          
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem("userType", Type.type);
-          
+
           window.location.href = "/";
         } else {
           setErrors1(data.message);
@@ -168,9 +171,10 @@ function NgoSignIn() {
     setErrors(validationerrors);
     if (Object.keys(validationerrors).length === 0) {
       try {
-      
         const response = await axios.post(
-          `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/changePassword`,
+          `${
+            process.env.REACT_APP_API
+          }/${Type.type.toLowerCase()}/changePassword`,
           user,
           {
             headers: {
@@ -178,10 +182,9 @@ function NgoSignIn() {
             },
           }
         );
-        const data = await response.json(); // Parse the response JSON
-        
+        const data = await response.data; // Parse the response JSON
+
         if (data.success) {
-         
           setDisabled(true);
           setErrors(validationerrors);
         } else {
@@ -201,30 +204,28 @@ function NgoSignIn() {
   async function handleChangePass(e) {
     e.preventDefault();
     const validationerrors = {};
-    const error_password_patten=/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
-    const error_otp_patten=/^\d{6}$/;
-    
+    const error_password_patten =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+    const error_otp_patten = /^\d{6}$/;
 
-  if(!user.otp.trim())
-    {
-      validationerrors.otp="OTP is required";
+    if (!user.otp.trim()) {
+      validationerrors.otp = "OTP is required";
+    } else if (!error_otp_patten.test(user.otp)) {
+      validationerrors.otp = "Pincode required only 6 digits";
     }
-    else if(!error_otp_patten.test(user.otp))
-    {
-      validationerrors.otp="Pincode required only 6 digits";
-    }
-    
 
     if (!user.password.trim()) {
       validationerrors.password = "Password is required";
     } else if (!error_password_patten.test(user.password)) {
-      validationerrors.password="Password between 7 to 15 characters which contain at least one numeric digit and a special character";
+      validationerrors.password =
+        "Password between 7 to 15 characters which contain at least one numeric digit and a special character";
     }
 
     if (!Type.Confpassword.trim()) {
       validationerrors.Confpassword = "Confirm Password is required";
     } else if (user.password !== Type.Confpassword) {
-      validationerrors.Confpassword ="Confirm Password is not match with Password";
+      validationerrors.Confpassword =
+        "Confirm Password is not match with Password";
     }
 
     setErrors(validationerrors);
@@ -233,7 +234,9 @@ function NgoSignIn() {
       try {
         // const validationerrors = {};
         const response = await axios.post(
-          `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/changePasswordConfirm`,
+          `${
+            process.env.REACT_APP_API
+          }/${Type.type.toLowerCase()}/changePasswordConfirm`,
           user,
           {
             headers: {
@@ -241,8 +244,8 @@ function NgoSignIn() {
             },
           }
         );
-        const data = await response.json(); // Parse the response JSON
-        
+        const data = await response.data; // Parse the response JSON
+
         if (data.success) {
           alert(data.message);
 
@@ -273,7 +276,6 @@ function NgoSignIn() {
           <form
             className="f1"
             onSubmit={(event) => {
-              
               handelsignin(event);
             }}
           >
@@ -309,7 +311,7 @@ function NgoSignIn() {
             </FormControl>
 
             <TextField
-            error={errors.email}
+              error={errors.email}
               name="email"
               id="filled-error-email"
               // sx={{ height: "60px", width: "500px" }}
@@ -502,7 +504,7 @@ function NgoSignIn() {
                     name="Confpassword"
                     type="password"
                     id="filled-error-password"
-                    sx={{ height: "60px", width: "100%",marginTop:"20px", }}
+                    sx={{ height: "60px", width: "100%", marginTop: "20px" }}
                     label="Confirm Password"
                     helperText={errors.Confpassword}
                     variant="filled"

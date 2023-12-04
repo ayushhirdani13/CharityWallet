@@ -273,7 +273,7 @@ export default function HorizontalLinearStepper() {
             },
           }
         );
-        const data1 = await response.json(); // Parse the response JSON
+        const data1 = await response.data; // Parse the response JSON
 
         if (data1.success) {
           alert(data1.message);
@@ -315,7 +315,7 @@ export default function HorizontalLinearStepper() {
         throw new Error(`Request failed with status: ${response.status}`);
       }
 
-      const data = await response.json(); // Parse the response JSON
+      const data = await response.data; // Parse the response JSON
       if (data.success) {
         const type = sessionStorage.getItem("userType");
         if (type == null) {

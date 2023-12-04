@@ -2,10 +2,12 @@ import { useState } from "react";
 import React from "react";
 import Axios from "axios";
 import "../Styles/createcampaign_res.css";
+import { useNavigate } from "react-router";
 
 Axios.defaults.withCredentials = true;
 
 function CreateCampaign() {
+  const navigate = useNavigate();
   const [Campaign, setcampaign] = useState({
     title: "",
     vision: "",
@@ -34,33 +36,24 @@ function CreateCampaign() {
 
   async function handleCampaign(e) {
     e.preventDefault();
-
-    try {
-      const response = await Axios.post(
-        `${process.env.REACT_APP_API}/${type.toLowerCase()}/addCampaign`,
-        Campaign,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      console.log(response.message);
-      if (!response.ok) {
-        // Handle errors if the request is not successful
-        throw new Error(`Request failed with status: ${response.status}`);
+    await Axios.post(
+      `${process.env.REACT_APP_API}/${type.toLowerCase()}/addCampaign`,
+      Campaign,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
       }
-
-      const data = await response.json(); // Parse the response JSON
-      if(data.s)
-      console.log(data); // Log the response data
-    } catch (error) {
-      console.error(error);
-    }
+    )
+      .then((response) => {
+        const data = response.data;
+        if (data.success) {
+          navigate("/Ngoprofile");
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
-
-
-
-  console.log(Campaign);
 
   return (
     <div class="container" style={{ height: "max-content", maxWidth: "100%" }}>

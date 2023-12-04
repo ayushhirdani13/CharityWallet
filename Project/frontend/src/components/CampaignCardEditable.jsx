@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 function CampaignCard(props) {
   async function handleDelete() {
     const response = await Axios.delete(
-      `${process.env.REACT_APP_API}/ngo/myNgo/deleteCampaign?campaignAlias=${props.alias}`,
+      `${process.env.REACT_APP_API}/ngo/deleteCampaign?campaignAlias=${props.alias}`,
       { withCredentials: true }
     );
 

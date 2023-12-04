@@ -271,7 +271,7 @@ export default function HorizontalLinearStepper() {
             },
           }
         );
-        const data1 = await response.json(); // Parse the response JSON
+        const data1 = await response.data; // Parse the response JSON
         setdata(data1);
 
         if (!data1.success) {
@@ -309,7 +309,7 @@ export default function HorizontalLinearStepper() {
           },
         }
       );
-      const data1 = await response.json(); // Parse the response JSON
+      const data1 = await response.data; // Parse the response JSON
 
       if (data1.success) {
         sessionStorage.setItem("loggedIn", true);

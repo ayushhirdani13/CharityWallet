@@ -10,6 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
+import axios from "axios";
 function PaperComponent(props) {
   return (
     <Draggable
@@ -35,66 +36,61 @@ function Donation_records() {
     window.location.reload();
   };
 
-  const validateEmail =
-    () => {
-      const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      if (re.test(email)) {
-        setEmailValid(true);
-      } else {
-        setEmailValid(false);
-      }
-    };
+  const validateEmail = () => {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (re.test(email)) {
+      setEmailValid(true);
+    } else {
+      setEmailValid(false);
+    }
+  };
   async function handelSubmit(e) {
     e.preventDefault();
-    try {
-      const response = await fetch("/donor/enter", {
-        method: "POST",
+    const body = { email: email };
+    await axios
+      .post(`${process.env.REACT_APP_API}/donor/enter`, body, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setEmailValid(true);
-      }
-      else
-      {
-        setErrors1(data.message);
+      })
+      .then((response) => {
+        const data = response.data;
+        if (data.success) {
+          setEmailValid(true);
+        } else {
+          setErrors1(data.message);
+          setOpen(true);
+        }
+      })
+      .catch((error) => {
+        setErrors1(error);
         setOpen(true);
-      }
-    } catch (error) {
-      setErrors1(error);
-      setOpen(true);
-    }
+      });
   }
 
   async function handelVerify(e) {
     e.preventDefault();
-    try {
-      const response = await fetch("/donor/verifyDonor", {
-        method: "POST",
+    const body = { email: email, otp: otp };
+    await axios
+      .post(`${process.env.REACT_APP_API}/donor/verifyDonor`, body, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email, otp:otp }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        navigate("/donor_records", { state: data.donations});
-        // setEmailValid(true);
-      }
-      else
-      {
-        setErrors1(data.message);
+      })
+      .then((response) => {
+        const data = response.data;
+        if (data.success) {
+          navigate("/donor_records", { state: data.donations });
+          // setEmailValid(true);
+        } else {
+          setErrors1(data.message);
+          setOpen(true);
+        }
+      })
+      .catch((error) => {
+        setErrors1(error);
         setOpen(true);
-      }
-    } catch (error) {
-      setErrors1(error);
-      setOpen(true);
-    }
+      });
   }
   return (
     <>
@@ -102,8 +98,8 @@ function Donation_records() {
         <form
           action=""
           className="needs-validation"
-         noValidate
-         onSubmit={validateEmail}
+          noValidate
+          onSubmit={validateEmail}
         >
           <div className="card">
             <div className="card-header">Enter Donar Details</div>
@@ -130,7 +126,7 @@ function Donation_records() {
                     placeholder="Kush"
                     value={otp}
                     disabled={!emailValid}
-                    onChange={(e)=>setOtp(e.target.value)}
+                    onChange={(e) => setOtp(e.target.value)}
                     required
                   />
                   <label for="floatinginput13">OTP</label>
@@ -145,46 +141,40 @@ function Donation_records() {
                 </button>
                 {emailValid ? (
                   <button
-                    
                     onClick={(e) => {
-                      handelVerify(e)
+                      handelVerify(e);
                     }}
                     className="btn"
-                    
                   >
                     Submit
                   </button>
                 ) : (
-                  <button
-                    
-                    onClick={(e) => (
-                      handelSubmit(e)
-                )}
-                    className="btn"
-                    
-                  >
+                  <button onClick={(e) => handelSubmit(e)} className="btn">
                     Next
                   </button>
                 )}
               </div>
             </div>
             <Dialog
-            open={open}
-            onClose={handleClose}
-            PaperComponent={PaperComponent}
-            maxWidth={"xl"}
-            aria-labelledby="draggable-dialog-title"
-          >
-            <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-              Error
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>{error1}</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Re Enter</Button>
-            </DialogActions>
-          </Dialog>
+              open={open}
+              onClose={handleClose}
+              PaperComponent={PaperComponent}
+              maxWidth={"xl"}
+              aria-labelledby="draggable-dialog-title"
+            >
+              <DialogTitle
+                style={{ cursor: "move" }}
+                id="draggable-dialog-title"
+              >
+                Error
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>{error1}</DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Re Enter</Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </form>
       </div>
