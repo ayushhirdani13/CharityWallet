@@ -1,13 +1,13 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
-import Profile_home from "../components/ProfileHome";
+import ProfileHome from "../components/ProfileHome";
 
 function Profile_home1() {
   return (
     <>
       <Navbar color="white" />
-      <Profile_home />
+      <ProfileHome />
       <Footer />
     </>
   );

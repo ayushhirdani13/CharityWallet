@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
-import EditProfileNgo from "../components/edit_profile_ngo_res";
+import EditProfileNgo from "../components/EditProfileNgo";
 
 function EditProfileNGO() {
   return (

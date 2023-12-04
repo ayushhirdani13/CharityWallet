@@ -1,7 +1,6 @@
-import { WindowSharp } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { Box} from "@mui/material";
 import axios from "axios";
 
 function CampaignCard(props) {
@@ -13,6 +12,7 @@ function CampaignCard(props) {
         setCover(res.data.cover);
       })
       .catch((err) => {});
+      
   }, [props.alias]);
   return (
     <div class="col-lg-6 col-12 mt-5">
@@ -24,7 +24,7 @@ function CampaignCard(props) {
         <img
           src={`data:image/jpeg;base64,${cover}`}
           class="img-fluid border rounded-3 shadow-lg "
-          alt="Example image"
+          alt="cover"
           loading="lazy"
         />
         <h1 class="text-center fw-bold fs-3 mt-2">{props.title}</h1>

@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import "../Styles/campaignhome.css";
 import Axios from "axios";
 import NgoCard from "./Ngocard";
-import CircularProgress from "@mui/material/CircularProgress";
-import LinearProgress from "@mui/material/LinearProgress";
+
 import HashLoader from "react-spinners/HashLoader";
-import { Link } from "react-router-dom";
+
 import { Box } from "@mui/material";
 function ExploreNgohome() {
   const [Ngo, setNgo] = useState({});
   const [loading, setloading] = useState(true);
-  const [logo, setlogo] = useState(null);
+ 
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get("/ngo/");
@@ -22,7 +21,8 @@ function ExploreNgohome() {
   }, []);
 
   const Ngode = Ngo.ngos;
-  console.log(logo);
+  
+
   const [searchItem, setSearchItem] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(Ngode);
 
@@ -37,7 +37,7 @@ function ExploreNgohome() {
     setFilteredUsers(filteredItems);
   };
 
-  console.log(Ngode);
+ 
   return (
     <>
       {loading === true ? (

@@ -1,8 +1,9 @@
 // import { WindowSharp } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import Axios from "axios";
+import NgoLogo from "../image/ngo.jpg";
 import HashLoader from "react-spinners/HashLoader";
 function NgoCard(props) {
   const [logo, setLogo] = useState({});
@@ -18,7 +19,8 @@ function NgoCard(props) {
     getabs().catch((error) => {
       setLoading(false);
     });
-  }, []);
+  });
+
   return (
     <div class="col-lg-6 col-12 mt-5">
       <Box
@@ -39,18 +41,21 @@ function NgoCard(props) {
           </Box>
         ) : (
           <>
-            {logo === null ? (
+            {Object.keys(logo).length === 0 ? (
               <img
-                // src={`data:image/jpeg;base64,${logo}`}
+                src={NgoLogo}
+                style={{height:"400px",width:"100%"}}
                 class="img-fluid border rounded-3 shadow-lg "
-                alt="Example image"
+                alt="jsx"
                 loading="lazy"
               />
             ) : (
               <img
+              
                 src={`data:image/jpeg;base64,${logo}`}
+                style={{height:"400px",width:"100%"}}
                 class="img-fluid border rounded-3 shadow-lg "
-                alt="Example image"
+                alt="jsx"
                 loading="lazy"
               />
             )}

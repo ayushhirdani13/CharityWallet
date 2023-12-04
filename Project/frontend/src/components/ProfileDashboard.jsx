@@ -5,7 +5,7 @@ import { Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 // import { use } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../Styles/profile_d_res.css";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import HashLoader from "react-spinners/HashLoader";
@@ -41,7 +41,6 @@ function Number({ n }) {
 }
 
 function Profile_Dashboard() {
-  const { alias } = useParams();
   const [loading, setloading] = useState(true);
   const [gallery, setGallery] = useState({});
   const [logo, setLogo] = useState({});
@@ -50,7 +49,6 @@ function Profile_Dashboard() {
   const [loading2, setLoading2] = useState(true);
   const [error1, setErrors1] = useState({});
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState();
 
   const navigate = useNavigate();
 
@@ -58,7 +56,7 @@ function Profile_Dashboard() {
     setOpen(false);
     sessionStorage.removeItem("loggedIn");
     sessionStorage.removeItem("userType");
-    navigate("/home");
+    navigate("/");
     window.location.reload();
   };
   const [Ngo, setNgo] = useState({});
@@ -67,7 +65,6 @@ function Profile_Dashboard() {
       const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/myNgo`, {
         withCredentials: true,
       }).catch((err) => {
-        console.log(err.response.data);
         setErrors1(err.response.data.message);
         setOpen(true);
       });
@@ -87,7 +84,7 @@ function Profile_Dashboard() {
         `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${res.data.ngo.alias}`
       );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
-      //   console.log(res);
+
       setGallery(res2.data.gallery);
 
       const res3 = await Axios.get(
@@ -102,9 +99,6 @@ function Profile_Dashboard() {
     getabs();
   }, []);
 
-  function handelchange() {
-    window.location.href = "/Createcampaign";
-  }
   return (
     <>
       {loading === true ? (
@@ -213,7 +207,7 @@ function Profile_Dashboard() {
               <img
                 src={`data:image/jpeg;base64,${logo}`}
                 className="img-fluid border rounded-4 shadow-lg"
-                alt="Example image"
+                alt="logo"
                 loading="lazy"
                 style={{ height: "400px", width: "400px" }}
               />
@@ -253,7 +247,7 @@ function Profile_Dashboard() {
                           <img
                             src={`data:image/jpeg;base64,${ga}`}
                             className="img-fluid border rounded-4 shadow-lg "
-                            alt="Example image"
+                            alt="gallery"
                             loading="lazy"
                             style={{ height: "200px", width: "200px" }}
                           />
@@ -303,7 +297,7 @@ function Profile_Dashboard() {
                                   <img
                                     src={`data:image/jpeg;base64,${gallery[0]}`}
                                     className="d-block w-100"
-                                    alt="Example image"
+                                    alt="gallery"
                                     loading="lazy"
                                     style={{ height: "700px", width: "600px" }}
                                   />
@@ -315,7 +309,7 @@ function Profile_Dashboard() {
                                     <img
                                       src={`data:image/jpeg;base64,${ga}`}
                                       className="d-block w-100"
-                                      alt="Example image"
+                                      alt="gallery"
                                       loading="lazy"
                                       style={{
                                         height: "700px",

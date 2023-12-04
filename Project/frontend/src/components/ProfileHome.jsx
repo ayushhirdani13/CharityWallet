@@ -16,7 +16,7 @@ function Number({ n }) {
 function Profile_home() {
   const naviGate = useNavigate();
   function handleSignout() {
-    sessionStorage.setItem("loggedIn", false);
+    sessionStorage.removeItem("loggedIn");
 
     naviGate("/");
     window.location.reload();
@@ -64,7 +64,7 @@ function Profile_home() {
       style={{ borderTopLeftRadius: "50px", borderTopRightRadius: "50px" }}
     >
       <div className="d-grid gap-2 py-10 d-md-flex justify-content-md-end">
-        {sessionStorage.getItem("loggedIn") === true ? (
+        {sessionStorage.getItem("loggedIn") ? (
           <button
             type="button"
             onClick={handleSignout}

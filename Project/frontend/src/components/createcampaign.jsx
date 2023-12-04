@@ -13,8 +13,6 @@ function CreateCampaign() {
     cover: null,
   });
 
-  const [cover, setCoverImage] = useState(null);
-
   function handlechange(event) {
     let { name, value, files } = event.target;
     if (name === "cover") {
@@ -32,13 +30,14 @@ function CreateCampaign() {
   // function handelCoverImg(event) {
   //   setCoverImage(event.target.files[0]);
   // }
+  const type = sessionStorage.getItem("userType");
 
   async function handleCampaign(e) {
     e.preventDefault();
 
     try {
       const response = await Axios.post(
-        `${process.env.REACT_APP_API}/ngo/myNgo/addCampaign`,
+        `${process.env.REACT_APP_API}/${type.toLowerCase()}/addCampaign`,
         Campaign,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -52,43 +51,14 @@ function CreateCampaign() {
       }
 
       const data = await response.json(); // Parse the response JSON
-
+      if(data.s)
       console.log(data); // Log the response data
     } catch (error) {
       console.error(error);
     }
   }
 
-  // async function uploadCoverImg(e) {
-  //   e.preventDefault();
-  //   try {
-  //     let alias = Campaign.title.toLowerCase().replace(/ /g, "_");
-  //     const formdata = new FormData();
-  //     console.log(cover);
-  //     console.log(alias);
-  //     formdata.append("cover", cover);
-  //     console.log(formdata);
-  //     const response = await fetch(
-  //       `ngo/myNgo/campaign/cover?campaignAlias=stop_child_labour`,
-  //       {
-  //         method: "POST",
-  //         // headers: {
-  //         //   "Content-Type": "multipart/form-data",
-  //         // },
-  //         body: formdata,
-  //       }
-  //     );
-  //     console.log(response);
-  //     if (!response.ok) {
-  //       // Handle errors if the request is not successful
-  //       throw new Error(`Request failed with status: ${response.status}`);
-  //     }
 
-  //     const data = await response.json(); // Parse the response JSON
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   console.log(Campaign);
 

@@ -63,8 +63,7 @@ export default function HorizontalLinearStepper() {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-  const [data, setdata] = useState();
-  const date = new Date();
+  
   const [Organizer, setOrganizer] = useState({
     name: "",
     contactNo: "",
@@ -83,9 +82,10 @@ export default function HorizontalLinearStepper() {
   });
   const handleNext = () => {
     const validationerrors = {};
-    const error_email_patten = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const error_email_patten = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/;
     const error_phoneNo_patten = /^\(?([6-9]{1})\)?([0-9]{9})$/;
-    const error_pincode_patten = /^\d{6}$/;
+    // const error_phoneNo_patten = /^\(?([6-9]{1})\)?([0-9]{9})$/;
+
     const error_password_patten =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
 
@@ -139,20 +139,7 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
+  
 
   const handleReset = () => {
     setActiveStep(0);
@@ -178,10 +165,10 @@ export default function HorizontalLinearStepper() {
     const { name, value } = event.target;
     setConf({ [name]: value });
   }
-  console.log(confpass);
+ 
   function handlechange(event) {
     const { name, value } = event.target;
-    console.log(name);
+  
 
     if (name === "email") {
       setverify((prev) => {
@@ -198,24 +185,18 @@ export default function HorizontalLinearStepper() {
     });
   }
 
-  function handlechangeadd(event) {
-    const { name, value } = event.target;
-    setOrganizer((prev) => {
-      return { ...prev, address: { ...prev.address, [name]: value } };
-    });
-  }
+ 
 
   function handleotp(event) {
     const { name, value } = event.target;
-    console.log(name);
+    
 
     setverify((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
-  console.log(Organizer);
-  console.log(verifyOrganizer);
+ 
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
@@ -247,14 +228,13 @@ export default function HorizontalLinearStepper() {
           body: JSON.stringify(Organizer),
         });
         const data1 = await response.json(); // Parse the response JSON
-        setdata(data1);
-        console.log(data);
-        // if (!data1.success) {
-        //   alert(data1.message);
-        // }
-        // console.log(response.message);
-        setdata(data1);
-        console.log(data);
+      
+        if (!data1.success) {
+          alert(data1.message);
+        }
+        
+      
+        
         if (!data1.success) {
           setErrors1(data1.message);
           setOpen(true);
@@ -292,23 +272,31 @@ export default function HorizontalLinearStepper() {
       const data1 = await response.json(); // Parse the response JSON
 
       if (data1.success) {
-        sessionStorage.setItem("loggedIn", true);
-        sessionStorage.setItem("userType", "Organizer");
-        console.log(sessionStorage);
-        window.location.href = "/edit_profile_org";
+        const type = sessionStorage.getItem("userType");
+        if (type == null) {
+          sessionStorage.setItem("loggedIn", true);
+          sessionStorage.setItem("userType", "Organizer");
+          window.location.href = "/edit_profile_org";
+        } else {
+          sessionStorage.removeItem("loggedIn");
+          sessionStorage.removeItem("userType");
+          sessionStorage.setItem("loggedIn", true);
+          sessionStorage.setItem("userType", "Organizer");
+          window.location.href = "/edit_profile_org";
+        }
       } else {
         setErrors1(data1.message);
         setOpen(true);
       }
-      console.log(response.message);
+      
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
       }
 
-      const data = await response.json(); // Parse the response JSON
+     // Parse the response JSON
 
-      console.log(data); // Log the response data
+     // Log the response data
     } catch (error) {
       console.error(error);
     }
@@ -429,7 +417,7 @@ export default function HorizontalLinearStepper() {
                       className="section1"
                       style={section1}
                       onSubmit={(event) => {
-                        console.log(event);
+                       
                         handelregistrtion(event);
                       }}
                     >

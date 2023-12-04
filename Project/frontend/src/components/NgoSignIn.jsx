@@ -137,7 +137,7 @@ function NgoSignIn() {
           
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem("userType", Type.type);
-          console.log(sessionStorage);
+          
           window.location.href = "/";
         } else {
           setErrors1(data.message);
@@ -171,7 +171,7 @@ function NgoSignIn() {
       try {
       
         const response = await fetch(
-          `/${Type.type.toLowerCase()}/myNgo/changePassword`,
+          `/${Type.type.toLowerCase()}/changePassword`,
           {
             method: "POST",
             headers: {
@@ -181,7 +181,7 @@ function NgoSignIn() {
           }
         );
         const data = await response.json(); // Parse the response JSON
-        console.log(data);
+        
         if (data.success) {
          
           setDisabled(true);
@@ -205,8 +205,7 @@ function NgoSignIn() {
     const validationerrors = {};
     const error_password_patten=/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
     const error_otp_patten=/^\d{6}$/;
-    console.log(Type);
-    console.log(user);
+    
 
   if(!user.otp.trim())
     {
@@ -236,7 +235,7 @@ function NgoSignIn() {
       try {
         // const validationerrors = {};
         const response = await fetch(
-          `/${Type.type.toLowerCase()}/myNgo/changePasswordConfirm`,
+          `/${Type.type.toLowerCase()}/changePasswordConfirm`,
           {
             method: "POST",
             headers: {
@@ -246,7 +245,7 @@ function NgoSignIn() {
           }
         );
         const data = await response.json(); // Parse the response JSON
-        console.log(data);
+        
         if (data.success) {
           alert(data.message);
 
@@ -277,7 +276,7 @@ function NgoSignIn() {
           <form
             className="f1"
             onSubmit={(event) => {
-              console.log(event);
+              
               handelsignin(event);
             }}
           >
@@ -307,7 +306,7 @@ function NgoSignIn() {
               >
                 <MenuItem value={"NGO"}>NGO</MenuItem>
                 <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
-                <MenuItem value={"Oraganizer"}>Organizer</MenuItem>
+                <MenuItem value={"Organizer"}>Organizer</MenuItem>
               </Select>
               <FormHelperText>{errors.type}</FormHelperText>
             </FormControl>
@@ -458,7 +457,7 @@ function NgoSignIn() {
                     >
                       <MenuItem value={"NGO"}>NGO</MenuItem>
                       <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
-                      <MenuItem value={"Oraganizer"}>Organizer</MenuItem>
+                      <MenuItem value={"Organizer"}>Organizer</MenuItem>
                     </Select>
                     <FormHelperText>{errors.type}</FormHelperText>
                   </FormControl>

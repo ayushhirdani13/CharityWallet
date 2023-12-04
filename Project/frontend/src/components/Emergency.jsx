@@ -11,7 +11,7 @@ function Emergency() {
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(`${process.env.REACT_APP_API}/fundraiser/`);
-      console.log(res.data.fundRaisers);
+     
       setHelpSeekers(res.data.fundRaisers);
       setLoading(false);
     };

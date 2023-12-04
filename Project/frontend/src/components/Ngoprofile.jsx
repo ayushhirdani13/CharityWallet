@@ -31,19 +31,17 @@ function NgoProfile() {
       setloading(false);
     };
     getabs();
-  }, []);
+  },[alias]);
 
   const [gallery, setGallery] = useState({});
   const [logo, setLogo] = useState({});
   const [loading1, setloading1] = useState(true);
-  const [loading2, setloading2] = useState(true);
-  const [donationData, setdonationData] = useState({
-    type: "ngo",
-    alias: alias,
-  });
+ 
+ 
+ 
   const navigate = useNavigate();
 
-  console.log(donationData);
+  
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`);
@@ -54,17 +52,17 @@ function NgoProfile() {
       setloading1(false);
     };
     getabs();
-  }, []);
+  }, [alias]);
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`);
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setLogo(res.data.logo);
       //    setlogo(res1.data);
-      setloading2(false);
+      // setloading2(false);
     };
     getabs();
-  }, []);
+  }, [alias]);
 
   return (
     <>
@@ -117,7 +115,7 @@ function NgoProfile() {
               <img
                 src={`data:image/jpeg;base64,${logo}`}
                 class="img-fluid border rounded-4 shadow-lg mt-4"
-                alt="Example image"
+                alt="logo"
                 loading="lazy"
                 style={{ height: "400px", width: "400px" }}
               />
@@ -157,7 +155,7 @@ function NgoProfile() {
                           <img
                             src={`data:image/jpeg;base64,${ga}`}
                             class="img-fluid border rounded-4 shadow-lg "
-                            alt="Example image"
+                            alt="gallery"
                             loading="lazy"
                           />
                         </Box>
@@ -199,7 +197,7 @@ function NgoProfile() {
                                   <img
                                     src={`data:image/jpeg;base64,${gallery[0]}`}
                                     class="d-block w-100"
-                                    alt="Example image"
+                                    alt="gallery"
                                     loading="lazy"
                                     style={{ height: "700px", width: "600px" }}
                                   />
@@ -211,7 +209,7 @@ function NgoProfile() {
                                     <img
                                       src={`data:image/jpeg;base64,${ga}`}
                                       class="d-block w-100"
-                                      alt="Example image"
+                                      alt="gallery"
                                       loading="lazy"
                                       style={{
                                         height: "700px",
@@ -266,7 +264,11 @@ function NgoProfile() {
               <div className="pb-3 d-flex justify-content-center">
                 <button
                   onClick={() => {
-                    navigate("/donor_details", { state: donationData });
+                 
+                    navigate("/donor_details", { state: {
+                      type: "ngo",
+                      alias: alias,
+                    } });
                   }}
                   type="button"
                   class="btn btn-primary px-5 btn-lg btn-clr rounded-4"

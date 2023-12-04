@@ -11,10 +11,6 @@ function Aftercreatecampaign() {
   console.log(alias);
 
   const [Campaign, setCampaign] = useState({});
-  const [donationData, setdonationData] = useState({
-    type: "campaign",
-    alias: alias,
-  });
   let navigate = useNavigate();
   useEffect(() => {
     const getabs = async () => {
@@ -28,7 +24,7 @@ function Aftercreatecampaign() {
       setloading(false);
     };
     getabs();
-  }, []);
+  }, [alias]);
 
   const [cover, setCover] = useState({});
   useEffect(() => {
@@ -68,7 +64,7 @@ function Aftercreatecampaign() {
               <img
                 src={`data:image/jpeg;base64,${cover}`}
                 className="img-fluid border rounded-3 shadow-lg "
-                alt="Example image"
+                alt="Cover"
                 loading="lazy"
               />
             </div>
@@ -109,7 +105,10 @@ function Aftercreatecampaign() {
             <div className="pb-3 d-flex justify-content-center">
               <button
                 onClick={() => {
-                  navigate("/donor_details", { state: donationData });
+                  navigate("/donor_details", { state: {
+                    type: "campaign",
+                    alias: alias,
+                  } });
                 }}
                 type="button"
                 className="btn btn-primary px-5 btn-lg btn-clr rounded-4"

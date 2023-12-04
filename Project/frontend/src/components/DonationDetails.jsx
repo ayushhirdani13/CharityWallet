@@ -4,23 +4,26 @@ import { useLocation } from "react-router-dom";
 import "../Styles/Don_details.css";
 import "../Styles/boot.css";
 import { Numbers } from "@mui/icons-material";
-import axios from "axios";
+
 // import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 function DonationDetails() {
   const location = useLocation();
+
   const Type = location.state;
+  console.log(Type);
   const navigate = useNavigate();
-  // console.log(Type);
+ 
   const [DonationDetails, setUser] = useState({
     donorName: "",
     donorEmail: "",
     donorPhoneNo: "",
     donationAmount: Numbers,
+    message: "",
     // receiverType:"NGO",
   });
 
-  const [isValid, setIsValid] = useState(false);
+  
 
   function handlechange(event) {
     const { name, value } = event.target;
@@ -33,41 +36,47 @@ function DonationDetails() {
     });
   }
 
-  async function handleChange(e) {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/${Type.type}/donate?${Type.type}Alias=${Type.alias}`,
-        DonationDetails,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json(); // Parse the response JSON
-      if (data.success) {
-        navigate("/");
-      }
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    // if (isValid == true) {
-    //   // navigate("/donor_amount", { state: DonationDetails });
-    // }
+  function handleChange() {
+    navigate("/donor_method", {
+      state: { Type: Type, DonationDetails: DonationDetails },
+    });
   }
+
+  // async function handleChange(e) {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_API}/${Type.type}/donate?${Type.type}Alias=${Type.alias}`,
+  //       DonationDetails,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     const data = await response.json(); // Parse the response JSON
+  //     if (data.success) {
+  //       navigate("/");
+  //     }
+
+  //     if (!response.ok) {
+  //       throw new Error(`Request failed with status: ${response.status}`);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // if (isValid == true) {
+  //   // navigate("/donor_amount", { state: DonationDetails });
+  // }
+  // }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     event.currentTarget.classList.add("was-validated");
 
     if (event.currentTarget.checkValidity()) {
-      setIsValid(true);
+    
     }
   };
 
@@ -76,7 +85,7 @@ function DonationDetails() {
       <div className="container">
         <div className="card">
           <div className="card-header">
-            <span>Enter Donar Details</span>
+            <span>Enter Donor Details</span>
           </div>
 
           <div className="card-body">
@@ -119,7 +128,7 @@ function DonationDetails() {
                     type="text"
                     class="form-control"
                     id="floatingInput"
-                    placeholder="Address"
+                    placeholder="Contact Number"
                     onChange={handlechange}
                     name="donorPhoneNo"
                     required
@@ -127,6 +136,21 @@ function DonationDetails() {
                   <label for="floatingInput">Phone No.</label>
                   <div className="invalid-feedback">Invaild Phone</div>
                 </div>
+
+                <div className="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="floatingInput"
+                    placeholder="Feedback"
+                    onChange={handlechange}
+                    name="message"
+                    required
+                  />
+                  <label for="floatingInput">Feedback</label>
+                  {/* <div className="invalid-feedback">Invaild Phone</div> */}
+                </div>
+
                 <div className="form-floating mb-3">
                   <input
                     type="number"
@@ -148,7 +172,6 @@ function DonationDetails() {
                   style={{
                     width: "200px",
                     borderRadius: "50px",
-                    height: "50px",
                     height: "50px",
                     marginTop: "0px",
                   }}

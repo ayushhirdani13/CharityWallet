@@ -177,20 +177,7 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
+  
 
   const handleReset = () => {
     setActiveStep(0);
@@ -219,10 +206,11 @@ export default function HorizontalLinearStepper() {
     const { name, value } = event.target;
     setConf({ [name]: value });
   }
-  console.log(confpass);
+ 
   function handlechange(event) {
     const { name, value } = event.target;
-    console.log(name);
+   
+
 
     if (name === "email") {
       setverify((prev) => {
@@ -248,15 +236,14 @@ export default function HorizontalLinearStepper() {
 
   function handleotp(event) {
     const { name, value } = event.target;
-    console.log(name);
+    
 
     setverify((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
-  console.log(Ngo);
-  console.log(verifyngo);
+ 
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
@@ -289,12 +276,12 @@ export default function HorizontalLinearStepper() {
         });
         const data1 = await response.json(); // Parse the response JSON
         setdata(data1);
-        console.log(data);
+        
         if (!data1.success) {
           setErrors1(data.message);
           setOpen(true);
         }
-        console.log(response.message);
+       
 
         if (!response.ok) {
           // Handle errors if the request is not successful
@@ -329,21 +316,21 @@ export default function HorizontalLinearStepper() {
       if (data1.success) {
         sessionStorage.setItem("loggedIn", true);
         sessionStorage.setItem("userType", "NGO");
-        console.log(sessionStorage);
+       
         window.location.href = "/edit_profile_ngo";
       } else {
         setErrors1(data1.message);
         setOpen(true);
       }
-      console.log(response.message);
+      
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
       }
 
-      const data = await response.json(); // Parse the response JSON
+      // Parse the response JSON
 
-      console.log(data); // Log the response data
+      // Log the response data
     } catch (error) {
       console.error(error);
     }
@@ -464,7 +451,7 @@ export default function HorizontalLinearStepper() {
                       className="section1"
                       style={section1}
                       onSubmit={(event) => {
-                        console.log(event);
+                        
                         handelregistrtion(event);
                       }}
                     >

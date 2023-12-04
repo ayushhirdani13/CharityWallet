@@ -15,6 +15,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Numbers } from "@mui/icons-material";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const steps = [
   "Fundraiser Information",
@@ -26,7 +29,6 @@ const steps = [
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const err = true;
   const section1 = {
     visibility: "hidden",
   };
@@ -47,8 +49,8 @@ export default function HorizontalLinearStepper() {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-  const [data, setdata] = useState();
-  const date = new Date();
+  
+
   const [Fundraiser, setFundraiser] = useState({
     name: "",
     phoneNo: "",
@@ -62,6 +64,7 @@ export default function HorizontalLinearStepper() {
       pincode: "",
     },
     password: "",
+    description: "",
   });
 
   const [verifyFundraiser, setverify] = useState({
@@ -112,8 +115,14 @@ export default function HorizontalLinearStepper() {
         validationerrors.issue = "Issue is required";
       }
 
-      if (Fundraiser.donationReq === 0) {
+      if (Fundraiser.donationReq.length === 0) {
         validationerrors.donationReq = "Donation amount is required";
+      }
+
+      if (!Fundraiser.description.trim()) {
+        validationerrors.description = " description is required";
+      } else if (Fundraiser.description.length < 256) {
+        validationerrors.description = " description is Maximun legth is 256";
       }
 
       if (!Fundraiser.address.city.trim()) {
@@ -162,21 +171,6 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -204,11 +198,10 @@ export default function HorizontalLinearStepper() {
     const { name, value } = event.target;
     setConf({ [name]: value });
   }
-  console.log(confpass);
+  
   function handlechange(event) {
     const { name, value } = event.target;
-    console.log(name);
-
+   
     if (name === "email") {
       setverify((prev) => {
         return { ...prev, [name]: value };
@@ -242,15 +235,14 @@ export default function HorizontalLinearStepper() {
 
   function handleotp(event) {
     const { name, value } = event.target;
-    console.log(name);
+  
 
     setverify((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
-  console.log(Fundraiser);
-  console.log(verifyFundraiser);
+  
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
@@ -282,14 +274,14 @@ export default function HorizontalLinearStepper() {
           body: JSON.stringify(Fundraiser),
         });
         const data1 = await response.json(); // Parse the response JSON
-        setdata(data1);
-        console.log(data);
-        //   if(!data1.success)
-        //   {
-        //     alert(data1.message);
-        //     window.location.href="fundraiser/Registration";
-        //   }
-        console.log(response.message);
+        
+        
+          if(data1.success)
+          {
+            alert(data1.message);
+            
+          }
+       
 
         if (!response.ok) {
           // Handle errors if the request is not successful
@@ -320,15 +312,33 @@ export default function HorizontalLinearStepper() {
         body: JSON.stringify(verifyFundraiser),
       });
 
-      console.log(response);
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
       }
 
       const data = await response.json(); // Parse the response JSON
+      if (data.success) {
+        const type = sessionStorage.getItem("userType");
+        if (type == null) {
+          sessionStorage.setItem("loggedIn", true);
+          sessionStorage.setItem("userType", "Fundraiser");
+          window.location.href = "/frprofile";
+        } else {
+          sessionStorage.removeItem("loggedIn");
+          sessionStorage.removeItem("userType");
 
-      console.log(data); // Log the response data
+          sessionStorage.setItem("loggedIn", true);
+          sessionStorage.setItem("userType", "Fundraiser");
+          window.location.href = "/frprofile";
+        }
+      } else {
+        alert(data.message);
+        window.location.href = "/fundraiser/Registration";
+        // setErrors1(data.message);
+        // setOpen(true);
+      }
+  // Log the response data
     } catch (error) {
       console.error(error);
     }
@@ -453,7 +463,7 @@ export default function HorizontalLinearStepper() {
                       className="section1"
                       style={section1}
                       onSubmit={(event) => {
-                        console.log(event);
+                        
                         handelregistrtion(event);
                       }}
                     >
@@ -586,18 +596,51 @@ export default function HorizontalLinearStepper() {
                         Issue,Donation Request And Address
                       </span>
 
-                      <TextField
+                      <FormControl
                         error={errors.issue}
-                        name="issue"
+                        variant="filled"
+                        sx={{
+                          m: 1,
+                          minWidth: 120,
+                          width: "85%",
+                          height: "50px",
+                          margin: "0px",
+                        }}
+                      >
+                        <InputLabel id="demo-simple-select-filled-label">
+                          Type
+                        </InputLabel>
+                        <Select
+                          name="issue"
+                          labelId="demo-simple-select-filled-label"
+                          id="demo-simple-select-filled"
+                          value={Fundraiser.issue}
+                          onChange={handlechange}
+                        >
+                          <MenuItem value={"Medical"}>Medical</MenuItem>
+                          <MenuItem value={"Animal"}>Animal</MenuItem>
+                          <MenuItem value={"Other"}>Other</MenuItem>
+                        </Select>
+                        <FormHelperText>{errors.type}</FormHelperText>
+                      </FormControl>
+
+                      <TextField
+                        error={errors.description}
+                        name="description"
                         onChange={handlechange}
                         id="filled-error"
-                        defaultValue={Fundraiser.issue}
-                        label="Issue"
-                        helperText={errors.issue}
-                        sx={{ width: "85%", height: "70px" }}
-                        variant="filled"
+                        defaultValue={Fundraiser.description}
+                        label="Description"
+                        type="text"
+                        helperText={errors.description}
+                        sx={{
+                          width: "85%",
+                          height: "50px",
+                          marginBottom: "10px",
+                        }}
                         multiline
                         rows={2}
+                        variant="filled"
                       />
 
                       <TextField

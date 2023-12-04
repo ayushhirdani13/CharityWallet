@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import Medical from "../image/medical.jpg";
 function HelpSeekerCard(props) {
   let navigate=useNavigate();
-  const [donationData,setdonationData]=useState({
+  const donationData=useState({
     type:"fundraiser",
     alias:props.alias,
   })
@@ -14,7 +15,7 @@ function HelpSeekerCard(props) {
           <div class=" row flex-lg-row align-items-center g-5 py-2 px-4 my-3 post_11 rounded-4">
             <div class="col-12 col-xxl-6 p-0 mt-0">
               <img
-                src="https://picsum.photos/640/360"
+                src={Medical}
                 class="d-block mx-lg-auto img-fluid rounded-4"
                 alt="Bootstrap Themes"
                 width="500px"
@@ -37,6 +38,15 @@ function HelpSeekerCard(props) {
                     class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
                   >
                     Donate
+                  </button>
+                  <button
+                    onClick={() => {
+                      window.location.href=`/Fundraiser_dashboard/${props.alias}`;
+                    }}
+                    type="button"
+                    class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
+                  >
+                    GO TO Dashboard
                   </button>
                 </div>
               </div>

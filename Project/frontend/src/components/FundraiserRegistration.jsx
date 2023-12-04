@@ -204,10 +204,11 @@ export default function HorizontalLinearStepper() {
     const { name, value } = event.target;
     setConf({ [name]: value });
   }
-  console.log(confpass);
+  
   function handlechange(event) {
     const { name, value } = event.target;
-    console.log(name);
+   
+
 
     if (name === "email") {
       setverify((prev) => {
@@ -233,15 +234,14 @@ export default function HorizontalLinearStepper() {
 
   function handleotp(event) {
     const { name, value } = event.target;
-    console.log(name);
+   
 
     setverify((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
-  console.log(Fundraiser);
-  console.log(verifyFundraiser);
+
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
@@ -274,13 +274,13 @@ export default function HorizontalLinearStepper() {
         });
         const data1 = await response.json(); // Parse the response JSON
         setdata(data1);
-        console.log(data);
+       
         //   if(!data1.success)
         //   {
         //     alert(data1.message);
         //     window.location.href="fundraiser/Registration";
         //   }
-        console.log(response.message);
+     
 
         if (!response.ok) {
           // Handle errors if the request is not successful
@@ -311,7 +311,7 @@ export default function HorizontalLinearStepper() {
         body: JSON.stringify(verifyFundraiser),
       });
 
-      console.log(response);
+  
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
@@ -319,7 +319,7 @@ export default function HorizontalLinearStepper() {
 
       const data = await response.json(); // Parse the response JSON
 
-      console.log(data); // Log the response data
+      // Log the response data
     } catch (error) {
       console.error(error);
     }
@@ -444,7 +444,7 @@ export default function HorizontalLinearStepper() {
                       className="section1"
                       style={section1}
                       onSubmit={(event) => {
-                        console.log(event);
+                        
                         handelregistrtion(event);
                       }}
                     >

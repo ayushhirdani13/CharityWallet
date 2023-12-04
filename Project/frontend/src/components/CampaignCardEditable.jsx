@@ -8,7 +8,13 @@ function CampaignCard(props) {
       { withCredentials: true }
     );
 
-    console.log(response.data);
+    if(response.data.success)
+    {
+      alert(response.data.message);
+      window.location.reload();
+    }
+
+    
   }
   const [cover, setCover] = useState({});
   const [loading, setLoading] = useState(true);
@@ -52,6 +58,7 @@ function CampaignCard(props) {
                 <p class="text-center">{props.vision}</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                   <button
+                    onClick={()=>(window.location.href=`/edit_Campaign/${props.alias}`)}
                     type="button"
                     class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
                   >
