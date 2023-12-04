@@ -86,19 +86,29 @@ export const updateCampaign = async (req, res, next) => {
   try {
     const campaignId = req.campaign._id;
     const data = req.body;
-
-    const allowedFields = ["vision"];
+    console.log(data)
+    const allowedFields = ["vision", "description"];
 
     const updateData = lodash.pick(data, allowedFields);
 
-    // Find the NGO by id and update it with the new data
-    const updatedCampaign = await Campaign.findByIdAndUpdate(
-      campaignId,
-      updateData,
-      {
-        new: true,
+    const campaign = await Campaign.findById(campaignId);
+
+    if (req.file) {
+      if (!campaign.cover) {
+        updateData.cover = await uploadLogoGdrive(req.file, next);
+      } else {
+        updateData.cover = await updateLogoGdrive(
+          campaign.cover,
+          req.file,
+          next
+        );
       }
-    );
+    }
+
+    // Find the NGO by id and update it with the new data
+    const updatedCampaign = await campaign.updateOne(updateData, {
+      new: true,
+    });
 
     if (!updatedCampaign) {
       return next(new ErrorHandler("Campaign not found.", 404));
@@ -186,7 +196,7 @@ export const uploadCoverCampaign = async (req, res, next) => {
       return next(new ErrorHandler("Multer Error. Try again Later."));
     }
     let imgId;
-    if (!req.ngo.logo) imgId = await uploadLogoGdrive(req.file, next);
+    if (!req.campaign.cover) imgId = await uploadLogoGdrive(req.file, next);
     else imgId = await updateLogoGdrive(req.campaign.cover, req.file, next);
 
     const updatedCampaign = await Campaign.findByIdAndUpdate(

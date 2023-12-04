@@ -31,8 +31,18 @@ router
   .patch(isOrganizerLoggedIn, updateOrganizerProfile)
   .delete(isOrganizerLoggedIn, deleteOrganizer);
 
-router.post("/addCampaign", isOrganizerLoggedIn, addCampaign);
-router.patch("/updateCampaign", isOrganizerLoggedIn, updateMyCampaign);
+router.post(
+  "/addCampaign",
+  isOrganizerLoggedIn,
+  upload.single("cover"),
+  addCampaign
+);
+router.patch(
+  "/updateCampaign",
+  isOrganizerLoggedIn,
+  upload.single("cover"),
+  updateMyCampaign
+);
 router.delete("/deleteCampaign", isOrganizerLoggedIn, deleteMyCampaign);
 router.post("/changePassword", changePassword);
 router.post("/changePasswordConfirm", changePasswordConfirmation);
@@ -42,10 +52,6 @@ router.post(
   isOrganizerLoggedIn,
   uploadCampaignGallery
 );
-router.delete(
-  "/campaign/cover",
-  isOrganizerLoggedIn,
-  deleteCampaignGallery
-);
+router.delete("/campaign/cover", isOrganizerLoggedIn, deleteCampaignGallery);
 
 export default router;

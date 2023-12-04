@@ -134,7 +134,7 @@ export const loginOrganizer = async (req, res, next) => {
       return next(new ErrorHandler("Invalid email or password.", 400));
     }
 
-    sendNgoCookie(organizer, res, `Welcome Back, ${organizer.name}`, 200);
+    sendOrganizerCookie(organizer, res, `Welcome Back, ${organizer.name}`, 200);
   } catch (error) {
     next(error);
   }
@@ -252,9 +252,9 @@ export const updateMyCampaign = async (req, res, next) => {
 
     if (!campaign) return next(new ErrorHandler("Campaign Not Found.", 401));
 
-    if (campaign.organizerId !== req.organizer._id)
+    if (campaign.organizerId.toString() !== req.organizer._id.toString())
       return next(
-        new ErrorHandler("This Campaign is not associated with your NGO.", 403)
+        new ErrorHandler("This Campaign is not associated with your Organization", 403)
       );
 
     req.campaign = campaign;
@@ -345,7 +345,7 @@ export const changePasswordConfirmation = async (req, res, next) => {
 
     await organizer.updateOne({ password: hashedPassword });
 
-    sendNgoCookie(
+    sendOrganizerCookie(
       organizer,
       res,
       "Organizer Password Updated Successfully.",

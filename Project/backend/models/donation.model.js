@@ -32,7 +32,7 @@ const schema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: function () {
       if (this.receiverType === "NGO") return "NGO";
-      if (this.receiverType === "Fundraiser") return "FundRaiser";
+      if (this.receiverType === "FundRaiser") return "FundRaiser";
       if (this.receiverType === "Campaign") return "Campaign";
     },
     required: true,

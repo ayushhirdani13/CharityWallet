@@ -1,60 +1,195 @@
 import React from "react";
 import Login from "../components/Login";
 import NgoSignIn from "../components/NgoSignIn";
-import NgoRegistration from "../components/NgoRegistration";
-import Footer from "../components/footer";
-import Card from "../components/Card";
-import pic2_card from "../image/home_card2_pic.png";
-import Createcampaign from "../components/createcampaign"
-import Aftercreatecampaign from "../components/aftercreatecampaign"
-import Fundraiser_dashboard from "../components/fundraiser_dashboard_res";
-import Profile_home1 from "./Profile_home";
-// import Fundraiser_Registration from "../Registration/Fundraiser_Registration";
-// import Organizer_Registration from "../Registration/Organizer_Registration";
-
-
-import Profile_Dashboard1 from "./Profile_dashboard";
-import Edit_profile_ngo1 from "./Edit_profile_ngo";
-import Edit_profile_org1 from "./Edit_profile_org";
-import Donor_amount from "./donarAmount";
-import Donor_details from './donarDetails';
-import Donor_Confirm from './donarConfirm';
-import Donor_method from './donarMethod';
-import Donor_records from './donarRecords';
-import Forgot_password from './forgotPassword';
+import NgoRegistration from "../Registration/NgoRegistration";
+import FundraiserRegistration from "../Registration/FundraiserRegistration";
+import OrganizerRegistration from "../Registration/OrganizerRegistration";
+import AfterCreateCampaign from "../Pages/After_create_campaign";
+import CampaignHome from "./CampaignHome";
+import ProfileHome from "./ProfileHome";
+import ProfileDashboard from "./ProfileDashboard";
+// import Edit_profile_ngo1 from "../Pages/Edit_profile_ngo";
+// import EditProfileOrg from "./EditProfileOrg";
+import Emergency from "./Emergency";
+import FundraiserDashboard from "./FundraiserDashboard";
+import OrgProfileDashboard from "./OrganizerProfile";
+// import Fundraiser_dashboard from "../components/Fundraiser_Dashboard";
+import AboutUs from "./About_us";
+import CreateCampaign from "../Pages/Create_campaign";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ExploreNgoHome from "../Pages/ExploreNGOhome";
+// import Profile_Dashboard from "../components/profile_dashboard";
+// import Navbar from "../components/Navbar";
+// import Edit_Profile from "../components/edit_profile";
+// import DonorHome from "./DonorHome";
+import NgoProfileDashboard from "./NGOProfile";
+import "../Styles/boot.css";
+import EditProfileNgo from "./EditProfileNgo";
+import DonorDetails from "./DonorDetails";
+import DonorConfirm from "./DonorConfirm";
+import DonorMethod from "./DonorMethod";
+import DonorRecords from "./DonorRecords";
+import Editcampaign1 from "./Edit_campaign";
+
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/createcampaign" element={<Createcampaign />} />
-        <Route path="/aftercreatecampaign" element={<Aftercreatecampaign />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/ngosignin" element={<NgoSignIn />} />
-        <Route path="/Registration" element={<NgoRegistration />} />
-        {/* <Route path="/fundraiser/Registration" element={<Fundraiser_Registration />} />
-        <Route path="/organizer/Registration" element={<Organizer_Registration />} />
-         */}
-        <Route path="/footer" element={<Footer />} />
-        <Route path="/Card" element={<Card
-                  imgSrc={pic2_card}
-                  imgAlt="Card Image 1"
-                  title="Help Nitya"
-                  description="It is important to take care of the patient, to be followed by the patient, but it will happen at such a time that there is a lot of work and pain. For to come to the smallest detail, no one should practice any kind of work unless he derives some benefit from it. Do not be angry with the pain in the rebuke, in the pleasure he wants to be a hair from the pain, let him flee from the pain..."
-                  buttonText="Donation"
-                  link="card1" 
-                />} />
-        <Route path="/fund" element={<Fundraiser_dashboard/>} />
-        <Route path="/home" element={<Profile_home1 />} />
-        <Route path="/profile_dashboard" element={<Profile_Dashboard1 />} />
-        <Route path="/edit_profile_ngo" element={<Edit_profile_ngo1 />} />
-        <Route path="/edit_profile" element={<Edit_profile_org1 />} />
-        <Route path="/donor_amount" element={<Donor_amount />} />
-        <Route path="/donor_details" element={<Donor_details />} />
-        <Route path="/donor_method" element={<Donor_method />} />
-        <Route path="/donor_records" element={<Donor_records />} />
-        <Route path="/donor_confirm" element={<Donor_Confirm />} />
-        <Route path="/forgot_password" element={<Forgot_password />} />
+        {/* <Route path="/createcampaign" element={<div><Navbar/><Createcampaign /></div>} /> */}
+
+        {/* <Route path="/footer" element={<Footer />} /> */}
+        {/* <Route path="/Card" element={<Card/>} /> */}
+
+        {sessionStorage.getItem("loggedIn") ? (
+          sessionStorage.getItem("userType") === "NGO" ? (
+            <>
+              <Route path="/" element={<ProfileHome />} />
+              <Route path="/edit_profile_ngo" element={<EditProfileNgo />} />
+              <Route path="/edit_Campaign/:alias" element={<Editcampaign1 />} />
+              <Route
+                path="/Campaignhome/:alias"
+                element={<AfterCreateCampaign />}
+              />
+              <Route path="/AboutUs" element={<AboutUs />} />
+              <Route path="/Campaignhome" element={<CampaignHome />} />
+              <Route path="/ExploreNgo" element={<ExploreNgoHome />} />
+              <Route
+                path="/ExploreNgo/:alias"
+                element={<NgoProfileDashboard />}
+              />
+              <Route path="/Ngoprofile" element={<ProfileDashboard />} />
+              <Route path="/Createcampaign" element={<CreateCampaign />} />
+              <Route path="/Emergency" element={<Emergency />} />
+              <Route
+                path="/aftercreatecampaign"
+                element={<AfterCreateCampaign />}
+              />
+              <Route path="/Createcampaign" element={<CreateCampaign />} />
+              <Route
+                path="/Fundraiser_dashboard"
+                element={<FundraiserDashboard />}
+              />
+              <Route
+                path="/Fundraiser_dashboard/:alias"
+                element={<FundraiserDashboard />}
+              />
+            </>
+          ) : sessionStorage.getItem("userType") === "Fundraiser" ? (
+            <>
+              <Route path="/" element={<ProfileHome />} />
+              <Route
+                path="/Campaignhome/:alias"
+                element={<AfterCreateCampaign />}
+              />
+              <Route path="/AboutUs" element={<AboutUs />} />
+              <Route path="/Campaignhome" element={<CampaignHome />} />
+              <Route path="/ExploreNgo" element={<ExploreNgoHome />} />
+              <Route
+                path="/ExploreNgo/:alias"
+                element={<NgoProfileDashboard />}
+              />
+              <Route path="/Frprofile" element={<ProfileDashboard />} />
+              <Route path="/Emergency" element={<Emergency />} />
+              <Route
+                path="/aftercreatecampaign"
+                element={<AfterCreateCampaign />}
+              />
+              <Route
+                path="/Fundraiser_dashboard"
+                element={<FundraiserDashboard />}
+              />
+              <Route
+                path="/Fundraiser_dashboard/:alias"
+                element={<FundraiserDashboard />}
+              />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<ProfileHome />} />
+              <Route
+                path="/organizer_dashboard"
+                element={<OrgProfileDashboard />}
+              />
+              <Route path="/edit_Campaign/:alias" element={<Editcampaign1 />} />
+              <Route
+                path="/Campaignhome/:alias"
+                element={<AfterCreateCampaign />}
+              />
+              <Route path="/AboutUs" element={<AboutUs />} />
+              <Route path="/Campaignhome" element={<CampaignHome />} />
+              <Route path="/ExploreNgo" element={<ExploreNgoHome />} />
+              <Route
+                path="/ExploreNgo/:alias"
+                element={<NgoProfileDashboard />}
+              />
+              <Route path="/Createcampaign" element={<CreateCampaign />} />
+              <Route path="/Emergency" element={<Emergency />} />
+              <Route
+                path="/aftercreatecampaign"
+                element={<AfterCreateCampaign />}
+              />
+              <Route path="/Createcampaign" element={<CreateCampaign />} />
+              <Route
+                path="/Fundraiser_dashboard"
+                element={<FundraiserDashboard />}
+              />
+              <Route
+                path="/Fundraiser_dashboard/:alias"
+                element={<FundraiserDashboard />}
+              />
+            </>
+          )
+        ) : (
+          <>
+            <Route path="/" element={<ProfileHome />} />
+            <Route path="/Registrationas" element={<Login />} />
+            <Route path="/ngo/Registration" element={<NgoRegistration />} />
+            <Route
+              path="/fundraiser/Registration"
+              element={<FundraiserRegistration />}
+            />
+            <Route
+              path="/organizer/Registration"
+              element={<OrganizerRegistration />}
+            />
+            <Route path="/signin" element={<NgoSignIn />} />
+            <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/Campaignhome" element={<CampaignHome />} />
+            <Route
+              path="/Campaignhome/:alias"
+              element={<AfterCreateCampaign />}
+            />
+            <Route path="/ExploreNgo" element={<ExploreNgoHome />} />
+            <Route
+              path="/ExploreNgo/:alias"
+              element={<NgoProfileDashboard />}
+            />
+            <Route
+              path="/donor_records/:alias"
+              element={<NgoProfileDashboard />}
+            />
+            {/* <Route path="/Ngoprofile" element={<Profile_Dashboard1/>} /> */}
+            <Route path="/Emergency" element={<Emergency />} />
+            <Route path="/donor_details" element={<DonorDetails />} />
+            <Route path="/donor_method" element={<DonorMethod />} />
+            <Route path="/donor_records" element={<DonorRecords />} />
+            <Route path="/donor_confirm" element={<DonorConfirm />} />
+            <Route
+              path="/Fundraiser_dashboard"
+              element={<FundraiserDashboard />}
+            />
+            <Route
+              path="/Fundraiser_dashboard/:alias"
+              element={<FundraiserDashboard />}
+            />
+          </>
+        )}
+
+        <Route path="/donor_details" element={<DonorDetails />} />
+
+        {/* <Route path="/Card" element={<Card/>} />
+        <Route path="/Card" element={<Card/>} />
+        <Route path="/Card" element={<Card/>} /> */}
       </Routes>
     </Router>
   );

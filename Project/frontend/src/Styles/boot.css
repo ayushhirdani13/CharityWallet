@@ -1,4 +1,4 @@
-.container {
+/* .container {
     height: max-content;
     width: 1120px;
     justify-content: center;
@@ -13,7 +13,7 @@
     width: 800px;
     border-radius: 20px;
     background-color: rgb(125, 185, 225, 0.24);
-    /* overflow: hidden; */
+    
   }
 
   .card-body{
@@ -61,7 +61,7 @@
 
   .btn-group{
     display: flex;
-    /* flex-direction: column; */
+   
     justify-content: center;
     height: 80px;
     flex-wrap: wrap;
@@ -113,7 +113,7 @@
 
   @media (max-width: 768px) {
 
-    /* Adjust the width and font size for smaller screens */
+    
     .form-floating {
       width: 100%;
       font-size: 14px;
@@ -135,7 +135,7 @@
   
   @media (max-width: 576px) {
   
-    /* Further adjustments for smaller screens */
+    
     .form-floating {
       width: 100%;
       font-size: 12px;
@@ -150,15 +150,10 @@
       width: 100%;
     }
   
-    /* .btn1 {
-      width: 100%;
-      flex-direction: column;
-      gap: 10px;
-      margin: 0px;
-    } */
+    
   
     .btn {
       margin-top: 0px;
       width: 100%;
     }
-  }
+  } */

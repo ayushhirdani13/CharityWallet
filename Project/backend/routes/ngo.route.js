@@ -72,13 +72,18 @@ router
 
 // Adding a Campaign, updating it, or deleting it, all of it done here.
 router.post(
-  "/myNgo/addCampaign",
+  "/addCampaign",
   isNgoLoggedIn,
   upload.single("cover"),
   addCampaign
 );
-router.patch("/myNgo/updateCampaign", isNgoLoggedIn, updateMyCampaign); // NOTE: Here, campaignAlias is required in the url query params.
-router.delete("/myNgo/deleteCampaign", isNgoLoggedIn, deleteMyCampaign);
+router.patch(
+  "/updateCampaign",
+  isNgoLoggedIn,
+  upload.single("cover"),
+  updateMyCampaign
+); // NOTE: Here, campaignAlias is required in the url query params.
+router.delete("/deleteCampaign", isNgoLoggedIn, deleteMyCampaign);
 
 // Password changing related queries. OTP required for changing password.
 router.post("/changePassword", changePassword);
