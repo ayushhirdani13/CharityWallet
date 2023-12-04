@@ -18,6 +18,7 @@ import { Numbers } from "@mui/icons-material";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import FormHelperText from "@mui/material/FormHelperText";
+import axios from "axios";
 
 const steps = [
   "Fundraiser Information",
@@ -49,7 +50,6 @@ export default function HorizontalLinearStepper() {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-  
 
   const [Fundraiser, setFundraiser] = useState({
     name: "",
@@ -198,10 +198,10 @@ export default function HorizontalLinearStepper() {
     const { name, value } = event.target;
     setConf({ [name]: value });
   }
-  
+
   function handlechange(event) {
     const { name, value } = event.target;
-   
+
     if (name === "email") {
       setverify((prev) => {
         return { ...prev, [name]: value };
@@ -235,14 +235,12 @@ export default function HorizontalLinearStepper() {
 
   function handleotp(event) {
     const { name, value } = event.target;
-  
 
     setverify((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
-  
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
@@ -266,22 +264,20 @@ export default function HorizontalLinearStepper() {
     setErrors(validationerrors);
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API}/fundraiser/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(Fundraiser),
-        });
-        const data1 = await response.json(); // Parse the response JSON
-        
-        
-          if(data1.success)
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}/fundraiser/register`,
           {
-            alert(data1.message);
-            
+            Fundraiser,
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-       
+        );
+        const data1 = await response.json(); // Parse the response JSON
+
+        if (data1.success) {
+          alert(data1.message);
+        }
 
         if (!response.ok) {
           // Handle errors if the request is not successful
@@ -304,13 +300,15 @@ export default function HorizontalLinearStepper() {
       validationerrors.pincode = "Pincode required only 6 digits";
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API}/fundraiser/completeRegistration`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(verifyFundraiser),
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/fundraiser/completeRegistration`,
+        {
+          verifyFundraiser,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         // Handle errors if the request is not successful
@@ -338,7 +336,7 @@ export default function HorizontalLinearStepper() {
         // setErrors1(data.message);
         // setOpen(true);
       }
-  // Log the response data
+      // Log the response data
     } catch (error) {
       console.error(error);
     }
@@ -463,7 +461,6 @@ export default function HorizontalLinearStepper() {
                       className="section1"
                       style={section1}
                       onSubmit={(event) => {
-                        
                         handelregistrtion(event);
                       }}
                     >

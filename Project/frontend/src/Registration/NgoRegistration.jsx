@@ -21,6 +21,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
+import axios from "axios";
 // import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 // import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -81,7 +82,7 @@ export default function HorizontalLinearStepper() {
       state: "",
       pincode: "",
     },
-    dateOfReg:null,
+    dateOfReg: null,
     password: "",
   });
 
@@ -177,8 +178,6 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  
-
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -206,11 +205,9 @@ export default function HorizontalLinearStepper() {
     const { name, value } = event.target;
     setConf({ [name]: value });
   }
- 
+
   function handlechange(event) {
     const { name, value } = event.target;
-   
-
 
     if (name === "email") {
       setverify((prev) => {
@@ -236,14 +233,12 @@ export default function HorizontalLinearStepper() {
 
   function handleotp(event) {
     const { name, value } = event.target;
-    
 
     setverify((prev) => {
       return { ...prev, [name]: value };
     });
   }
 
- 
   async function handelregistrtion(e) {
     e.preventDefault();
     const validationerrors = {};
@@ -267,21 +262,22 @@ export default function HorizontalLinearStepper() {
     setErrors(validationerrors);
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API}/ngo/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(Ngo),
-        });
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}/ngo/register`,
+          {
+            Ngo,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data1 = await response.json(); // Parse the response JSON
         setdata(data1);
-        
+
         if (!data1.success) {
           setErrors1(data.message);
           setOpen(true);
         }
-       
 
         if (!response.ok) {
           // Handle errors if the request is not successful
@@ -304,25 +300,27 @@ export default function HorizontalLinearStepper() {
       validationerrors.pincode = "Pincode required only 6 digits";
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API}/ngo/confirm-registration`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(verifyngo),
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/ngo/confirm-registration`,
+        {
+          verifyngo,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data1 = await response.json(); // Parse the response JSON
 
       if (data1.success) {
         sessionStorage.setItem("loggedIn", true);
         sessionStorage.setItem("userType", "NGO");
-       
+
         window.location.href = "/edit_profile_ngo";
       } else {
         setErrors1(data1.message);
         setOpen(true);
       }
-      
+
       if (!response.ok) {
         // Handle errors if the request is not successful
         throw new Error(`Request failed with status: ${response.status}`);
@@ -451,7 +449,6 @@ export default function HorizontalLinearStepper() {
                       className="section1"
                       style={section1}
                       onSubmit={(event) => {
-                        
                         handelregistrtion(event);
                       }}
                     >
@@ -618,7 +615,7 @@ export default function HorizontalLinearStepper() {
                       />
 
                       <TextField
-                      type="date"
+                        type="date"
                         error={errors.dateOfReg}
                         name="dateOfReg"
                         onChange={handlechange}
@@ -629,7 +626,6 @@ export default function HorizontalLinearStepper() {
                         sx={{ width: "85%", height: "50px" }}
                         variant="filled"
                       />
-                     
                     </div>
                   </Typography>
                   <Box

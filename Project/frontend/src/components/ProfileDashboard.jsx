@@ -3,7 +3,7 @@ import { useSpring, animated } from "react-spring";
 import "../Styles/profile_d_res.css";
 import { Link } from "@mui/material";
 import { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 // import { use } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Styles/profile_d_res.css";
@@ -62,7 +62,7 @@ function Profile_Dashboard() {
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/myNgo`, {
+      const res = await axios.get(`${process.env.REACT_APP_API}/ngo/myNgo`, {
         withCredentials: true,
       }).catch((err) => {
         setErrors1(err.response.data.message);
@@ -72,7 +72,7 @@ function Profile_Dashboard() {
       setNgo(res.data.ngo);
 
       setloading(false);
-      const res1 = await Axios.get(
+      const res1 = await axios.get(
         `${process.env.REACT_APP_API}/ngo/campaigns?ngoAlias=${res.data.ngo.alias}`
       );
 
@@ -80,14 +80,14 @@ function Profile_Dashboard() {
 
       setLoading2(false);
 
-      const res2 = await Axios.get(
+      const res2 = await axios.get(
         `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${res.data.ngo.alias}`
       );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
 
       setGallery(res2.data.gallery);
 
-      const res3 = await Axios.get(
+      const res3 = await axios.get(
         `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${res.data.ngo.alias}`
       );
       setLogo(res3.data.logo);

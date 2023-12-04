@@ -124,12 +124,11 @@ function NgoSignIn() {
 
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/login`, {
-          method: "POST",
+        const response = await axios.post(`${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/login`, {
+          user,
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(user),
         });
         const data = await response.json(); // Parse the response JSON
 
@@ -170,14 +169,13 @@ function NgoSignIn() {
     if (Object.keys(validationerrors).length === 0) {
       try {
       
-        const response = await fetch(
+        const response = await axios.post(
           `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/changePassword`,
+          user,
           {
-            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(user),
           }
         );
         const data = await response.json(); // Parse the response JSON
@@ -234,14 +232,13 @@ function NgoSignIn() {
     if (Object.keys(validationerrors).length === 0) {
       try {
         // const validationerrors = {};
-        const response = await fetch(
+        const response = await axios.post(
           `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/changePasswordConfirm`,
+          user,
           {
-            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(user),
           }
         );
         const data = await response.json(); // Parse the response JSON

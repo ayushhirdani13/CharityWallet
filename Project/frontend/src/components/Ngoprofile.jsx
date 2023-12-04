@@ -26,25 +26,26 @@ function NgoProfile() {
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(`/ngo/dashboard?ngoAlias=${alias}`);
+      const res = await Axios.get(
+        `${process.env.REACT_APP_API}/ngo/dashboard?ngoAlias=${alias}`
+      );
       setNgo(res.data);
       setloading(false);
     };
     getabs();
-  },[alias]);
+  }, [alias]);
 
   const [gallery, setGallery] = useState({});
   const [logo, setLogo] = useState({});
   const [loading1, setloading1] = useState(true);
- 
- 
- 
+
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`);
+      const res = await Axios.get(
+        `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`
+      );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setGallery(res.data.gallery);
 
@@ -55,7 +56,9 @@ function NgoProfile() {
   }, [alias]);
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`);
+      const res = await Axios.get(
+        `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`
+      );
       // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setLogo(res.data.logo);
       //    setlogo(res1.data);
@@ -264,11 +267,12 @@ function NgoProfile() {
               <div className="pb-3 d-flex justify-content-center">
                 <button
                   onClick={() => {
-                 
-                    navigate("/donor_details", { state: {
-                      type: "ngo",
-                      alias: alias,
-                    } });
+                    navigate("/donor_details", {
+                      state: {
+                        type: "ngo",
+                        alias: alias,
+                      },
+                    });
                   }}
                   type="button"
                   class="btn btn-primary px-5 btn-lg btn-clr rounded-4"

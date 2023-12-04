@@ -1,5 +1,6 @@
 import React from "react";
 import "../Styles/AboutUs.css";
+import da from "../image/daiict.png"
 function AboutUs() {
   return (
     <div class="container-fluid bcolor_11 py-5">
@@ -29,7 +30,7 @@ function AboutUs() {
         <div class="row">
           <div class="col-lg-6 col-12 d-flex">
             <img
-              src="https://picsum.photos/200/200"
+              src={da}
               class="d-block rounded-4 "
               alt="Bootstrap Themes"
               height="200px"
@@ -37,14 +38,14 @@ function AboutUs() {
               loading="lazy"
             />
             <div class="px-2 mx-4 bgcolor_11 rounded-4 w-100_11 py-5 my-auto">
-              <p> Name:</p>
-              <p> About:</p>
+              <p> Name: Prof. Saurabh Tiwari</p>
+              <p> About : Course Instructor</p>
             </div>
           </div>
 
           <div class="col-lg-6 col-12 d-flex">
             <img
-              src="https://picsum.photos/200/200"
+              src={da}
               class="d-block rounded-4 "
               alt="Bootstrap Themes"
               height="200px"
@@ -52,8 +53,8 @@ function AboutUs() {
               loading="lazy"
             />
             <div class="px-2 mx-4 bgcolor_11 rounded-4 w-100_11 py-5 my-auto">
-              <p> Name:</p>
-              <p> About:</p>
+              <p> Name:Shrut Shah</p>
+              <p> About: TA</p>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { useSpring, animated } from "react-spring";
 import "../Styles/profile_home_res.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import medical from "../image/medical.jpg"
 function Number({ n }) {
   const { number } = useSpring({
     from: { number: 0 },
@@ -174,7 +175,7 @@ function Profile_home() {
               <div className=" row flex-lg-row align-items-center g-5 py-3 px-lg-5 px-3 mx-lg-5 my-3 post_123 rounded-4">
                 <div className="col-12 col-xxl-6 p-0 mt-0">
                   <img
-                    src="https://picsum.photos/1600/1500"
+                    src={medical}
                     className="d-block mx-lg-auto img-fluid rounded-4"
                     alt="Bootstrap Themes"
                     width="700"
