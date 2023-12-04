@@ -124,7 +124,7 @@ function NgoSignIn() {
 
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await fetch(`/${Type.type.toLowerCase()}/login`, {
+        const response = await fetch(`${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ function NgoSignIn() {
       try {
       
         const response = await fetch(
-          `/${Type.type.toLowerCase()}/changePassword`,
+          `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/changePassword`,
           {
             method: "POST",
             headers: {
@@ -235,7 +235,7 @@ function NgoSignIn() {
       try {
         // const validationerrors = {};
         const response = await fetch(
-          `/${Type.type.toLowerCase()}/changePasswordConfirm`,
+          `${process.env.REACT_APP_API}/${Type.type.toLowerCase()}/changePasswordConfirm`,
           {
             method: "POST",
             headers: {

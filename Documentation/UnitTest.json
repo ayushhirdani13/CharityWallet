@@ -1,0 +1,355 @@
+{
+	"id": "6fad9dd3-545e-4ab8-9289-ed9ef2c8f242",
+	"name": "CharityWallet",
+	"timestamp": "2023-12-04T08:59:41.862Z",
+	"collection_id": "28167529-56a24e6e-91f8-4915-961e-bdbd4fa66ed5",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 11,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2023-12-04T08:59:38.256Z",
+	"totalFail": 7,
+	"results": [
+		{
+			"id": "168530d8-1dec-4bfa-abe4-159fe0fe5286",
+			"name": "getNgos",
+			"url": "localhost:5000/ngo",
+			"time": 23,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status Check": true,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Status Check": true,
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "d13356f8-46e9-47fc-8e17-45ab5a1811d4",
+			"name": "loginNgo",
+			"url": "localhost:5000/ngo/login",
+			"time": 81,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status Check": true,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				81
+			],
+			"allTests": [
+				{
+					"Status Check": true,
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "92135cff-43e1-487a-8686-9789d3c789d8",
+			"name": "getMyNgo",
+			"url": "localhost:5000/ngo/myNgo",
+			"time": 63,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status Check": true,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				63
+			],
+			"allTests": [
+				{
+					"Status Check": true,
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "bc310a47-1e65-4405-a134-9ec3ddac0687",
+			"name": "getNgoByAlias",
+			"url": "localhost:5000/ngo/dashboard?ngoAlias=star_ngo",
+			"time": 37,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status Check": true,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				37
+			],
+			"allTests": [
+				{
+					"Status Check": true,
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "2029df20-2d4a-4475-b90b-7c84824f52e0",
+			"name": "getLogo",
+			"url": "localhost:5000/ngo/logo?ngoAlias=star_ngo",
+			"time": 1014,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status Check": false,
+				"Status code is 200": false
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				1014
+			],
+			"allTests": [
+				{
+					"Status Check": false,
+					"Status code is 200": false
+				}
+			]
+		},
+		{
+			"id": "67ec0c23-58d0-463b-b312-ca085b3bad15",
+			"name": "getGallery",
+			"url": "localhost:5000/ngo/gallery?ngoAlias=star_ngo",
+			"time": 1408,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status Check": false,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				1408
+			],
+			"allTests": [
+				{
+					"Status Check": false,
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "7efab52f-4883-45c4-a978-c27df39e8e06",
+			"name": "getCampaigns",
+			"url": "localhost:5000/campaign",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status Check": true,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Status Check": true,
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "8b9fc994-a935-4982-9427-399557870123",
+			"name": "getCampaignByAlias",
+			"url": "localhost:5000/campaign/sample_campaign_title",
+			"time": 2,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status Check": false,
+				"Status code is 200": false
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				2
+			],
+			"allTests": [
+				{
+					"Status Check": false,
+					"Status code is 200": false
+				}
+			]
+		},
+		{
+			"id": "bf293132-ac59-40af-b2e8-b0a31197a77b",
+			"name": "getGalleryCampaign",
+			"url": "localhost:5000/campaign/gallery?campaignAlias=star_campaign_1",
+			"time": 2,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status Check": false,
+				"Status code is 200": false
+			},
+			"testPassFailCounts": {
+				"Status Check": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				2
+			],
+			"allTests": [
+				{
+					"Status Check": false,
+					"Status code is 200": false
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 2651,
+	"collection": {
+		"requests": [
+			{
+				"id": "168530d8-1dec-4bfa-abe4-159fe0fe5286",
+				"method": "GET"
+			},
+			{
+				"id": "d13356f8-46e9-47fc-8e17-45ab5a1811d4",
+				"method": "POST"
+			},
+			{
+				"id": "92135cff-43e1-487a-8686-9789d3c789d8",
+				"method": "GET"
+			},
+			{
+				"id": "bc310a47-1e65-4405-a134-9ec3ddac0687",
+				"method": "GET"
+			},
+			{
+				"id": "2029df20-2d4a-4475-b90b-7c84824f52e0",
+				"method": "GET"
+			},
+			{
+				"id": "67ec0c23-58d0-463b-b312-ca085b3bad15",
+				"method": "GET"
+			},
+			{
+				"id": "7efab52f-4883-45c4-a978-c27df39e8e06",
+				"method": "GET"
+			},
+			{
+				"id": "8b9fc994-a935-4982-9427-399557870123",
+				"method": "GET"
+			},
+			{
+				"id": "bf293132-ac59-40af-b2e8-b0a31197a77b",
+				"method": "GET"
+			}
+		]
+	}
+}

@@ -220,7 +220,7 @@ export default function HorizontalLinearStepper() {
     setErrors(validationerrors);
     if (Object.keys(validationerrors).length === 0) {
       try {
-        const response = await fetch("/organizer/register", {
+        const response = await fetch(`${process.env.REACT_APP_API}/organizer/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -261,7 +261,7 @@ export default function HorizontalLinearStepper() {
       validationerrors.pincode = "Pincode required only 6 digits";
     }
     try {
-      const response = await fetch("/organizer/confirm-registration", {
+      const response = await fetch(`${process.env.REACT_APP_API}/organizer/confirm-registration`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
