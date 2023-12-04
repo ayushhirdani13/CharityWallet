@@ -130,7 +130,7 @@ REACT_APP_API=<api_url>
 1. Navigate to Emergency Help page and click on create Fundraisers.
 2. Provide required details and create the dashboard.
 
-   ##Development
+   ## Development
 
 ### Running Tests
 To run the test suite, use the following command:
@@ -152,11 +152,11 @@ npm test
 Under Course **IT-313 Software Engineering** at **Dhirubhai Ambani Institute of Information and Communication Technology**, the following students are working on this project:
 
 **Group 8**
-- Ayush Hirdani(2021011)
-- Kush Patel(2021011)
-- Ruturaj Sinh(2021011)
+- Ayush Hirdani(202101139)
+- Kush Patel(202101137)
+- Ruturajsinh Chauhan(202101146)
 - Shrushti Timbadiya(202101141)
 - Hirmi Patel(202101151)
-- Priyank Hudka(2021011)
-- Sankalp Bohidar(2021011)
-- Darshan(202101150)
+- Priyank Hudka(202101125)
+- Sankalp Bohidar(202101122)
+- Darshan Sanghavi(202101150)
