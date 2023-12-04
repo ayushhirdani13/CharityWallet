@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
-import FundraiserDashboard from "../components/Fundraiser_Dashboard";
+import FundraiserDashboard from "../components/FundraiserDashboard";
 
 function Fundraiser_dashboard1() {
   return (

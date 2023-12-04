@@ -9,10 +9,10 @@ import { Box } from "@mui/material";
 function ExploreNgohome() {
   const [Ngo, setNgo] = useState({});
   const [loading, setloading] = useState(true);
- 
+
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get("/ngo/");
+      const res = await Axios.get(`${process.env.REACT_APP_API}/ngo/`);
 
       setNgo(res.data);
       setloading(false);
@@ -21,7 +21,6 @@ function ExploreNgohome() {
   }, []);
 
   const Ngode = Ngo.ngos;
-  
 
   const [searchItem, setSearchItem] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(Ngode);
@@ -37,7 +36,6 @@ function ExploreNgohome() {
     setFilteredUsers(filteredItems);
   };
 
- 
   return (
     <>
       {loading === true ? (
@@ -87,41 +85,6 @@ function ExploreNgohome() {
                     />
                   ))}
             </div>
-
-            {/*             
-            <div class="row py-4">
-                <div class="col-lg-6 col-12">
-                    <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-3 shadow-lg " alt="Example image" loading="lazy"/>
-                    <h1 class="text-center fw-bold fs-3 mt-2">Sankalp NGOs</h1>
-                    <div class="concolor33 py-1 px-1  rounded-4 text-center"> 
-                        <p class="mt-2">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-3 shadow-lg " alt="Example image" loading="lazy"/>
-                    <h1 class="text-center fw-bold fs-3 mt-2">Sankalp NGOs</h1>
-                    <div class="concolor33 py-1 px-1  rounded-4 text-center"> 
-                        <p class="mt-2">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row py-4">
-                <div class="col-lg-6 col-12">
-                    <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-3 shadow-lg " alt="Example image" loading="lazy"/>
-                    <h1 class="text-center fw-bold fs-3 mt-2">Sankalp NGOs</h1>
-                    <div class="concolor33 py-1 px-1  rounded-4 text-center"> 
-                        <p class="mt-2">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <img src="https://picsum.photos/1600/900" class="img-fluid border rounded-3 shadow-lg " alt="Example image" loading="lazy"/>
-                    <h1 class="text-center fw-bold fs-3 mt-2">Sankalp NGOs</h1>
-                    <div class="concolor33 py-1 px-1  rounded-4 text-center"> 
-                        <p class="mt-2">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
-                    </div>
-                </div>
-            </div> */}
           </div>
         </div>
       )}

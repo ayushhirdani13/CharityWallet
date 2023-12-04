@@ -61,30 +61,35 @@ function Navbar(prop) {
             </ul>
           </li>
 
-          {sessionStorage.getItem("loggedIn") ? ( sessionStorage.getItem("userType")==="NGO"?(
-            <li className="align-item-center d-flex ">
-              <a
-                href="/Ngoprofile"
-                className="nav-link px-4 text-black  fs-4 mt-2"
-              >
-                Profile
-              </a>
-            </li>):( 
-            sessionStorage.getItem("userType")==="Fundraiser"?(<li className="align-item-center d-flex ">
-              <a
-                href="/frprofile"
-                className="nav-link px-4 text-black  fs-4 mt-2"
-              >
-                Profile
-              </a>
-            </li>):(<li className="align-item-center d-flex ">
-              <a
-                href="/organizer_dashboard"
-                className="nav-link px-4 text-black  fs-4 mt-2"
-              >
-                Profile
-              </a>
-            </li>))
+          {sessionStorage.getItem("loggedIn") ? (
+            sessionStorage.getItem("userType") === "NGO" ? (
+              <li className="align-item-center d-flex ">
+                <a
+                  href="/Ngoprofile"
+                  className="nav-link px-4 text-black  fs-4 mt-2"
+                >
+                  Profile
+                </a>
+              </li>
+            ) : sessionStorage.getItem("userType") === "Fundraiser" ? (
+              <li className="align-item-center d-flex ">
+                <a
+                  href="/frprofile"
+                  className="nav-link px-4 text-black  fs-4 mt-2"
+                >
+                  Profile
+                </a>
+              </li>
+            ) : (
+              <li className="align-item-center d-flex ">
+                <a
+                  href="/organizer_dashboard"
+                  className="nav-link px-4 text-black  fs-4 mt-2"
+                >
+                  Profile
+                </a>
+              </li>
+            )
           ) : (
             <li className="align-item-center d-flex ">
               <a

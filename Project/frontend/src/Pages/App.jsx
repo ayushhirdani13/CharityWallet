@@ -8,20 +8,13 @@ import AfterCreateCampaign from "../Pages/After_create_campaign";
 import CampaignHome from "./CampaignHome";
 import ProfileHome from "./ProfileHome";
 import ProfileDashboard from "./ProfileDashboard";
-// import Edit_profile_ngo1 from "../Pages/Edit_profile_ngo";
-// import EditProfileOrg from "./EditProfileOrg";
 import Emergency from "./Emergency";
 import FundraiserDashboard from "./FundraiserDashboard";
 import OrgProfileDashboard from "./OrganizerProfile";
-// import Fundraiser_dashboard from "../components/Fundraiser_Dashboard";
 import AboutUs from "./About_us";
 import CreateCampaign from "../Pages/Create_campaign";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ExploreNgoHome from "../Pages/ExploreNGOhome";
-// import Profile_Dashboard from "../components/profile_dashboard";
-// import Navbar from "../components/Navbar";
-// import Edit_Profile from "../components/edit_profile";
-// import DonorHome from "./DonorHome";
 import NgoProfileDashboard from "./NGOProfile";
 import "../Styles/boot.css";
 import EditProfileNgo from "./EditProfileNgo";
@@ -186,10 +179,6 @@ function App() {
         )}
 
         <Route path="/donor_details" element={<DonorDetails />} />
-
-        {/* <Route path="/Card" element={<Card/>} />
-        <Route path="/Card" element={<Card/>} />
-        <Route path="/Card" element={<Card/>} /> */}
       </Routes>
     </Router>
   );

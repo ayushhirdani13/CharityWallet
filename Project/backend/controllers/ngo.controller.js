@@ -181,7 +181,7 @@ export const updateNgoProfile = async (req, res, next) => {
             next
           );
         } else {
-          updateData.logo = await uploadLogoGdrive(req.file, next);
+          updateData.logo = await uploadLogoGdrive(req.files["logo"][0], next);
         }
       }
       if (req.files["gallery"]) {
@@ -224,7 +224,7 @@ export const deleteNgo = async (req, res, next) => {
     const ngoId = req.ngo._id;
 
     await deleteLogoGdrive(req.ngo.logo, next);
-    await deleteGallery(req.gallery, next);
+    await deleteImageGDrive(req.gallery, next);
 
     await Campaign.deleteMany({ organizerId: ngoId });
 
