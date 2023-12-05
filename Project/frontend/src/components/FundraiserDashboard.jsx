@@ -10,7 +10,6 @@ import axios from "axios";
 function Fundraiser_dashboard() {
   const { alias } = useParams();
   const [loading, setloading] = useState(true);
-  
 
   const [Fundraiser, setFundraiser] = useState({});
 
@@ -29,7 +28,14 @@ function Fundraiser_dashboard() {
   }, [alias]);
 
   const Fundraiserdetails = Fundraiser.data;
-
+  const [donationError, setDonationError] = useState(false);
+  useEffect(() => {
+    try {
+      setDonationError(
+        Fundraiserdetails.donationTillNow >= Fundraiserdetails.donationReq
+      );
+    } catch (err) {}
+  }, [Fundraiserdetails]);
 
   return (
     <>
@@ -75,23 +81,22 @@ function Fundraiser_dashboard() {
             </div>
             <div className="col-4 ">
               <div className="container">
-                <h1 className="fs-5 text-center mb-0 p-3">
-                  Donations Till Now
-                </h1>
-               
+                
               </div>
-              
             </div>
           </div>
 
           <div className="row pb-4">
-            <div className="col-8">
+            <div className="col-3">
               <div className="py-2 px-4 d-flex align-items-center  border border-primary my-2 rounded-4 vinput22">
                 <p className="text-center">{Fundraiserdetails.issue}</p>
               </div>
             </div>
             <div className="col-4 d-flex justify-content-center align-items-center">
               <div className="p-2 hinput text-center rounded-5 color22">
+              <h1 className="fs-5 text-center mb-0 p-3">
+                  Donations Till Now
+                </h1>
                 <p className="fs-1 mb-3">{Fundraiserdetails.donationTillNow}</p>
               </div>
             </div>
@@ -100,10 +105,17 @@ function Fundraiser_dashboard() {
             <div className="pb-3 d-flex justify-content-center">
               <button
                 onClick={() => {
-                  navigate("/donor_details", { state: {
-                    type: "fundraiser",
-                    alias: alias,
-                  } });
+                  if (!donationError) {
+                    navigate("/donor_details", {
+                      state: {
+                        type: "fundraiser",
+                        alias: alias,
+                        name: Fundraiserdetails.title,
+                      },
+                    });
+                  } else {
+                    alert("Donation is already complete for this Fundraiser.")
+                  }
                 }}
                 type="button"
                 className="btn btn-primary px-5 btn-lg btn-clr rounded-4"

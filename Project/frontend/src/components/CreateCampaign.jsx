@@ -33,26 +33,46 @@ function CreateCampaign() {
   //   setCoverImage(event.target.files[0]);
   // }
   const type = sessionStorage.getItem("userType");
+  const [error, setErrors] = useState({});
 
   async function handleCampaign(e) {
     e.preventDefault();
-    await Axios.post(
-      `${process.env.REACT_APP_API}/${type.toLowerCase()}/addCampaign`,
-      Campaign,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      }
-    )
-      .then((response) => {
-        const data = response.data;
-        if (data.success) {
-          navigate("/Ngoprofile");
+    const validerror = {};
+
+    if (!Campaign.title.trim()) {
+      validerror.title = "Title is Required.";
+    }
+    if (!Campaign.vision.trim()) {
+      validerror.vision = "Vision is Required.";
+    }
+
+    setErrors(validerror);
+
+    if (Object.keys(error).length === 0) {
+      await Axios.post(
+        `${process.env.REACT_APP_API}/${type.toLowerCase()}/addCampaign`,
+        Campaign,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
         }
-      })
-      .catch((err) => {
-        alert(err);
-      });
+      )
+        .then((response) => {
+          const data = response.data;
+          if (data.success) {
+            if (type === "NGO") {
+              navigate("/Ngoprofile");
+            } else {
+              navigate("/organizer_dashboard");
+            }
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } else {
+      
+    }
   }
 
   return (
@@ -60,6 +80,7 @@ function CreateCampaign() {
       <div class="py-4">
         <h3 class=" py-3 mb-0 fw-bold"> Title </h3>
         <input
+          error={!error.title}
           name="title"
           onChange={handlechange}
           type="text"
@@ -68,6 +89,7 @@ function CreateCampaign() {
           aria-describedby="inputGroup-sizing-default"
           placeholder="Add Title"
         />
+        {error.title && <div className="error-message">{error.title}</div>}
       </div>
 
       <div class="row ">
@@ -116,6 +138,7 @@ function CreateCampaign() {
             placeholder="Add Vision"
             id="floatingTextarea2"
           ></textarea>
+          {error.vision && <div className="error-message">{error.vision}</div>}
           <button
             onClick={(event) => {
               handleCampaign(event);
@@ -125,16 +148,6 @@ function CreateCampaign() {
           >
             Save
           </button>
-        </div>
-        <div class="col-4 ">
-          <div class="container p-2">
-            <h1 class="fs-5 text-center mb-0 p-3">
-              No. of people Benefited Till now
-            </h1>
-            <div class="p-2 border border-dark text-center rounded-5 color44">
-              <p class="fs-1 mb-3"> 12,3478 </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

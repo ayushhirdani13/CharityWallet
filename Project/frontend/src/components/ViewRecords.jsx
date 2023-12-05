@@ -59,7 +59,7 @@ function View_records() {
                           )}
                         </td>
                         <td>{donor.donationAmount}</td>
-                        <td>{donor.donationTime}</td>
+                        <td>{donor.donationTime.slice(0, 10)}</td>
                         <td>{donor.transactionId}</td>
                       </tr>
                     ))}

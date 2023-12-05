@@ -2,19 +2,19 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function CampaignCard(props) {
+  const Type = sessionStorage.getItem("userType");
   async function handleDelete() {
     const response = await Axios.delete(
-      `${process.env.REACT_APP_API}/ngo/deleteCampaign?campaignAlias=${props.alias}`,
+      `${
+        process.env.REACT_APP_API
+      }/${Type.toLowerCase()}/deleteCampaign?campaignAlias=${props.alias}`,
       { withCredentials: true }
     );
 
-    if(response.data.success)
-    {
+    if (response.data.success) {
       alert(response.data.message);
       window.location.reload();
     }
-
-    
   }
   const [cover, setCover] = useState({});
   const [loading, setLoading] = useState(true);
@@ -58,7 +58,9 @@ function CampaignCard(props) {
                 <p class="text-center">{props.vision}</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                   <button
-                    onClick={()=>(window.location.href=`/edit_Campaign/${props.alias}`)}
+                    onClick={() =>
+                      (window.location.href = `/edit_Campaign/${props.alias}`)
+                    }
                     type="button"
                     class="btn btn-primary btn-clr btn-lg px-5 me-md-2"
                   >

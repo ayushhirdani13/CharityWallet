@@ -279,7 +279,7 @@ export const deleteMyCampaign = async (req, res, next) => {
 
     if (!campaign) return next(new ErrorHandler("Campaign Not Found.", 404));
 
-    if (campaign.organizerId !== req.organizer._id)
+    if (campaign.organizerId.toString() !== req.organizer._id.toString())
       return next(
         new ErrorHandler("Unauthorized Access to the Campaign.", 403)
       );
@@ -356,7 +356,7 @@ export const changePasswordConfirmation = async (req, res, next) => {
   }
 };
 
-export const uploadCampaignGallery = async (req, res, next) => {
+export const uploadCampaignCover = async (req, res, next) => {
   try {
     req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
     if (req.campaign.organizerId.toString() !== req.organizer._id.toString())
@@ -369,7 +369,7 @@ export const uploadCampaignGallery = async (req, res, next) => {
   }
 };
 
-export const deleteCampaignGallery = async (req, res, next) => {
+export const deleteCampaignCover = async (req, res, next) => {
   try {
     req.campaign = await Campaign.findOne({ alias: req.query.campaignAlias });
     if (req.campaign.organizerId.toString() !== req.organizer._id.toString())

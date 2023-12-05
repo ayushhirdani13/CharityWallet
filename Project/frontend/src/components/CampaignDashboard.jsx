@@ -108,6 +108,7 @@ function Aftercreatecampaign() {
                   navigate("/donor_details", { state: {
                     type: "campaign",
                     alias: alias,
+                    name: Campaigndetails.title
                   } });
                 }}
                 type="button"

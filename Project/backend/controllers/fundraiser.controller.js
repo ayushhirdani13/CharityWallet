@@ -13,7 +13,7 @@ export const registerFundraiser = async (req, res, next) => {
     const fr_form = req.body;
 
     const alreadyExistingFundraiser = await FundRaiser.findOne({
-      $or: [{ email: fr_form.email }, { contactNo: fr_form.contactNo }],
+      $or: [{ email: fr_form.email }, { phoneNo: fr_form.phoneNo }],
     });
     if (alreadyExistingFundraiser) {
       return next(

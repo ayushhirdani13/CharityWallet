@@ -512,13 +512,14 @@ export const getLogo = async (req, res, next) => {
 
     const ngo = await NGO.findOne({ alias: ngoAlias });
     if (ngo.logo === null) {
-      return next(new ErrorHandler("No Logo Image Found.", 400));
+      return next(new ErrorHandler("No Logo Image Found.", 404));
     }
     const img = await getLogoGdrive(ngo.logo, next);
 
     if (!img) return next(new ErrorHandler("Error getting image.", 500));
     const base64img = img.toString("base64");
-    res.status(201).json({
+    res.status(200).json({
+      success: true,
       logo: base64img,
     });
   } catch (error) {
@@ -587,7 +588,7 @@ export const getGallery = async (req, res, next) => {
 
     const images = await getGalleryFromGdrive(gallery, next);
 
-    if (!images) return next(new ErrorHandler("Error getting images.", 402));
+    if (!images) return next(new ErrorHandler("Error getting images.", 404));
 
     // Converting each image buffer to base64
     const base64Images = images.map((image) => image.toString("base64"));
@@ -596,7 +597,7 @@ export const getGallery = async (req, res, next) => {
     res.type("application/json");
 
     // Sending images as a JSON array
-    res.json({ gallery: base64Images });
+    res.status(200).json({ success: true, gallery: base64Images });
   } catch (error) {
     next(error);
   }

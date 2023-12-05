@@ -121,7 +121,7 @@ export default function HorizontalLinearStepper() {
 
       if (!Fundraiser.description.trim()) {
         validationerrors.description = " description is required";
-      } else if (Fundraiser.description.length < 256) {
+      } else if (Fundraiser.description.length > 256) {
         validationerrors.description = " description is Maximun legth is 256";
       }
 
@@ -266,8 +266,8 @@ export default function HorizontalLinearStepper() {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_API}/fundraiser/register`,
+          Fundraiser,
           {
-            Fundraiser,
             headers: {
               "Content-Type": "application/json",
             },
@@ -302,8 +302,8 @@ export default function HorizontalLinearStepper() {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/fundraiser/completeRegistration`,
+        verifyFundraiser,
         {
-          verifyFundraiser,
           headers: {
             "Content-Type": "application/json",
           },
@@ -311,8 +311,7 @@ export default function HorizontalLinearStepper() {
       );
 
       if (!response.ok) {
-        // Handle errors if the request is not successful
-        throw new Error(`Request failed with status: ${response.status}`);
+        alert(response.data.message);
       }
 
       const data = await response.data; // Parse the response JSON
@@ -321,22 +320,19 @@ export default function HorizontalLinearStepper() {
         if (type == null) {
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem("userType", "Fundraiser");
-          window.location.href = "/frprofile";
+          window.location.href = "/";
         } else {
           sessionStorage.removeItem("loggedIn");
           sessionStorage.removeItem("userType");
 
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem("userType", "Fundraiser");
-          window.location.href = "/frprofile";
+          window.location.href = "/";
         }
       } else {
         alert(data.message);
         window.location.href = "/fundraiser/Registration";
-        // setErrors1(data.message);
-        // setOpen(true);
       }
-      // Log the response data
     } catch (error) {
       console.error(error);
     }
@@ -880,16 +876,15 @@ export default function HorizontalLinearStepper() {
                     <Button
                       variant="contained"
                       onClick={(event) => {
-                        handleNext();
-
                         handelregistrtion(event);
+                        handleNext();
                       }}
                       sx={{
                         backgroundColor: "white",
                         color: "black",
                         borderRadius: "50px",
 
-                        ":hovor": {
+                        ":hover": {
                           backgroundColor: "#004574",
                           color: "white",
                         },
@@ -975,7 +970,7 @@ export default function HorizontalLinearStepper() {
                         color: "black",
                         borderRadius: "50px",
 
-                        ":hovor": {
+                        ":hover": {
                           backgroundColor: "#004574",
                           color: "white",
                         },

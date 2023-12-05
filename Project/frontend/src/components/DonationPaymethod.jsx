@@ -114,36 +114,8 @@ function Donationmethod() {
                       >
                         <div className="UPI_section">
                           <h3 class="title">UPI Payment</h3>
-                          <div className="form-floating my-3">
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="floatinginput11"
-                              placeholder="Kush"
-                              name="fullname"
-                              onChange={handlechange}
-                              required
-                            />
-                            <label for="floatinginput11">Full Name</label>
-                            <div className="invalid-feedback">
-                              Invaild Name.
-                            </div>
-                          </div>
-                          <div class="form-floating mb-3">
-                            <input
-                              type="email"
-                              class="form-control"
-                              id="floatingInput2"
-                              placeholder="name@example.com"
-                              name="email"
-                              onChange={handlechange}
-                              required
-                            />
-                            <label for="floatingInput2">Email address</label>
-                            <div className="invalid-feedback">
-                              Invaild Email.
-                            </div>
-                          </div>
+                          <div className="form-floating my-3"></div>
+
                           <div class="form-floating mb-3">
                             <input
                               type="text"
@@ -159,21 +131,7 @@ function Donationmethod() {
                               Invaild UPI ID.
                             </div>
                           </div>
-                          <div class="form-floating mb-3">
-                            <input
-                              type="number"
-                              class="form-control"
-                              id="floatingInput4"
-                              placeholder="1000"
-                              onChange={handlechange}
-                              name="amount"
-                              required
-                            />
-                            <label for="floatingInput4">Donation Amount</label>
-                            <div className="invalid-feedback">
-                              Invaild Amount.
-                            </div>
-                          </div>
+
                           <div className="procd_section">
                             <button
                               className="btn btn-outline "

@@ -1,9 +1,10 @@
 import React from "react";
 import { useSpring, animated } from "react-spring";
 import { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 // import { use } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
+import NgoLogo from "../image/ngo.jpg";
 import "../Styles/profile_d_res.css";
 
 import HashLoader from "react-spinners/HashLoader";
@@ -26,7 +27,7 @@ function NgoProfile() {
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
-      const res = await Axios.get(
+      const res = await axios.get(
         `${process.env.REACT_APP_API}/ngo/dashboard?ngoAlias=${alias}`
       );
       setNgo(res.data);
@@ -35,36 +36,38 @@ function NgoProfile() {
     getabs();
   }, [alias]);
 
-  const [gallery, setGallery] = useState({});
-  const [logo, setLogo] = useState({});
+  const [gallery, setGallery] = useState([]);
+  const [logo, setLogo] = useState(null);
   const [loading1, setloading1] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getabs = async () => {
-      const res = await Axios.get(
-        `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`
-      );
-      // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
-      setGallery(res.data.gallery);
-
-      //    setlogo(res1.data);
+    const getGallery = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`
+        );
+        if (res.success) {
+          setGallery(res.data.gallery);
+        }
+      } catch (err) {}
       setloading1(false);
     };
-    getabs();
+    getGallery();
   }, [alias]);
   useEffect(() => {
-    const getabs = async () => {
-      const res = await Axios.get(
-        `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`
-      );
-      // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
-      setLogo(res.data.logo);
-      //    setlogo(res1.data);
-      // setloading2(false);
+    const getLogo = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`
+        );
+        if (res.success) {
+          setLogo(res.data.logo);
+        }
+      } catch (err) {}
     };
-    getabs();
+    getLogo();
   }, [alias]);
 
   return (
@@ -81,32 +84,32 @@ function NgoProfile() {
           <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
       ) : (
-        <div class="container-fluid" style={{ height: "max-content" }}>
-          <div class="row">
-            <div class="col-6 col-lg-8 px-0">
-              <div class="py-2 border border-primary my-5 rounded-4">
-                <h1 class="fs-5 fs-lg-1 text-center fw-light">
+        <div className="container-fluid" style={{ height: "max-content" }}>
+          <div className="row">
+            <div className="col-6 col-lg-8 px-0">
+              <div className="py-2 border border-primary my-5 rounded-4">
+                <h1 className="fs-5 fs-lg-1 text-center fw-light">
                   {Ngo.data.name}
                 </h1>
               </div>
 
-              <div class="py-2 border border-primary my-5 rounded-4">
-                <h3 class="fs-5 fs-lg-3  text-center fw-light">
+              <div className="py-2 border border-primary my-5 rounded-4">
+                <h3 className="fs-5 fs-lg-3  text-center fw-light">
                   {Ngo.data.vision}
                 </h3>
               </div>
 
-              <div class="row mt-5">
-                <div class="col-12 col-lg-8">
-                  <div class="py-2 border border-primary  rounded-4">
-                    <h3 class="fs-5 fs-lg-3  text-center fw-light">
+              <div className="row mt-5">
+                <div className="col-12 col-lg-8">
+                  <div className="py-2 border border-primary  rounded-4">
+                    <h3 className="fs-5 fs-lg-3  text-center fw-light">
                       {Ngo.data.address.city}, {Ngo.data.address.pincode}
                     </h3>
                   </div>
                 </div>
-                <div class="col-12 col-lg-4 mt-5 mt-lg-0">
-                  <div class="py-2 border border-primary  rounded-4">
-                    <h3 class="fs-5 fs-lg-3 text-center fw-light">
+                <div className="col-12 col-lg-4 mt-5 mt-lg-0">
+                  <div className="py-2 border border-primary  rounded-4">
+                    <h3 className="fs-5 fs-lg-3 text-center fw-light">
                       {Ngo.data.address.state}
                     </h3>
                   </div>
@@ -114,29 +117,39 @@ function NgoProfile() {
               </div>
             </div>
 
-            <div class="col-6 col-lg-4 d-flex flex-column align-items-center justify-content-center">
-              <img
-                src={`data:image/jpeg;base64,${logo}`}
-                class="img-fluid border rounded-4 shadow-lg mt-4"
-                alt="logo"
-                loading="lazy"
-                style={{ height: "400px", width: "400px" }}
-              />
+            <div className="col-6 col-lg-4 d-flex flex-column align-items-center justify-content-center">
+              {logo ? (
+                <img
+                  src={`data:image/jpeg;base64,${logo}`}
+                  className="img-fluid border rounded-4 shadow-lg mt-4"
+                  alt="logo"
+                  loading="lazy"
+                  style={{ height: "400px", width: "400px" }}
+                />
+              ) : (
+                <img
+                  src={NgoLogo}
+                  className="img-fluid border rounded-4 shadow-lg mt-4"
+                  alt="logo"
+                  loading="lazy"
+                  style={{ height: "400px", width: "400px" }}
+                />
+              )}
             </div>
           </div>
 
-          <div class="row my-4 ">
-            <div class="col-12 px-0">
-              <h1 class="my-2 fw-normal text-center rounded-4 pwclr text-white py-3">
+          <div className="row my-4 ">
+            <div className="col-12 px-0">
+              <h1 className="my-2 fw-normal text-center rounded-4 pwclr text-white py-3">
                 Previous Work
               </h1>
             </div>
           </div>
 
-          <div class="row ">
-            <div class="col-12 col-lg-8">
-              <div class="row py-4 px-4 my-5 rounded-4 pdclr">
-                {loading1 === true ? (
+          <div className="row ">
+            <div className="col-12 col-lg-8">
+              <div className="row py-4 px-4 my-5 rounded-4 pdclr">
+                {loading1 === true && gallery.length !== 0 ? (
                   <>
                     {" "}
                     <Box
@@ -153,53 +166,60 @@ function NgoProfile() {
                 ) : (
                   <>
                     {gallery.map((ga) => (
-                      <div class="col-3 mb-4 mx-auto">
+                      <div className="col-3 mb-4 mx-auto">
                         <Box>
                           <img
                             src={`data:image/jpeg;base64,${ga}`}
-                            class="img-fluid border rounded-4 shadow-lg "
+                            className="img-fluid border rounded-4 shadow-lg "
                             alt="gallery"
                             loading="lazy"
                           />
                         </Box>
                       </div>
                     ))}
-                    <div class="d-flex justify-content-center ">
-                      <button
-                        type="button"
-                        class="btn btn-primary btn-lg btn-clr rounded-4 px-5"
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
-                      >
-                        Show gallery
-                      </button>
+                    <div className="d-flex justify-content-center ">
+                      {gallery.length ? (
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-clr rounded-4 px-5"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModal"
+                        >
+                          Show gallery
+                        </button>
+                      ) : (
+                        <p>No Gallery for this NGO</p>
+                      )}
                     </div>
                     <div
-                      class="modal"
+                      className="modal"
                       id="exampleModal"
                       aria-labelledby="exampleModalLabel"
                       aria-hidden="true"
-                      tabindex="-1"
+                      tabIndex="-1"
                     >
-                      <div class="modal-dialog modal-dialog-centered modal-xl">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Gallery</h5>
+                      <div className="modal-dialog modal-dialog-centered modal-xl">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title">Gallery</h5>
                             <button
                               type="button"
-                              class="btn-close"
+                              className="btn-close"
                               data-bs-dismiss="modal"
                               aria-label="Close"
                             ></button>
                           </div>
-                          <div class="modal-body">
-                            <div id="carouselExample" class="carousel slide">
-                              <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                  {/* <div class="col-3 mb-4 mx-auto"> */}
+                          <div className="modal-body">
+                            <div
+                              id="carouselExample"
+                              className="carousel slide"
+                            >
+                              <div className="carousel-inner">
+                                <div className="carousel-item active">
+                                  {/* <div className="col-3 mb-4 mx-auto"> */}
                                   <img
                                     src={`data:image/jpeg;base64,${gallery[0]}`}
-                                    class="d-block w-100"
+                                    className="d-block w-100"
                                     alt="gallery"
                                     loading="lazy"
                                     style={{ height: "700px", width: "600px" }}
@@ -207,11 +227,11 @@ function NgoProfile() {
                                   {/* </div> */}
                                 </div>
                                 {gallery.map((ga) => (
-                                  <div class="carousel-item">
-                                    {/* <div class="col-3 mb-4 mx-auto"> */}
+                                  <div className="carousel-item">
+                                    {/* <div className="col-3 mb-4 mx-auto"> */}
                                     <img
                                       src={`data:image/jpeg;base64,${ga}`}
-                                      class="d-block w-100"
+                                      className="d-block w-100"
                                       alt="gallery"
                                       loading="lazy"
                                       style={{
@@ -223,36 +243,38 @@ function NgoProfile() {
                                   </div>
                                 ))}
                                 <button
-                                  class="carousel-control-prev"
+                                  className="carousel-control-prev"
                                   type="button"
                                   data-bs-target="#carouselExample"
                                   data-bs-slide="prev"
                                 >
                                   <span
-                                    class="carousel-control-prev-icon"
+                                    className="carousel-control-prev-icon"
                                     aria-hidden="true"
                                   ></span>
-                                  <span class="visually-hidden">Previous</span>
+                                  <span className="visually-hidden">
+                                    Previous
+                                  </span>
                                 </button>
                                 <button
-                                  class="carousel-control-next"
+                                  className="carousel-control-next"
                                   type="button"
                                   data-bs-target="#carouselExample"
                                   data-bs-slide="next"
                                 >
                                   <span
-                                    class="carousel-control-next-icon"
+                                    className="carousel-control-next-icon"
                                     aria-hidden="true"
                                   ></span>
-                                  <span class="visually-hidden">Next</span>
+                                  <span className="visually-hidden">Next</span>
                                 </button>
                               </div>
                             </div>
                           </div>
-                          <div class="modal-footer">
+                          <div className="modal-footer">
                             <button
                               type="button"
-                              class="btn btn-secondary"
+                              className="btn btn-secondary"
                               data-bs-dismiss="modal"
                             >
                               Close
@@ -271,26 +293,29 @@ function NgoProfile() {
                       state: {
                         type: "ngo",
                         alias: alias,
+                        name: Ngo.name,
                       },
                     });
                   }}
                   type="button"
-                  class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
+                  className="btn btn-primary px-5 btn-lg btn-clr rounded-4"
                 >
                   Donate
                 </button>
               </div>
             </div>
 
-            <div class="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4">
-              <div class="py-2 border border-primary rounded-4 hw-adj d-flex justify-content-center align-items-center py-5 max-content">
-                <p class="text-center fw-light px-2 ">{Ngo.data.description}</p>
-              </div>
-              <h5 class="py-3 mb-0">Donation Live Count</h5>
-              <div class="p-2  text-center rounded-5 dbclr px-5">
-                <p class="fs-1 mb-0">
-                  <Number n={1202121} />
+            <div className="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4">
+              <div className="py-2 border border-primary rounded-4 hw-adj d-flex justify-content-center align-items-center py-5 max-content">
+                <p className="text-center fw-light px-2 ">
+                  {Ngo.data.description}
                 </p>
+              </div>
+              <h5 className="py-3 mb-0">Donation Live Count</h5>
+              <div className="p-2  text-center rounded-5 dbclr px-5">
+                <div className="fs-1 mb-0">
+                  <Number n={Ngo.donationsTillNow} />
+                </div>
               </div>
             </div>
           </div>

@@ -86,7 +86,7 @@ export const updateCampaign = async (req, res, next) => {
   try {
     const campaignId = req.campaign._id;
     const data = req.body;
-    console.log(data)
+    console.log(data);
     const allowedFields = ["vision", "description"];
 
     const updateData = lodash.pick(data, allowedFields);
@@ -123,6 +123,9 @@ export const updateCampaign = async (req, res, next) => {
 export const deleteCampaign = async (req, res, next) => {
   try {
     const campaignId = req.campaign._id;
+    const campaign = await Campaign.findById(campaignId);
+
+    await deleteLogoGdrive(campaign.cover, next);
 
     const deletedCampaign = await Campaign.findByIdAndDelete(campaignId);
 
@@ -234,7 +237,8 @@ export const getCoverCampaign = async (req, res, next) => {
 
     if (!img) return next(new ErrorHandler("Error getting image.", 500));
     const base64img = img.toString("base64");
-    res.status(201).json({
+    res.status(200).json({
+      success: true,
       cover: base64img,
     });
   } catch (error) {

@@ -7,6 +7,7 @@ function HelpSeekerCard(props) {
   const donationData=useState({
     type:"fundraiser",
     alias:props.alias,
+    name: props.title
   })
   return (
     <>
@@ -46,7 +47,7 @@ function HelpSeekerCard(props) {
                     type="button"
                     class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
                   >
-                    GO TO Dashboard
+                    GO to Dashboard
                   </button>
                 </div>
               </div>

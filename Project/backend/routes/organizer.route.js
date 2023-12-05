@@ -5,7 +5,7 @@ import {
   changePassword,
   changePasswordConfirmation,
   confirmOrganizerRegistration,
-  deleteCampaignGallery,
+  deleteCampaignCover,
   deleteMyCampaign,
   deleteOrganizer,
   getMyProfile,
@@ -14,7 +14,7 @@ import {
   registerOrganizer,
   updateMyCampaign,
   updateOrganizerProfile,
-  uploadCampaignGallery,
+  uploadCampaignCover,
 } from "../controllers/organizer.controller.js";
 import { isOrganizerLoggedIn } from "../middlewares/auth.js";
 import { upload } from "../middlewares/imageHandler.js";
@@ -50,8 +50,8 @@ router.post(
   "/campaign/cover",
   upload.single("cover"),
   isOrganizerLoggedIn,
-  uploadCampaignGallery
+  uploadCampaignCover
 );
-router.delete("/campaign/cover", isOrganizerLoggedIn, deleteCampaignGallery);
+router.delete("/campaign/cover", isOrganizerLoggedIn, deleteCampaignCover);
 
 export default router;

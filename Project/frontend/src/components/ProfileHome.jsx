@@ -3,7 +3,7 @@ import { useSpring, animated } from "react-spring";
 import "../Styles/profile_home_res.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import medical from "../image/medical.jpg"
+import medical from "../image/medical.jpg";
 function Number({ n }) {
   const { number } = useSpring({
     from: { number: 0 },
@@ -15,11 +15,11 @@ function Number({ n }) {
   return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
 }
 function Profile_home() {
-  const naviGate = useNavigate();
+  const navigate = useNavigate();
   function handleSignout() {
     sessionStorage.removeItem("loggedIn");
 
-    naviGate("/");
+    navigate("/");
     window.location.reload();
   }
   const [ngo, SetNgo] = useState({});
@@ -195,6 +195,15 @@ function Profile_home() {
                     </p>
                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                       <button
+                        onClick={() => {
+                          navigate("/donor_details", {
+                            state: {
+                              type: "fundraiser",
+                              alias: fundraiser.alias,
+                              name: fundraiser.title
+                            },
+                          });
+                        }}
                         type="button"
                         className="btn btn-primary btn-clr btn-lg px-5 me-md-2"
                       >

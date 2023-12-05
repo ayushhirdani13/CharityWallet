@@ -1,12 +1,8 @@
 import { React, useState, useEffect } from "react";
 import "../Styles/campaignhome_res.css";
 import Axios from "axios";
-// import NgoCard from './Ngocard';
 import CampaignCard from "./CampaignCard";
-// import CircularProgress from '@mui/material/CircularProgress';
-// import LinearProgress from '@mui/material/LinearProgress';
 import HashLoader from "react-spinners/HashLoader";
-// import {Link} from "react-router-dom";
 import { Box } from "@mui/material";
 
 function Campaignhome() {
@@ -16,19 +12,12 @@ function Campaignhome() {
   useEffect(() => {
     const getabs = async () => {
       const res = await Axios.get(`${process.env.REACT_APP_API}/campaign/`);
-      // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
       setCampaign(res.data);
       //    setlogo(res1.data);
       setloading(false);
     };
     getabs();
-
-    //    setloading(false);
-    // Axios.get('http://localhost:5000/ngo/')
-    // .then(Ngo=>setNgo(Ngo.data))
   }, []);
-
-  console.log(Campaign);
   const Campaigndetails = Campaign.campaigns;
 
   const [searchItem, setSearchItem] = useState("");
@@ -38,8 +27,8 @@ function Campaignhome() {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm);
 
-    const filteredItems = Campaigndetails.filter((Ngode) =>
-      Ngode.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredItems = Campaigndetails.filter((campaigns) =>
+      campaigns.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     setFilteredUsers(filteredItems);
