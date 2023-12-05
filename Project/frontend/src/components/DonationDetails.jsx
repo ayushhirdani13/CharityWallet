@@ -82,9 +82,9 @@ function DonationDetails() {
 
   return (
     <>
-      <div className="container">
-        <div className="card">
-          <div className="card-header">
+      <div className="container-fluid d-flex justify-content-center p-5">
+        <div className="card" style={{width:"50%"}}>
+          <div className="card-header" style={{display:"flex", justifyContent:"center"}}>
             <span>Enter Donor Details</span>
           </div>
 

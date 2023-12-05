@@ -5,7 +5,7 @@ import Axios from "axios";
 // import { use } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import "../Styles/profile_d_res.css";
-
+import Ngoimag from "../image/ngo.jpg";
 import HashLoader from "react-spinners/HashLoader";
 import { Box } from "@mui/material";
 function Number({ n }) {
@@ -54,18 +54,18 @@ function NgoProfile() {
     };
     getabs();
   }, [alias]);
-  useEffect(() => {
-    const getabs = async () => {
-      const res = await Axios.get(
-        `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`
-      );
-      // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
-      setLogo(res.data.logo);
-      //    setlogo(res1.data);
-      // setloading2(false);
-    };
-    getabs();
-  }, [alias]);
+  // useEffect(() => {
+  //   const getabs = async () => {
+  //     const res = await Axios.get(
+  //       `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`
+  //     );
+  //     // const res1=await Axios.get('http://localhost:5000/ngo/logo?ngoAlias=sample_ngo')
+  //     setLogo(res.data.logo);
+  //     //    setlogo(res1.data);
+  //     // setloading2(false);
+  //   };
+  //   getabs();
+  // }, [alias]);
 
   return (
     <>
@@ -81,17 +81,23 @@ function NgoProfile() {
           <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
       ) : (
-        <div class="container-fluid" style={{ height: "max-content" }}>
+        <div class="container pb-5" style={{ height: "max-content" }}>
           <div class="row">
             <div class="col-6 col-lg-8 px-0">
               <div class="py-2 border border-primary my-5 rounded-4">
-                <h1 class="fs-5 fs-lg-1 text-center fw-light">
+                <h1 class="fs-5 fs-lg-1 text-center fw-light" style={{color: 'black',
+fontSize: '16',
+fontFamily: 'Raleway',
+fontWeight: '400'}}>
                   {Ngo.data.name}
                 </h1>
               </div>
 
               <div class="py-2 border border-primary my-5 rounded-4">
-                <h3 class="fs-5 fs-lg-3  text-center fw-light">
+                <h3 class="fs-5 fs-lg-3  text-center fw-light" style={{color: 'black',
+fontSize: '16',
+fontFamily: 'Merriweather',
+fontWeight: '400'}}>
                   {Ngo.data.vision}
                 </h3>
               </div>
@@ -99,14 +105,20 @@ function NgoProfile() {
               <div class="row mt-5">
                 <div class="col-12 col-lg-8">
                   <div class="py-2 border border-primary  rounded-4">
-                    <h3 class="fs-5 fs-lg-3  text-center fw-light">
+                    <h3 class="fs-5 fs-lg-3  text-center fw-light"style={{color: 'black',
+fontSize: '20',
+fontFamily: 'Merriweather',
+fontWeight: '500'}}>
                       {Ngo.data.address.city}, {Ngo.data.address.pincode}
                     </h3>
                   </div>
                 </div>
                 <div class="col-12 col-lg-4 mt-5 mt-lg-0">
                   <div class="py-2 border border-primary  rounded-4">
-                    <h3 class="fs-5 fs-lg-3 text-center fw-light">
+                    <h3 class="fs-5 fs-lg-3 text-center fw-light"style={{color: 'black',
+fontSize: '16',
+fontFamily: 'Merriweather',
+fontWeight: '400'}}>
                       {Ngo.data.address.state}
                     </h3>
                   </div>
@@ -116,7 +128,8 @@ function NgoProfile() {
 
             <div class="col-6 col-lg-4 d-flex flex-column align-items-center justify-content-center">
               <img
-                src={`data:image/jpeg;base64,${logo}`}
+              src={Ngoimag}
+                // src={`data:image/jpeg;base64,${logo}`}
                 class="img-fluid border rounded-4 shadow-lg mt-4"
                 alt="logo"
                 loading="lazy"
@@ -160,6 +173,7 @@ function NgoProfile() {
                             class="img-fluid border rounded-4 shadow-lg "
                             alt="gallery"
                             loading="lazy"
+                            style={{height:"100px", width:"200px"}}
                           />
                         </Box>
                       </div>

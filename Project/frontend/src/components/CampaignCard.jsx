@@ -26,6 +26,7 @@ function CampaignCard(props) {
           class="img-fluid border rounded-3 shadow-lg "
           alt="cover"
           loading="lazy"
+          style={{height:"300px", width:"100%"}}
         />
         <h1 class="text-center fw-bold fs-3 mt-2">{props.title}</h1>
         <div class="concolor33 py-1 px-1  rounded-4 text-center">

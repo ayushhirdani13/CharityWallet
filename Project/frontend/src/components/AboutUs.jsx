@@ -53,7 +53,7 @@ function AboutUs() {
               loading="lazy"
             />
             <div class="px-2 mx-4 bgcolor_11 rounded-4 w-100_11 py-5 my-auto">
-              <p> Name:Shrut Shah</p>
+              <p> Name: Meet Panchal</p>
               <p> About: TA</p>
             </div>
           </div>
@@ -70,7 +70,7 @@ function AboutUs() {
                 <div class="col-6 my-auto">
                   <p>1. Kush D Patel</p>
                   <p>2. Hirmi Bhupendra Patel</p>
-                  <p>3. Timbadiya Shrusti Vipulbhai</p>
+                  <p>3. Timbadiya Shrushti Vipulbhai</p>
                   <p>4. Sankalp Bohidar</p>
                   <p>5. Chauhan Ruturajsinh Bharatsingh</p>
                   <p>6. Hirdani Ayush Rajeshkumar</p>

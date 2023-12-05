@@ -114,7 +114,7 @@ function EditCampaign() {
  
 
   return (
-    <div class="container" style={{ height: "max-content", maxWidth: "100%" }}>
+    <div class="container pb-5" style={{ height: "max-content" }}>
       <div class="py-4">
         <h3 class=" py-3 mb-0 fw-bold"> Title </h3>
         <input
