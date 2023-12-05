@@ -11,13 +11,14 @@
 
 .footer-links {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   text-align: left;
   margin-bottom: 2rem;
+  gap: 30%;
   color: white;
 }
 

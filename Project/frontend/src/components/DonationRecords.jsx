@@ -94,89 +94,92 @@ function Donation_records() {
   }
   return (
     <>
-      <div className="container">
-        <form
-          action=""
-          className="needs-validation"
-          noValidate
-          onSubmit={validateEmail}
-        >
-          <div className="card">
-            <div className="card-header">Enter Donar Details</div>
-            <div className="card-body">
-              <div className="donarInputsection">
-                <div className="form-floating mb-3 mt-3">
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="floatinginput12"
-                    placeholder="example@gmail.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                  <label for="floatinginput12">Email</label>
-                  <div className="invalid-feedback">Invalid Email.</div>
+      <div className="container-fluid d-flex justify-content-center align-items-center " style={{paddingBottom:"100px", paddingTop:"100px"}}  >
+        <div style={{height:"80%", width:"60%"}}>
+          <form
+            action=""
+            className="needs-validation d-flex align-items-center justify-content-center"
+            noValidate
+            onSubmit={validateEmail}
+            style={{height:"100%", width:"100%"}}
+          >
+            <div className="card" style={{width:"60%" }}>
+              <div className="card-header" style={{justifyContent:"center", display:"flex"}}>Enter Donar Details</div>
+              <div className="card-body">
+                <div className="donarInputsection">
+                  <div className="form-floating mb-3 mt-3">
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="floatinginput12"
+                      placeholder="example@gmail.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <label for="floatinginput12">Email</label>
+                    <div className="invalid-feedback">Invalid Email.</div>
+                  </div>
+                  <div className="form-floating my-3">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="floatinginput13"
+                      placeholder="Kush"
+                      value={otp}
+                      disabled={!emailValid}
+                      onChange={(e) => setOtp(e.target.value)}
+                      required
+                    />
+                    <label for="floatinginput13">OTP</label>
+                  </div>
                 </div>
-                <div className="form-floating my-3">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="floatinginput13"
-                    placeholder="Kush"
-                    value={otp}
-                    disabled={!emailValid}
-                    onChange={(e) => setOtp(e.target.value)}
-                    required
-                  />
-                  <label for="floatinginput13">OTP</label>
+                <div
+                  className="col d-flex " 
+                  style={{ justifyContent: "center", alignItems: "center", gap:"20px" }}
+                >
+                  <button className="btn" type="reset">
+                    Cancel
+                  </button>
+                  {emailValid ? (
+                    <button
+                      onClick={(e) => {
+                        handelVerify(e);
+                      }}
+                      className="btn "
+                    >
+                      Submit
+                    </button>
+                  ) : (
+                    <button onClick={(e) => handelSubmit(e)} className="btn">
+                      Next
+                    </button>
+                  )}
                 </div>
               </div>
-              <div
-                className="col d-flex"
-                style={{ justifyContent: "center", alignItems: "center" }}
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                PaperComponent={PaperComponent}
+                maxWidth={"xl"}
+                aria-labelledby="draggable-dialog-title"
               >
-                <button className="btn" type="reset">
-                  Cancel
-                </button>
-                {emailValid ? (
-                  <button
-                    onClick={(e) => {
-                      handelVerify(e);
-                    }}
-                    className="btn"
-                  >
-                    Submit
-                  </button>
-                ) : (
-                  <button onClick={(e) => handelSubmit(e)} className="btn">
-                    Next
-                  </button>
-                )}
-              </div>
+                <DialogTitle
+                  style={{ cursor: "move" }}
+                  id="draggable-dialog-title"
+                >
+                  Error
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>{error1}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Re Enter</Button>
+                </DialogActions>
+              </Dialog>
             </div>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              PaperComponent={PaperComponent}
-              maxWidth={"xl"}
-              aria-labelledby="draggable-dialog-title"
-            >
-              <DialogTitle
-                style={{ cursor: "move" }}
-                id="draggable-dialog-title"
-              >
-                Error
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>{error1}</DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Re Enter</Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </>
   );

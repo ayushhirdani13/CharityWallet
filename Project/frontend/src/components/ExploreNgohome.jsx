@@ -50,7 +50,7 @@ function ExploreNgohome() {
           <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
       ) : (
-        <div class="container-fluid">
+        <div class="container-fluid pb-5" style={{margin:"100px 0px 100px"}}>
           <div class="container px-5">
             {/* <img src='http://localhost:5000/ngo/logo?ngoAlias=sample_ngo' alt="logo"/> */}
             <h1 class="fw-bold text-center hsize33 py-4">Explore NGOs</h1>

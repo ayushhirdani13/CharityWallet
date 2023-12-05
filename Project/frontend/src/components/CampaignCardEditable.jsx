@@ -1,3 +1,4 @@
+import { Height } from "@mui/icons-material";
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -32,8 +33,8 @@ function CampaignCard(props) {
     <>
       <div class="row justify-content-center">
         <div class="col-11 px-4">
-          <div class=" row flex-lg-row align-items-center g-5 py-2 px-4 my-3 post_11 rounded-4">
-            <div class="col-12 col-xxl-6 p-0 mt-0">
+          <div class=" row flex-lg-row align-items-center g-5 py-4 px-4 my-3 post_11 rounded-4">
+            <div class="col-12 col-xxl-6 p-0 mt-0 d-flex justify-content-center">
               {loading ? (
                 <img
                   // src={`data:image/jpeg;base64,${cover}`}
@@ -44,9 +45,10 @@ function CampaignCard(props) {
               ) : (
                 <img
                   src={`data:image/jpeg;base64,${cover}`}
-                  class="d-flex w-100 img-fluid rounded-4"
+                  class="d-flex  img-fluid justify-content-center rounded-4"
                   alt="Bootstrap Themes"
                   loading="lazy"
+                  style={{height:"350px", width:"90%"}}
                 />
               )}
             </div>
