@@ -21,7 +21,7 @@ function Footer() {
               <p> Campaigns</p>
             </a>
           </div>
-          <div className="fotter-links-div">
+          {/* <div className="fotter-links-div">
             <h4>SUPPORT US</h4>
             <a href="/FAQS">
               <p> FAQs</p>
@@ -32,7 +32,7 @@ function Footer() {
             <a href="/T&C">
               <p> Terms and Conditions</p>
             </a>
-          </div>
+          </div> */}
           <div className="fotter-links-div">
             <h4>CONTACT US</h4>
 
@@ -43,9 +43,7 @@ function Footer() {
               Gandhinagar, Gujarat.{" "}
             </p>
 
-            <p> Email: info@charutywallet.org</p>
-
-            <p> Contact: +91 99xxxxxx01</p>
+            <p> Email: charitywallet5@gmail.com</p>
           </div>
         </div>
         <hr></hr>

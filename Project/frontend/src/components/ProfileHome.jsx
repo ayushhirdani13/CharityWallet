@@ -12,6 +12,8 @@ function Number({ n }) {
     config: { mass: 1, tension: 20, friction: 10 },
   });
 
+  const navigete = useNavigate();
+
   return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
 }
 function Profile_home() {
@@ -123,6 +125,7 @@ function Profile_home() {
                   src={`data:image/jpeg;base64,${ngoLogo}`}
                   className="img-fluid border rounded-4 shadow-lg "
                   alt="NGO"
+                  style={{ height: "400px", width: "100%" }}
                   loading="lazy"
                 />
               </div>
@@ -132,6 +135,7 @@ function Profile_home() {
                   className="img-fluid border rounded-4 shadow-lg "
                   alt="Campaign"
                   loading="lazy"
+                  style={{ height: "400px", width: "100%" }}
                 />
               </div>
               {/* <div className="carousel-item">
@@ -200,7 +204,7 @@ function Profile_home() {
                             state: {
                               type: "fundraiser",
                               alias: fundraiser.alias,
-                              name: fundraiser.title
+                              name: fundraiser.title,
                             },
                           });
                         }}
@@ -220,24 +224,24 @@ function Profile_home() {
         <div className="col-4 p-1 d-flex">
           <div className="p-0 m-0 border border-dark vr"></div>
           <div className="d-flex flex-column justify-content-center align-items-center w-100">
-            <h1 className="text-center px-xl-5 ">
+            {/* <h1 className="text-center px-xl-5 ">
               No of Donation we Facilitated
             </h1>
             <h1 className="text-center raleway100 mb-5">
               <Number n={56470} />
-            </h1>
+            </h1> */}
             <h1 className="text-center px-xl-5 ">
               No of Donation we Facilitated
             </h1>
             <h1 className="text-center raleway100  mb-5">
               <Number n={56470} />
             </h1>
-            <h1 className="text-center px-xl-5  ">
+            {/* <h1 className="text-center px-xl-5  ">
               No of Donation we Facilitated
             </h1>
             <h1 className="text-center raleway100  mb-5">
               <Number n={56470} />
-            </h1>
+            </h1> */}
           </div>
         </div>
       </div>

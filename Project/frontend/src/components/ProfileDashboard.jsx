@@ -62,12 +62,14 @@ function Profile_Dashboard() {
   const [Ngo, setNgo] = useState({});
   useEffect(() => {
     const getabs = async () => {
-      const res = await axios.get(`${process.env.REACT_APP_API}/ngo/myNgo`, {
-        withCredentials: true,
-      }).catch((err) => {
-        setErrors1(err.response.data.message);
-        setOpen(true);
-      });
+      const res = await axios
+        .get(`${process.env.REACT_APP_API}/ngo/myNgo`, {
+          withCredentials: true,
+        })
+        .catch((err) => {
+          setErrors1(err.response.data.message);
+          setOpen(true);
+        });
 
       setNgo(res.data.ngo);
 
@@ -130,10 +132,7 @@ function Profile_Dashboard() {
           </Dialog>
         </Box>
       ) : (
-        <div
-          className="container"
-          style={{ height: "max-content", maxWidth: "100%" }}
-        >
+        <div className="container pb-5" style={{ height: "max-content" }}>
           <Box>
             {Ngo.verified === true ? (
               <Box sx={{ display: "flex" }}>
@@ -249,7 +248,7 @@ function Profile_Dashboard() {
                             className="img-fluid border rounded-4 shadow-lg "
                             alt="gallery"
                             loading="lazy"
-                            style={{ height: "200px", width: "200px" }}
+                            style={{ height: "100px", width: "200px" }}
                           />
                         </Box>
                       </div>
@@ -393,25 +392,21 @@ function Profile_Dashboard() {
             </div>
           </div>
           <div className="d-flex justify-content-center mb-3">
-            <Link to="/Createcampaign">
-              <button
-                type="button"
-                className="btn btn-primary btn-clr btn-lg px-5 me-md-2"
-                onClick={() => (window.location.href = "/Createcampaign")}
-              >
-                Create Campaign
-              </button>
-            </Link>
+            <button
+              type="button"
+              className="btn btn-primary btn-clr btn-lg  me-2"
+              onClick={() => (window.location.href = "/Createcampaign")}
+            >
+              Create Campaign
+            </button>
 
-            <Link to="/edit_profile_ngo">
-              <button
-                type="button"
-                className="btn btn-primary btn-clr btn-lg px-5 me-md-2"
-                onClick={() => (window.location.href = "/edit_profile_ngo")}
-              >
-                Edit Profile
-              </button>
-            </Link>
+            <button
+              type="button"
+              className="btn btn-primary btn-clr btn-lg px-5 me-md-2"
+              onClick={() => (window.location.href = "/edit_profile_ngo")}
+            >
+              Edit Profile
+            </button>
           </div>
 
           <div className="col-12 p-0 clr rounded-4 mx-md-auto">

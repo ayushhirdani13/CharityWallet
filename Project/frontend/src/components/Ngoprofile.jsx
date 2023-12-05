@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import NgoLogo from "../image/ngo.jpg";
 import "../Styles/profile_d_res.css";
-
+import Ngoimag from "../image/ngo.jpg";
 import HashLoader from "react-spinners/HashLoader";
 import { Box } from "@mui/material";
 function Number({ n }) {
@@ -84,17 +84,23 @@ function NgoProfile() {
           <HashLoader size="150px" loading={true} color="#36d7b7" />
         </Box>
       ) : (
-        <div className="container-fluid" style={{ height: "max-content" }}>
+        <div className="container pb-5" style={{ height: "max-content" }}>
           <div className="row">
             <div className="col-6 col-lg-8 px-0">
               <div className="py-2 border border-primary my-5 rounded-4">
-                <h1 className="fs-5 fs-lg-1 text-center fw-light">
+                <h1 className="fs-5 fs-lg-1 text-center fw-light" style={{color: 'black',
+fontSize: '16',
+fontFamily: 'Raleway',
+fontWeight: '400'}}>
                   {Ngo.data.name}
                 </h1>
               </div>
 
               <div className="py-2 border border-primary my-5 rounded-4">
-                <h3 className="fs-5 fs-lg-3  text-center fw-light">
+                <h3 className="fs-5 fs-lg-3  text-center fw-light" style={{color: 'black',
+fontSize: '16',
+fontFamily: 'Merriweather',
+fontWeight: '400'}}>
                   {Ngo.data.vision}
                 </h3>
               </div>
@@ -102,14 +108,20 @@ function NgoProfile() {
               <div className="row mt-5">
                 <div className="col-12 col-lg-8">
                   <div className="py-2 border border-primary  rounded-4">
-                    <h3 className="fs-5 fs-lg-3  text-center fw-light">
+                    <h3 className="fs-5 fs-lg-3  text-center fw-light"style={{color: 'black',
+fontSize: '20',
+fontFamily: 'Merriweather',
+fontWeight: '500'}}>
                       {Ngo.data.address.city}, {Ngo.data.address.pincode}
                     </h3>
                   </div>
                 </div>
                 <div className="col-12 col-lg-4 mt-5 mt-lg-0">
                   <div className="py-2 border border-primary  rounded-4">
-                    <h3 className="fs-5 fs-lg-3 text-center fw-light">
+                    <h3 className="fs-5 fs-lg-3 text-center fw-light"style={{color: 'black',
+fontSize: '16',
+fontFamily: 'Merriweather',
+fontWeight: '400'}}>
                       {Ngo.data.address.state}
                     </h3>
                   </div>
@@ -173,6 +185,7 @@ function NgoProfile() {
                             className="img-fluid border rounded-4 shadow-lg "
                             alt="gallery"
                             loading="lazy"
+                            style={{height:"100px", width:"200px"}}
                           />
                         </Box>
                       </div>

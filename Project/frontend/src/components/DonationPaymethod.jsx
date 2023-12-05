@@ -58,9 +58,9 @@ function Donationmethod() {
 
   return (
     <>
-      <div className="container" style={{ height: "max content" }}>
+      <div className="container-fluid p-5" style={{marginBottom:"100px", height:""}}>
         <div className="card">
-          <div className="card-header">
+          <div className="card-header" style={{display:"flex", justifyContent:"center"}}>
             <span> Payment Methods </span>
           </div>
           <div

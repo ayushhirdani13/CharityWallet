@@ -115,24 +115,12 @@ function ProfileDashboard_org() {
         </Box>
       ) : (
         <div
-          className="container"
-          style={{ height: "max-content", maxWidth: "100%" }}
+          className="container pb-5"
+          style={{ height: "max-content" }}
         >
-          <Box>
-            {organizer.verified === true ? (
-              <Box sx={{ display: "flex" }}>
-                <VerifiedUserIcon fontSize="large" color="success" />
-                <span style={{ fontSize: "25px" }}>Is verified</span>
-              </Box>
-            ) : (
-              <Box sx={{ display: "flex" }}>
-                <VerifiedUserIcon fontSize="large" sx={{ color: "red" }} />
-                <span style={{ fontSize: "25px" }}>Is not Verified</span>
-              </Box>
-            )}
-          </Box>
+         
           <div className="row">
-            <div className="col-8 px-0">
+            <div className="col-12 px-0">
               <div className="py-2 border border-primary my-5 rounded-4">
                 <h1
                   style={{
@@ -148,7 +136,7 @@ function ProfileDashboard_org() {
 
               <div className="py-2 border border-primary my-5 rounded-4">
                 <h3
-                  style={{ fontSize: "40px", margin: "0px", fontWeight: "300" }}
+                  style={{ fontSize: "40px", margin: "0px", fontWeight: "500" }}
                   className="  text-center "
                 >
                   {/* {organizer.vision} */}
@@ -157,7 +145,7 @@ function ProfileDashboard_org() {
               </div>
 
               <div className="row mt-5">
-                <div className="col-12 col-lg-8">
+                <div className="col-12 ">
                   <div className="py-2 border border-primary  rounded-4">
                     <h3
                       style={{
@@ -175,7 +163,7 @@ function ProfileDashboard_org() {
               </div>
             </div>
 
-            <div className="col-4 d-flex align-items-center justify-content-center"></div>
+         
           </div>
 
           <div className="row my-4 ">
@@ -187,7 +175,7 @@ function ProfileDashboard_org() {
           </div>
 
           <div className="row ">
-            <div className="col-12 col-lg-4 d-flex flex-column justify-content-center align-items-center px-4 mb-5">
+            <div className="col-12 d-flex flex-column justify-content-center align-items-center px-4 mb-5">
               <div
                 tyle={{ width: "100%", height: "100%" }}
                 className=" border border-primary rounded-4 hw-adj d-flex justify-content-center align-items-center  max-content"

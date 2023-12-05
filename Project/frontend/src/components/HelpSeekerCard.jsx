@@ -3,12 +3,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import Medical from "../image/medical.jpg";
 function HelpSeekerCard(props) {
-  let navigate=useNavigate();
-  const donationData=useState({
-    type:"fundraiser",
-    alias:props.alias,
-    name: props.title
-  })
+  let navigate = useNavigate();
+  const donationData = useState({
+    type: "fundraiser",
+    alias: props.alias,
+    name: props.title,
+  });
   return (
     <>
       <div class="row justify-content-center">
@@ -31,24 +31,28 @@ function HelpSeekerCard(props) {
               <div class="bgd-clr p-3 rounded-4">
                 <p class="text-center">{props.issue}</p>
                 <div className="pb-3 d-flex justify-content-center">
-                  <button
-                    onClick={() => {
-                      navigate("/donor_details", { state: donationData });
-                    }}
-                    type="button"
-                    class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
-                  >
-                    Donate
-                  </button>
-                  <button
-                    onClick={() => {
-                      window.location.href=`/Fundraiser_dashboard/${props.alias}`;
-                    }}
-                    type="button"
-                    class="btn btn-primary px-5 btn-lg btn-clr rounded-4"
-                  >
-                    GO to Dashboard
-                  </button>
+                  <div>
+                    <button
+                      onClick={() => {
+                        navigate("/donor_details", { state: donationData });
+                      }}
+                      type="button"
+                      class="btn btn-primary px-5 mx-1 btn-lg btn-clr rounded-4"
+                    >
+                      Donate
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => {
+                        window.location.href = `/Fundraiser_dashboard/${props.alias}`;
+                      }}
+                      type="button"
+                      class="btn btn-primary px-5 mx-1 btn-lg btn-clr rounded-4"
+                    >
+                      Dashboard
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
