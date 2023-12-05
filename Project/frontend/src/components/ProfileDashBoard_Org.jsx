@@ -7,7 +7,6 @@ import Axios from "axios";
 // import { use } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Styles/profile_d_res.css";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import HashLoader from "react-spinners/HashLoader";
 import { Box } from "@mui/material";
 import CampaignCard from "./CampaignCardEditable";
@@ -77,8 +76,6 @@ function ProfileDashboard_org() {
       setloading(false);
       setLoading2(false);
     };
-
-    // setCampaign(res1.data.campaigns);
 
     getabs();
   }, []);
@@ -155,7 +152,6 @@ function ProfileDashboard_org() {
                       }}
                       className="  text-center "
                     >
-                      {/* {organizer.address.city}, {organizer.address.pincode} */}
                       {organizer.contactNo}
                     </h3>
                   </div>

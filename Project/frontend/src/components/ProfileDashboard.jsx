@@ -1,7 +1,6 @@
 import React from "react";
 import { useSpring, animated } from "react-spring";
 import "../Styles/profile_d_res.css";
-import { Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 // import { use } from "react-router-dom";

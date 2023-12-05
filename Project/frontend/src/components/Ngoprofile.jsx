@@ -6,7 +6,6 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import NgoLogo from "../image/ngo.jpg";
 import "../Styles/profile_d_res.css";
-import Ngoimag from "../image/ngo.jpg";
 import HashLoader from "react-spinners/HashLoader";
 import { Box } from "@mui/material";
 function Number({ n }) {
@@ -48,7 +47,7 @@ function NgoProfile() {
         const res = await axios.get(
           `${process.env.REACT_APP_API}/ngo/gallery?ngoAlias=${alias}`
         );
-        if (res.success) {
+        if (res.data.success) {
           setGallery(res.data.gallery);
         }
       } catch (err) {}
@@ -62,7 +61,7 @@ function NgoProfile() {
         const res = await axios.get(
           `${process.env.REACT_APP_API}/ngo/logo?ngoAlias=${alias}`
         );
-        if (res.success) {
+        if (res.data.success) {
           setLogo(res.data.logo);
         }
       } catch (err) {}

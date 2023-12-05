@@ -12,8 +12,6 @@ function Number({ n }) {
     config: { mass: 1, tension: 20, friction: 10 },
   });
 
-  const navigete = useNavigate();
-
   return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
 }
 function Profile_home() {
@@ -121,22 +119,26 @@ function Profile_home() {
             </div>
             <div className="carousel-inner">
               <div className="carousel-item active">
-                <img
-                  src={`data:image/jpeg;base64,${ngoLogo}`}
-                  className="img-fluid border rounded-4 shadow-lg "
-                  alt="NGO"
-                  style={{ height: "400px", width: "100%" }}
-                  loading="lazy"
-                />
+                <Link to={`/ExploreNgo/${ngo.alias}`}>
+                  <img
+                    src={`data:image/jpeg;base64,${ngoLogo}`}
+                    className="img-fluid border rounded-4 shadow-lg "
+                    alt={ngo.name}
+                    style={{ height: "400px", width: "100%" }}
+                    loading="lazy"
+                  />
+                </Link>
               </div>
               <div className="carousel-item">
-                <img
-                  src={`data:image/jpeg;base64,${campaignCover}`}
-                  className="img-fluid border rounded-4 shadow-lg "
-                  alt="Campaign"
-                  loading="lazy"
-                  style={{ height: "400px", width: "100%" }}
-                />
+                <Link to={`/ExploreNgo/${ngo.alias}`}>
+                  <img
+                    src={`data:image/jpeg;base64,${campaignCover}`}
+                    className="img-fluid border rounded-4 shadow-lg "
+                    alt={campaign.title}
+                    loading="lazy"
+                    style={{ height: "400px", width: "100%" }}
+                  />
+                </Link>
               </div>
               {/* <div className="carousel-item">
                             <img src="https://picsum.photos/1600/900" className="img-fluid border rounded-4 shadow-lg " alt="Example image" loading="lazy"/>
@@ -147,7 +149,7 @@ function Profile_home() {
               type="button"
               data-bs-target="#carouselExampleIndicators"
               data-bs-slide="prev"
-            >
+              >
               <span
                 className="carousel-control-prev-icon"
                 aria-hidden="true"
