@@ -97,7 +97,7 @@ function Aftercreatecampaign() {
             </div>
             <div className="col-4 d-flex justify-content-center align-items-center">
               <div className="p-2 hinput text-center rounded-5 color22">
-                <p className="fs-1 mb-3"></p>
+                <p className="fs-1 mb-3">{Campaigndetails.donationsTillNow}</p>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ function Number({ n }) {
     config: { mass: 1, tension: 20, friction: 10 },
   });
 
-  return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
+  return <animated.div>{number.to((n) => parseInt(n))}</animated.div>;
 }
 function Profile_home() {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ function Profile_home() {
   const [fundraiser, setFundraiser] = useState({});
   const [ngoLogo, setNgoLogo] = useState({});
   const [campaignCover, setCampaignCover] = useState({});
+  const [count, setDonationCount] = useState({});
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/misc/current`)
@@ -34,6 +35,7 @@ function Profile_home() {
         SetNgo(res.data.ngo);
         setCampaign(res.data.campaign);
         setFundraiser(res.data.fundraiser);
+        setDonationCount(res.data.donationCount);
       })
 
       .catch((err) => {});
@@ -130,7 +132,7 @@ function Profile_home() {
                 </Link>
               </div>
               <div className="carousel-item">
-                <Link to={`/ExploreNgo/${ngo.alias}`}>
+                <Link to={`/Campaignhome/${campaign.alias}`}>
                   <img
                     src={`data:image/jpeg;base64,${campaignCover}`}
                     className="img-fluid border rounded-4 shadow-lg "
@@ -149,7 +151,7 @@ function Profile_home() {
               type="button"
               data-bs-target="#carouselExampleIndicators"
               data-bs-slide="prev"
-              >
+            >
               <span
                 className="carousel-control-prev-icon"
                 aria-hidden="true"
@@ -236,7 +238,7 @@ function Profile_home() {
               No of Donation we Facilitated
             </h1>
             <h1 className="text-center raleway100  mb-5">
-              <Number n={56470} />
+              <Number n={count} />
             </h1>
             {/* <h1 className="text-center px-xl-5  ">
               No of Donation we Facilitated

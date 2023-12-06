@@ -216,32 +216,20 @@ export default function HorizontalLinearStepper() {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_API}/organizer/register`,
+          Organizer,
           {
-            Organizer,
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-        const data1 = await response.data; // Parse the response JSON
+        const data1 = response.data; // Parse the response JSON
 
-        if (!data1.success) {
-          alert(data1.message);
-        }
-
-        if (!data1.success) {
+        if (data1.success) {
           setErrors1(data1.message);
           setOpen(true);
         }
-
-        if (!response.ok) {
-          // Handle errors if the request is not successful
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
-
-        // Log the response data
       } catch (error) {
-        console.error(error);
       }
     }
   }
@@ -257,8 +245,8 @@ export default function HorizontalLinearStepper() {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/organizer/confirm-registration`,
+        verifyOrganizer,
         {
-          verifyOrganizer,
           headers: {
             "Content-Type": "application/json",
           },
@@ -284,17 +272,8 @@ export default function HorizontalLinearStepper() {
         setErrors1(data1.message);
         setOpen(true);
       }
-
-      if (!response.ok) {
-        // Handle errors if the request is not successful
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
-
-      // Parse the response JSON
-
-      // Log the response data
     } catch (error) {
-      console.error(error);
+      alert(error.response.data.message);
     }
   }
   return (
@@ -310,7 +289,7 @@ export default function HorizontalLinearStepper() {
                   marginBottom: "30px",
                 }}
               >
-                Registration From
+                Registration Form
               </span>
               <Stepper activeStep={activeStep} orientation="vertical">
                 {steps.map((label, index) => {
@@ -484,7 +463,6 @@ export default function HorizontalLinearStepper() {
                     <Button
                       variant="contained"
                       onClick={(event) => {
-                        handelregistrtion(event);
                         handleNext();
                       }}
                       sx={{

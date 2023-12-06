@@ -16,7 +16,7 @@ function Number({ n }) {
     config: { mass: 1, tension: 20, friction: 10 },
   });
 
-  return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
+  return <animated.div>{number.to((n) => parseInt(n))}</animated.div>;
 }
 
 function NgoProfile() {
@@ -326,7 +326,7 @@ fontWeight: '400'}}>
               <h5 className="py-3 mb-0">Donation Live Count</h5>
               <div className="p-2  text-center rounded-5 dbclr px-5">
                 <div className="fs-1 mb-0">
-                  <Number n={Ngo.donationsTillNow} />
+                  <Number n={Ngo.data.donationsTillNow} />
                 </div>
               </div>
             </div>

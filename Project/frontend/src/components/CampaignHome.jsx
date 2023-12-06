@@ -72,12 +72,12 @@ function Campaignhome() {
                     />
                     // </Link>
                   ))
-                : filteredUsers.map((ngoterm) => (
+                : filteredUsers.map((campaign) => (
                     <CampaignCard
-                      key={ngoterm.id}
-                      name={ngoterm.name}
-                      description={ngoterm.description}
-                      image={ngoterm.alias}
+                      key={campaign.id}
+                      title={campaign.title}
+                      vision={campaign.vision}
+                      alias={campaign.alias}
                     />
                   ))}
             </div>

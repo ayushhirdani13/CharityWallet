@@ -100,6 +100,14 @@ function Fundraiser_dashboard() {
                 <p className="fs-1 mb-3">{Fundraiserdetails.donationTillNow}</p>
               </div>
             </div>
+            <div className="col-4 d-flex justify-content-center align-items-center">
+              <div className="p-2 hinput text-center rounded-5 color22">
+              <h1 className="fs-5 text-center mb-0 p-3">
+                  Donations Required
+                </h1>
+                <p className="fs-1 mb-3">{Fundraiserdetails.donationReq}</p>
+              </div>
+            </div>
           </div>
           <div>
             <div className="pb-3 d-flex justify-content-center">

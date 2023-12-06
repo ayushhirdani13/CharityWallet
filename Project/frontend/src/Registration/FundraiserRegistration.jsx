@@ -279,14 +279,9 @@ export default function HorizontalLinearStepper() {
           alert(data1.message);
         }
 
-        if (!response.ok) {
-          // Handle errors if the request is not successful
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
-
         // Log the response data
       } catch (error) {
-        console.error(error);
+        alert(error.response.data.message);
       }
     }
   }
@@ -334,7 +329,7 @@ export default function HorizontalLinearStepper() {
         window.location.href = "/fundraiser/Registration";
       }
     } catch (error) {
-      console.error(error);
+      alert(error.response.data.message);
     }
   }
   return (
@@ -350,7 +345,7 @@ export default function HorizontalLinearStepper() {
                   marginBottom: "30px",
                 }}
               >
-                Registration From
+                Registration Form
               </span>
               <Stepper
                 activeStep={activeStep}

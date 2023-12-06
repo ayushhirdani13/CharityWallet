@@ -43,7 +43,7 @@ export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [error1, setErrors1] = useState({});
+  const [error1, setErrors1] = useState();
 
   const handleClose = () => {
     setOpen(false);
@@ -70,8 +70,6 @@ export default function HorizontalLinearStepper() {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-  const [data, setdata] = useState();
-  // const date = new Date();
   const [Ngo, setNgo] = useState({
     name: "",
     contactNo: "",
@@ -261,33 +259,42 @@ export default function HorizontalLinearStepper() {
 
     setErrors(validationerrors);
     if (Object.keys(validationerrors).length === 0) {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API}/ngo/register`,
-          {
-            Ngo,
-            headers: {
-              "Content-Type": "application/json",
-            },
+      // try {
+      //   const response = await axios.post(
+      //     `${process.env.REACT_APP_API}/ngo/register`,
+      //     Ngo,
+      //     {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   );
+      //   const data1 = response.data; // Parse the response JSON
+
+      //   if (!data1.success) {
+      //     setErrors1(data1.message);
+      //     setOpen(true);
+      //   }
+      // } catch (error) {
+      //   alert(error);
+      // }
+      await axios
+        .post(`${process.env.REACT_APP_API}/ngo/register`, Ngo, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          if (!data.success) {
+            alert(data.message);
+          } else {
+            alert(data.message);
           }
-        );
-        const data1 = await response.data; // Parse the response JSON
-        setdata(data1);
-
-        if (!data1.success) {
-          setErrors1(data.message);
-          setOpen(true);
-        }
-
-        if (!response.ok) {
-          // Handle errors if the request is not successful
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
-
-        // Log the response data
-      } catch (error) {
-        console.error(error);
-      }
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+        });
     }
   }
   async function handleconfirmregistrstion(e) {
@@ -299,38 +306,32 @@ export default function HorizontalLinearStepper() {
     } else if (!error_otp_patten.test(verifyngo.otp)) {
       validationerrors.pincode = "Pincode required only 6 digits";
     }
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/ngo/confirm-registration`,
-        {
+    setErrors(validationerrors);
+    if (Object.keys(validationerrors).length === 0) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}/ngo/confirm-registration`,
           verifyngo,
-          headers: {
-            "Content-Type": "application/json",
-          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data1 = await response.data; // Parse the response JSON
+
+        if (data1.success) {
+          sessionStorage.setItem("loggedIn", true);
+          sessionStorage.setItem("userType", "NGO");
+
+          window.location.href = "/edit_profile_ngo";
+        } else {
+          setErrors1(data1.message);
+          setOpen(true);
         }
-      );
-      const data1 = await response.data; // Parse the response JSON
 
-      if (data1.success) {
-        sessionStorage.setItem("loggedIn", true);
-        sessionStorage.setItem("userType", "NGO");
-
-        window.location.href = "/edit_profile_ngo";
-      } else {
-        setErrors1(data1.message);
-        setOpen(true);
-      }
-
-      if (!response.ok) {
-        // Handle errors if the request is not successful
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
-
-      // Parse the response JSON
-
-      // Log the response data
-    } catch (error) {
-      console.error(error);
+        // Log the response data
+      } catch (error) {}
     }
   }
   return (
@@ -346,7 +347,7 @@ export default function HorizontalLinearStepper() {
                   marginBottom: "30px",
                 }}
               >
-                Registration From
+                Registration Form
               </span>
               <Stepper activeStep={activeStep} orientation="vertical">
                 {steps.map((label, index) => {
@@ -533,7 +534,6 @@ export default function HorizontalLinearStepper() {
                     <Button
                       variant="contained"
                       onClick={(event) => {
-                        handelregistrtion(event);
                         handleNext();
                       }}
                       sx={{
@@ -541,7 +541,7 @@ export default function HorizontalLinearStepper() {
                         color: "black",
                         borderRadius: "50px",
 
-                        ":hovor": {
+                        ":hover": {
                           backgroundColor: "#004574",
                           color: "white",
                         },
